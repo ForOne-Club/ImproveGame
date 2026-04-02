@@ -1,4 +1,5 @@
-﻿using ImproveGame.Content.Items;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Content.Items;
 
 namespace ImproveGame.Common.ModPlayers;
 
@@ -47,8 +48,8 @@ internal class TilePlaceBoostHandler : ModPlayer
         if (Player.whoAmI == Main.myPlayer)
         {
             // 设置放置范围
-            Player.tileRangeX += Config.ModifyPlayerTileRange;
-            Player.tileRangeY += Config.ModifyPlayerTileRange;
+            Player.tileRangeX += ImproveConfigs.Instance.ModifyPlayerTileRange;
+            Player.tileRangeY += ImproveConfigs.Instance.ModifyPlayerTileRange;
 
             if (!ShouldItemAcceptSpeedBoost(Player.HeldItem))
                 return;
@@ -64,14 +65,14 @@ internal class TilePlaceBoostHandler : ModPlayer
 
     internal static bool ShouldItemAcceptSpeedBoost(Item item)
     {
-        if (item.IsAir || !Config.ModifyPlayerPlaceSpeed)
+        if (item.IsAir || !ImproveConfigs.Instance.ModifyPlayerPlaceSpeed)
             return false;
 
         // 《英文名》因为没法在非英语语言获取英文名，只能用内部名了
         string internalName = ItemID.Search.GetName(item.type).ToLower();
         string currentLanguageName = Lang.GetItemNameValue(item.type).ToLower();
 
-        if (Config.TileSpeed_Blacklist.Any(str => internalName.Contains(str) || currentLanguageName.Contains(str)))
+        if (ImproveConfigs.Instance.TileSpeed_Blacklist.Any(str => internalName.Contains(str) || currentLanguageName.Contains(str)))
             return false;
 
         // 是特判捏嘿嘿

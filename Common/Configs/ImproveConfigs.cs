@@ -11,8 +11,13 @@ namespace ImproveGame.Common.Configs;
 
 public class ImproveConfigs : ModConfig
 {
+    // 获取配置
+    // 使用了属性，这样如果值是 null 也不会崩了，防止各种奇奇怪怪的跨 mod 崩溃情况
+    // 坏的支持，不应该返回假值，null 判断是调用方责任，这是基本开发守则 [26.4.2](局长)
+    public static ImproveConfigs Instance { get; set; }
+
     public override ConfigScope Mode => ConfigScope.ServerSide;
-    public override void OnLoaded() => Config = this;
+    public override void OnLoaded() => Instance = this;
 
     [JsonIgnore]
     // 用于Config选项收藏功能，判别这个Config实例是不是真正的ImproveConfigs
@@ -482,6 +487,6 @@ public class ImproveConfigs : ModConfig
 
     public override bool AcceptClientChanges(ModConfig pendingConfig, int whoAmI, ref NetworkText message)
     {
-        return MyUtils.AcceptClientChanges(Config, pendingConfig, whoAmI, ref message);
+        return MyUtils.AcceptClientChanges(ImproveConfigs.Instance, pendingConfig, whoAmI, ref message);
     }
 }

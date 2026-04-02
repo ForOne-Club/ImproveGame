@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.GlobalItems;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Common.GlobalItems;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
@@ -12,8 +13,7 @@ namespace ImproveGame.UI;
 
 public class PrefixRecallGUI : BaseBody, ISidedView
 {
-    public static bool Visible =>
-        Config.ImprovePrefix && !Main.reforgeItem.IsAir &&
+    public static bool Visible => ImproveConfigs.Instance.ImprovePrefix && !Main.reforgeItem.IsAir &&
         Main.reforgeItem.TryGetGlobalItem<ImprovePrefixItem>(out var modItem) && modItem.Prefixs.Count > 0;
 
     public override bool Enabled { get => true; set { } }

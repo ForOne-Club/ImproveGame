@@ -1,4 +1,6 @@
-﻿namespace ImproveGame.Content.Items;
+﻿using ImproveGame.Common.Configs;
+
+namespace ImproveGame.Content.Items;
 
 public class WallPlaceSelectorMode : SelectorItem
 {
@@ -40,7 +42,7 @@ public class WallPlaceSelectorMode : SelectorItem
                 // 大于等于 999 不消耗墙
                 // ItemLoader.ConsumeItem 判断手持物品是否是科技法杖，但是他是机器人放置墙体的，即使手持不是科技也可能不消耗
                 bool vanillaHooks = firstWall.consumable && ItemLoader.ConsumeItem(firstWall, player);
-                bool modSpecificChecks = firstWall.stack < 999 || !Config.WandMaterialNoConsume;
+                bool modSpecificChecks = firstWall.stack < 999 || !ImproveConfigs.Instance.WandMaterialNoConsume;
                 if (vanillaHooks && modSpecificChecks && --firstWall.stack == 0)
                     firstWall.SetDefaults();
                 break;

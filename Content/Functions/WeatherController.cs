@@ -1,4 +1,5 @@
-﻿using Terraria.GameContent.Creative;
+﻿using ImproveGame.Common.Configs;
+using Terraria.GameContent.Creative;
 using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Content.Functions;
@@ -8,7 +9,7 @@ public sealed class WeatherController : ModSystem
     /// <summary>
     /// 是否能够使用天气控制功能
     /// </summary>
-    public static bool Enabled => Config.WeatherControl && Unlocked;
+    public static bool Enabled => ImproveConfigs.Instance.WeatherControl && Unlocked;
 
     public static bool Unlocked;
 

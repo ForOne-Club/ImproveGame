@@ -1,4 +1,5 @@
-﻿using ImproveGame.Content.Items.ItemContainer;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Content.Items.ItemContainer;
 using ImproveGame.Packets;
 using ImproveGame.UIFramework.Common;
 using Terraria.ModLoader.IO;
@@ -134,7 +135,7 @@ public class DataPlayer : ModPlayer
     public override IEnumerable<Item> AddMaterialsForCrafting(out ItemConsumedCallback itemConsumedCallback)
     {
         var items = new List<Item>();
-        bool superVaultParticipateSynthesis = Config.SuperVault && Main.LocalPlayer.GetModPlayer<UIPlayerSetting>().SuperVault_ParticipateSynthesis && SuperVault is not null;
+        bool superVaultParticipateSynthesis = ImproveConfigs.Instance.SuperVault && Main.LocalPlayer.GetModPlayer<UIPlayerSetting>().SuperVault_ParticipateSynthesis && SuperVault is not null;
 
         foreach (Item item in GetAllInventoryItemsList(Main.LocalPlayer, superVaultParticipateSynthesis ? "" : "mod", estimatedCapacity: 260))
         {

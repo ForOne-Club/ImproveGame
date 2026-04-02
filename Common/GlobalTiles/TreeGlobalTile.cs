@@ -1,4 +1,6 @@
-﻿namespace ImproveGame.Common.GlobalTiles
+﻿using ImproveGame.Common.Configs;
+
+namespace ImproveGame.Common.GlobalTiles
 {
     public class TreeGlobalTile : GlobalTile
     {
@@ -13,7 +15,7 @@
             }
 
             // HasTile为false一般不可能，但还是判断一下
-            if (!Config.TreeGrowFaster || !Main.tile[i, j].HasTile)
+            if (!ImproveConfigs.Instance.TreeGrowFaster || !Main.tile[i, j].HasTile)
             {
                 return;
             }

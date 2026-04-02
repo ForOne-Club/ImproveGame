@@ -18,7 +18,7 @@ public class EmpressButterflyNPC : GlobalNPC
 
     public override void OnSpawn(NPC npc, IEntitySource source)
     {
-        if (Config.NoConsume_SummonItem && source is EntitySource_Parent { Entity: Player })
+        if (ImproveConfigs.Instance.NoConsume_SummonItem && source is EntitySource_Parent { Entity: Player })
         {
             npc.SpawnedFromStatue = true;
         }
@@ -39,13 +39,13 @@ public class ImproveItem : GlobalItem, IItemOverrideHover, IItemMiddleClickable
 {
     public override void SetDefaults(Item item)
     {
-        if (Config is null || item is null) return;
+        if (ImproveConfigs.Instance is null || item is null) return;
 
         // 最大堆叠
-        if (item.maxStack > 1 && Config.ItemMaxStack > item.maxStack && item.DamageType != DamageClass.Melee &&
+        if (item.maxStack > 1 && ImproveConfigs.Instance.ItemMaxStack > item.maxStack && item.DamageType != DamageClass.Melee &&
             !ItemID.Sets.CommonCoin[item.type])
         {
-            item.maxStack = Config.ItemMaxStack;
+            item.maxStack = ImproveConfigs.Instance.ItemMaxStack;
         }
 
         // 使用速度 → 15
@@ -57,10 +57,10 @@ public class ImproveItem : GlobalItem, IItemOverrideHover, IItemMiddleClickable
         }
 
         // 任务鱼可堆叠
-        if (Config.QuestFishStack && Main.anglerQuestItemNetIDs.Contains(item.netID))
+        if (ImproveConfigs.Instance.QuestFishStack && Main.anglerQuestItemNetIDs.Contains(item.netID))
         {
             item.uniqueStack = false;
-            item.maxStack = Config.ItemMaxStack;
+            item.maxStack = ImproveConfigs.Instance.ItemMaxStack;
         }
     }
 
@@ -70,7 +70,7 @@ public class ImproveItem : GlobalItem, IItemOverrideHover, IItemMiddleClickable
     public override float UseTimeMultiplier(Item item, Player player)
     {
         if (item.pick > 0 || item.hammer > 0 || item.axe > 0 || item.type is ItemID.WireCutter)
-            return 1f - Config.ExtraToolSpeed;
+            return 1f - ImproveConfigs.Instance.ExtraToolSpeed;
         return 1f;
     }
 
@@ -83,7 +83,7 @@ public class ImproveItem : GlobalItem, IItemOverrideHover, IItemMiddleClickable
 
             // 检测那一堆if判断成没成
             if (player.itemTime == item.useTime / 2)
-                player.itemTime = (int)Math.Max(1, (1f - Config.ExtraToolSpeed) * (item.useTime / 2f));
+                player.itemTime = (int)Math.Max(1, (1f - ImproveConfigs.Instance.ExtraToolSpeed) * (item.useTime / 2f));
         };
     }
 
@@ -135,7 +135,7 @@ public class ImproveItem : GlobalItem, IItemOverrideHover, IItemMiddleClickable
     public override bool ConsumeItem(Item item, Player player)
     {
         // 所有召唤物不会消耗
-        if (Config.NoConsume_SummonItem &&
+        if (ImproveConfigs.Instance.NoConsume_SummonItem &&
             (Lookups.BossSummonItems.Contains(item.type) || Lookups.EventSummonItems.Contains(item.type)))
             return false;
 
@@ -144,14 +144,14 @@ public class ImproveItem : GlobalItem, IItemOverrideHover, IItemMiddleClickable
              ((item.createTile is TileID.WorkBenches or TileID.Chairs or TileID.Beds) && item.stack >= 99))
             && ModItemID.NoConsumptionItems.Contains(player.HeldItem.type)
             && !(ItemLoader.CanRightClick(item) && Main.ItemDropsDB.GetRulesForItemID(item.type).Count > 0))
-            return !Config.WandMaterialNoConsume;
+            return !ImproveConfigs.Instance.WandMaterialNoConsume;
 
         // 抛射物不消耗
-        if (Config.NoConsume_Projectile && item.stack >= 3996 && item.shoot > ProjectileID.None)
+        if (ImproveConfigs.Instance.NoConsume_Projectile && item.stack >= 3996 && item.shoot > ProjectileID.None)
             return false;
 
         // 电线不消耗
-        if (Config.NoConsume_Wire && item.stack >= 3996 && item.type == ItemID.Wire)
+        if (ImproveConfigs.Instance.NoConsume_Wire && item.stack >= 3996 && item.type == ItemID.Wire)
             return false;
 
         return base.ConsumeItem(item, player);
@@ -159,14 +159,14 @@ public class ImproveItem : GlobalItem, IItemOverrideHover, IItemMiddleClickable
 
     public override bool? CanConsumeBait(Player player, Item bait)
     {
-        if (Config.NoConsume_SummonItem && bait.type == ItemID.TruffleWorm) return false;
+        if (ImproveConfigs.Instance.NoConsume_SummonItem && bait.type == ItemID.TruffleWorm) return false;
 
         return base.CanConsumeBait(player, bait);
     }
 
     public override bool CanBeConsumedAsAmmo(Item ammo, Item weapon, Player player)
     {
-        if (Config.NoConsume_Ammo)
+        if (ImproveConfigs.Instance.NoConsume_Ammo)
         {
             // 坠落之星特判
             if (ammo.stack >= 999 && ammo.type == ItemID.FallenStar)

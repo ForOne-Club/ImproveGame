@@ -1,4 +1,6 @@
-﻿namespace ImproveGame.UI.ModernConfig.Categories;
+﻿using ImproveGame.Common.Configs;
+
+namespace ImproveGame.UI.ModernConfig.Categories;
 
 public sealed class ModItemSettings : Category
 {
@@ -8,9 +10,9 @@ public sealed class ModItemSettings : Category
 
     public override void AddOptions(ConfigOptionsPanel panel)
     {
-        panel.AddToggle(Config, nameof(Config.EmptyAutofisher));
-        panel.AddValueSlider(Config, nameof(Config.ExStorageSearchDistance));
-        panel.AddToggle(Config, nameof(Config.WandMaterialNoConsume));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.EmptyAutofisher));
+        panel.AddValueSlider(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.ExStorageSearchDistance));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.WandMaterialNoConsume));
         panel.AddToggle(AvailableConfig, nameof(AvailableConfig.AvailableMagickWand));
         panel.AddToggle(AvailableConfig, nameof(AvailableConfig.AvailableSpaceWand));
         panel.AddToggle(AvailableConfig, nameof(AvailableConfig.AvailableStarburstWand));

@@ -1,4 +1,6 @@
-﻿namespace ImproveGame.UI.ModernConfig.Categories;
+﻿using ImproveGame.Common.Configs;
+
+namespace ImproveGame.UI.ModernConfig.Categories;
 
 public sealed class Multiplayer : Category
 {
@@ -6,14 +8,14 @@ public sealed class Multiplayer : Category
 
     public override void AddOptions(ConfigOptionsPanel panel)
     {
-        panel.AddToggle(Config, nameof(Config.OnlyHost));
-        panel.AddToggle(Config, nameof(Config.OnlyHostByPassword));
-        panel.AddToggle(Config, nameof(Config.ShareCraftingStation));
-        panel.AddToggle(Config, nameof(Config.ShareInfBuffs));
-        panel.AddValueSlider(Config, nameof(Config.ShareRange));
-        panel.AddToggle(Config, nameof(Config.TeamAutoJoin));
-        panel.AddToggle(Config, nameof(Config.BedOnlyOne));
-        panel.AddToggle(Config, nameof(Config.NoConditionTP));
-        panel.AddToggle(Config, nameof(Config.DummyCustomAIStyleAllowed));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.OnlyHost));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.OnlyHostByPassword));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.ShareCraftingStation));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.ShareInfBuffs));
+        panel.AddValueSlider(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.ShareRange));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.TeamAutoJoin));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.BedOnlyOne));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.NoConditionTP));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.DummyCustomAIStyleAllowed));
     }
 }

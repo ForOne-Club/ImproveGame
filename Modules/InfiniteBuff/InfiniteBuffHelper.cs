@@ -1,4 +1,6 @@
-﻿namespace ImproveGame.Modules.InfiniteBuff;
+﻿using ImproveGame.Common.Configs;
+
+namespace ImproveGame.Modules.InfiniteBuff;
 
 /// <summary>
 /// 无限 BUFF 帮助类
@@ -13,10 +15,10 @@ internal static class InfiniteBuffHelper
     public static string GetRightClickString(bool enable) => enable ? RightClickDisable : RightClickEnable;
 
     public static float RemapSliderToSpawnRate(float value, int digits = 0) =>
-        RemapSliderToSpawnRate(value, Config.SpawnRateMinValue, Config.SpawnRateMaxValue, digits);
+        RemapSliderToSpawnRate(value, ImproveConfigs.Instance.SpawnRateMinValue, ImproveConfigs.Instance.SpawnRateMaxValue, digits);
 
     public static float RemapSpawnRateToSlider(float value) =>
-        RemapSpawnRateToSlider(value, Config.SpawnRateMinValue, Config.SpawnRateMaxValue);
+        RemapSpawnRateToSlider(value, ImproveConfigs.Instance.SpawnRateMinValue, ImproveConfigs.Instance.SpawnRateMaxValue);
 
     /// <summary>
     /// 重映射滑块至生成率

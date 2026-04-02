@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.GlobalItems;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Components;
 using ImproveGame.Content.Items.ItemContainer;
@@ -137,7 +138,7 @@ public class InfiniteBuffModPlayer : ModPlayer
         SetupActivationFlags(BuffItems);
 
         // 2) 队友可共享物品 (开启时)
-        if (Main.netMode == NetmodeID.MultiplayerClient && Config.ShareInfBuffs)
+        if (Main.netMode == NetmodeID.MultiplayerClient && ImproveConfigs.Instance.ShareInfBuffs)
         {
             PlayerHelper.ForEachTeammate(player.whoAmI,
                 (player) => SetupActivationFlags(player.GetModPlayer<InfiniteBuffModPlayer>().PlayerBuffItems));
@@ -159,7 +160,7 @@ public class InfiniteBuffModPlayer : ModPlayer
                 foreach (var potion in container)
                 {
                     if (item is null || item.IsAir) continue;
-                    if (item.stack < Config.NoConsume_PotionRequirement) continue;
+                    if (item.stack < ImproveConfigs.Instance.NoConsume_PotionRequirement) continue;
                     _activationFlags[potion.buffType] = true;
                 }
 
@@ -194,7 +195,7 @@ public class InfiniteBuffModPlayer : ModPlayer
         // 1) 应用本地玩家来源。
         ApplyAvailableBuffs(PlayerBuffItems);
 
-        if (Config.ShareInfBuffs)
+        if (ImproveConfigs.Instance.ShareInfBuffs)
         {
             // 2) 应用同队共享来源（含距离规则，见 CheckTeamPlayers）。
             PlayerHelper.ForEachTeammate(player.whoAmI, (teammate) =>
@@ -286,7 +287,7 @@ public class InfiniteBuffModPlayer : ModPlayer
             }
 
             // 未开启“随身增益站”时不回填场景标记。
-            if (!Config.NoPlace_BUFFTile) continue;
+            if (!ImproveConfigs.Instance.NoPlace_BUFFTile) continue;
 
             UniqueBoostFlags.UpdateStateByType(buffType);
         }

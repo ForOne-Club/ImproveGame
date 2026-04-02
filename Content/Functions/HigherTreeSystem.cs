@@ -1,4 +1,5 @@
-﻿using Mono.Cecil.Cil;
+﻿using ImproveGame.Common.Configs;
+using Mono.Cecil.Cil;
 using MonoMod.Cil;
 
 namespace ImproveGame.Content.Functions
@@ -10,9 +11,9 @@ namespace ImproveGame.Content.Functions
             ILCursor c = new(il);
             c.GotoNext(MoveType.After, i => i.MatchCall<WorldGen>("get_genRand"),
                                        i => i.Match(OpCodes.Ldc_I4_S, (sbyte)10));
-            c.EmitDelegate((int _) => Config.PalmTreeMin);
+            c.EmitDelegate((int _) => ImproveConfigs.Instance.PalmTreeMin);
             c.GotoNext(MoveType.After, i => i.Match(OpCodes.Ldc_I4_S, (sbyte)21));
-            c.EmitDelegate((int _) => Config.PalmTreeMax + 1);
+            c.EmitDelegate((int _) => ImproveConfigs.Instance.PalmTreeMax + 1);
         }
 
         // 通过简单的IL修改一般树木高度
@@ -20,9 +21,9 @@ namespace ImproveGame.Content.Functions
         {
             ILCursor c = new(il);
             c.GotoNext(MoveType.After, i => i.MatchLdcI4(5));
-            c.EmitDelegate((int min) => Config.MostTreeMin);
+            c.EmitDelegate((int min) => ImproveConfigs.Instance.MostTreeMin);
             c.GotoNext(MoveType.After, i => i.MatchLdcI4(17));
-            c.EmitDelegate((int max) => Config.MostTreeMax + 1);
+            c.EmitDelegate((int max) => ImproveConfigs.Instance.MostTreeMax + 1);
         }
 
         public override void Load()
@@ -30,12 +31,12 @@ namespace ImproveGame.Content.Functions
             IL_WorldGen.GrowTree += ModifyMostTrees;
             IL_WorldGen.GrowPalmTree += ModifyPalmTrees;
             On_WorldGen.SetGemTreeDrops += GemAlwaysTweak;
-            SetTreeHeights(Config.GemTreeMin, Config.GemTreeMax, Config.MostTreeMin, Config.MostTreeMax);
+            SetTreeHeights(ImproveConfigs.Instance.GemTreeMin, ImproveConfigs.Instance.GemTreeMax, ImproveConfigs.Instance.MostTreeMin, ImproveConfigs.Instance.MostTreeMax);
         }
 
         private void GemAlwaysTweak(On_WorldGen.orig_SetGemTreeDrops orig, int gemType, int seedType, Tile tileCache, ref int dropItem, ref int secondaryItem)
         {
-            if (Config.GemTreeAlwaysDropGem)
+            if (ImproveConfigs.Instance.GemTreeAlwaysDropGem)
             {
                 dropItem = gemType;
                 secondaryItem = seedType;

@@ -10,7 +10,7 @@ public sealed class Minimap : Category
     {
         var uiConfig = UIConfigs.Instance;
         panel.AddToggle(uiConfig, nameof(uiConfig.GlobeEffect));
-        panel.AddToggle(Config, nameof(Config.MinimapMark));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.MinimapMark));
         panel.AddValueSlider(uiConfig, nameof(uiConfig.MarkDungeon));
         panel.AddValueSlider(uiConfig, nameof(uiConfig.MarkTemple));
         panel.AddValueSlider(uiConfig, nameof(uiConfig.MarkAether));

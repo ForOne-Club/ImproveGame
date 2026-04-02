@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.ModSystems;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Common.ModSystems;
 using ImproveGame.Packets;
 using Terraria.GameInput;
 using Terraria.UI.Chat;
@@ -44,7 +45,7 @@ namespace ImproveGame.Content.Functions
 
         public override void UpdateUI(GameTime gameTime)
         {
-            if (Main.LocalPlayer.talkNPC != -1 && IsTalkingToTravellingMerchant && Main.npcShop == 0 && !ModIntegrationsSystem.DialogueTweakLoaded && Config.TravellingMerchantRefresh)
+            if (Main.LocalPlayer.talkNPC != -1 && IsTalkingToTravellingMerchant && Main.npcShop == 0 && !ModIntegrationsSystem.DialogueTweakLoaded && ImproveConfigs.Instance.TravellingMerchantRefresh)
             {
                 AnimationTimer += 0.05f;
                 if (AnimationTimer >= 4f)
@@ -68,7 +69,7 @@ namespace ImproveGame.Content.Functions
                 layers.Insert(dialogIndex + 1, new LegacyGameInterfaceLayer("ImproveGame: Travelling Merchant Refresh Button",
                     delegate
                     {
-                        if (Main.LocalPlayer.talkNPC != -1 && IsTalkingToTravellingMerchant && Main.npcShop == 0 && !ModIntegrationsSystem.DialogueTweakLoaded && Config.TravellingMerchantRefresh)
+                        if (Main.LocalPlayer.talkNPC != -1 && IsTalkingToTravellingMerchant && Main.npcShop == 0 && !ModIntegrationsSystem.DialogueTweakLoaded && ImproveConfigs.Instance.TravellingMerchantRefresh)
                         {
                             var talkNPC = Main.npc[Main.LocalPlayer.talkNPC];
                             Vector2 scale = new(0.9f);

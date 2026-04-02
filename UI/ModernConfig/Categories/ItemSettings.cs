@@ -10,26 +10,26 @@ public sealed class ItemSettings : Category
     {
         var uiConfig = UIConfigs.Instance;
         //panel.AddValueText(Config, nameof(Config.ItemMaxStack));
-        panel.AddValueSlider(Config, nameof(Config.ItemMaxStack));
+        panel.AddValueSlider(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.ItemMaxStack));
         panel.AddToggle(uiConfig, nameof(uiConfig.ShowModName));
         panel.AddToggle(uiConfig, nameof(uiConfig.ShowShimmerInfo));
         panel.AddToggle(uiConfig, nameof(uiConfig.AutoSummon));
         panel.AddToggle(uiConfig, nameof(uiConfig.MagicMirrorInstantTp));
-        panel.AddToggle(Config, nameof(Config.QuestFishStack));
-        panel.AddToggle(Config, nameof(Config.NoConsume_SummonItem));
-        panel.AddToggle(Config, nameof(Config.NoConsume_Ammo));
-        panel.AddToggle(Config, nameof(Config.NoConsume_Projectile));
-        panel.AddToggle(Config, nameof(Config.NoConsume_Wire));
-        panel.AddToggle(Config, nameof(Config.ImprovePrefix));
-        panel.AddToggle(Config, nameof(Config.MiddleEnableBank));
-        panel.AddToggle(Config, nameof(Config.PortableCraftingStation));
-        panel.AddToggle(Config, nameof(Config.NoPlace_BUFFTile));
-        panel.AddToggle(Config, nameof(Config.NoPlace_BUFFTile_Banner));
-        panel.AddToggle(Config, nameof(Config.NoConsume_Potion));
-        panel.AddValueSlider(Config, nameof(Config.NoConsume_PotionRequirement));
-        panel.AddToggle(Config, nameof(Config.InfiniteRedPotion));
-        panel.AddToggle(Config, nameof(Config.RedPotionEverywhere));
-        panel.AddValueSlider(Config, nameof(Config.RedPotionRequirement));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.QuestFishStack));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.NoConsume_SummonItem));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.NoConsume_Ammo));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.NoConsume_Projectile));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.NoConsume_Wire));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.ImprovePrefix));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.MiddleEnableBank));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.PortableCraftingStation));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.NoPlace_BUFFTile));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.NoPlace_BUFFTile_Banner));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.NoConsume_Potion));
+        panel.AddValueSlider(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.NoConsume_PotionRequirement));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.InfiniteRedPotion));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.RedPotionEverywhere));
+        panel.AddValueSlider(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.RedPotionRequirement));
         panel.AddToggle(uiConfig, nameof(uiConfig.ShowMoreData));
     }
 }

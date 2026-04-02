@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.ModHooks;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Common.ModHooks;
 using ImproveGame.Content.Items;
 using ImproveGame.Content.Items.IconDummies;
 using ImproveGame.Core;
@@ -35,7 +36,7 @@ public class AmmoChainGlobalItem : GlobalItem, IItemOverrideHover, IItemOverride
 
     private Item OnChooseAmmo(On_Player.orig_ChooseAmmo orig, Player player, Item weapon)
     {
-        if (!Config.AmmoChain || !IsPickingAmmo || !weapon.TryGetGlobalItem<AmmoChainGlobalItem>(out var globalItem) ||
+        if (!ImproveConfigs.Instance.AmmoChain || !IsPickingAmmo || !weapon.TryGetGlobalItem<AmmoChainGlobalItem>(out var globalItem) ||
             globalItem.Chain is null || globalItem.Chain.Chain.Count is 0)
         {
             return DoVanillaChooseAmmoPlusBigBagAmmo(orig, player, weapon);

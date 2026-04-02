@@ -21,7 +21,7 @@ public class IndicatorMapLayer : ModMapLayer
             new SpriteFrame(columns, rows, 0, 1), new Vector2(1f, 1f));
 
         // 定位球系列图标
-        if (!Config.MinimapMark) return;
+        if (!ImproveConfigs.Instance.MinimapMark) return;
 
         // 地牢
         ProcessStructure(ref context, ref text, StructureDatas.DungeonUnlocked, StructureDatas.DungeonPosition,

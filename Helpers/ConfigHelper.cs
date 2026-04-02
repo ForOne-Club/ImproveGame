@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.ModSystems;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Common.ModSystems;
 using ImproveGame.Packets;
 using ImproveGame.UI.ModernConfig.OptionElements;
 using Newtonsoft.Json;
@@ -364,14 +365,14 @@ public static class ConfigHelper
             if (modConfig.Mode is ConfigScope.ServerSide && Main.netMode is NetmodeID.MultiplayerClient && broadcast)
             {
                 // 没有通过主机IP验证
-                if (config.Mod.Name == "ImproveGame" && Config.OnlyHost && !Main.countsAsHostForGameplay[Main.myPlayer])
+                if (config.Mod.Name == "ImproveGame" && ImproveConfigs.Instance.OnlyHost && !Main.countsAsHostForGameplay[Main.myPlayer])
                 {
                     // “无法更改: 你不是服务器主机玩家！”
                     Main.NewText(GetText("Configs.ImproveConfigs.OnlyHost.Unaccepted"), Color.Red);
                     return;
                 }
 
-                if (config.Mod.Name == "ImproveGame" && Config.OnlyHostByPassword && !NetPasswordSystem.LocalPlayerRegistered)
+                if (config.Mod.Name == "ImproveGame" && ImproveConfigs.Instance.OnlyHostByPassword && !NetPasswordSystem.LocalPlayerRegistered)
                 {
                     // “无法更改：你没有通过密码验证！”
                     Main.NewText(GetText("Configs.ImproveConfigs.OnlyHostByPassword.Unaccepted"), Color.Red);

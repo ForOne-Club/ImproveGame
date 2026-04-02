@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.ModSystems;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Tiles;
 using ImproveGame.UI.ExtremeStorage;
 using Mono.Cecil.Cil;
@@ -18,7 +19,7 @@ internal class PortableStationSystem : ModSystem
 
     private void AddZoneStation(On_Recipe.orig_FindRecipes orig, bool canDelayCheck)
     {
-        if (!Config.PortableCraftingStation)
+        if (!ImproveConfigs.Instance.PortableCraftingStation)
         {
             orig.Invoke(canDelayCheck);
             return;
@@ -27,7 +28,7 @@ internal class PortableStationSystem : ModSystem
         var flag2 = Main.LocalPlayer.ZoneSnow;
 
         CheckZoneItemFromPlayer(Main.LocalPlayer);
-        if (Config.ShareCraftingStation)
+        if (ImproveConfigs.Instance.ShareCraftingStation)
             PlayerHelper.ForEachTeammate(Main.myPlayer, CheckZoneItemFromPlayer);
 
         orig.Invoke(canDelayCheck);
@@ -129,12 +130,12 @@ internal class PortableStationSystem : ModSystem
         c.Emit(OpCodes.Ldarg_0);
         c.EmitDelegate<Action<Player>>(player =>
         {
-            if (!Config.PortableCraftingStation)
+            if (!ImproveConfigs.Instance.PortableCraftingStation)
                 return;
 
             // 从玩家身上获取所有的无尽Buff物品
             CheckStationsFromPlayer(player);
-            if (Config.ShareCraftingStation)
+            if (ImproveConfigs.Instance.ShareCraftingStation)
                 PlayerHelper.ForEachTeammate(player.whoAmI, CheckStationsFromPlayer);
 
             // 从TE中获取所有的无尽Buff物品

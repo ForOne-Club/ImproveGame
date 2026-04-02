@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.ModSystems;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Common.ModSystems;
 using ImproveGame.Packets;
 
 namespace ImproveGame.Common.Commands
@@ -12,7 +13,7 @@ namespace ImproveGame.Common.Commands
 
         public override void Action(CommandCaller caller, string input, string[] args)
         {
-            if (!Config.OnlyHostByPassword)
+            if (!ImproveConfigs.Instance.OnlyHostByPassword)
             {
                 caller.Reply(GetText("Configs.ImproveConfigs.OnlyHostByPassword.NotOn"), new(206, 212, 106));
                 return;

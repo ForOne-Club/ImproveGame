@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Conditions;
+using ImproveGame.Common.Configs;
 using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.ModSystems;
@@ -167,12 +168,12 @@ public class PotionBag : ModItem, IItemOverrideLeftClick, IItemOverrideHover, II
                 {
                     var potion = ItemContainer[i];
                     var color = Color.SkyBlue;
-                    bool available = potion.stack >= Config.NoConsume_PotionRequirement;
+                    bool available = potion.stack >= ImproveConfigs.Instance.NoConsume_PotionRequirement;
                     string text = $"[i/s{potion.stack}:{potion.type}] [{Lang.GetItemNameValue(potion.type)}]";
                     // 有30个
                     if (available)
                     {
-                        if (!Config.NoConsume_Potion || Main.LocalPlayer.GetModPlayer<InfiniteBuffModPlayer>().Blacklist.ContainsByType(potion.buffType))
+                        if (!ImproveConfigs.Instance.NoConsume_Potion || Main.LocalPlayer.GetModPlayer<InfiniteBuffModPlayer>().Blacklist.ContainsByType(potion.buffType))
                         {
                             // 被禁用了
                             text += $"  {GetText("Tips.PotionBagDisabled")}";
@@ -187,7 +188,7 @@ public class PotionBag : ModItem, IItemOverrideLeftClick, IItemOverrideHover, II
                     else
                     {
                         text +=
-                            $"  {GetText("Tips.PotionBagUnavailable")} ({potion.stack}/{Config.NoConsume_PotionRequirement})";
+                            $"  {GetText("Tips.PotionBagUnavailable")} ({potion.stack}/{ImproveConfigs.Instance.NoConsume_PotionRequirement})";
                     }
 
                     tooltips.Add(new(Mod, $"PotionBagP{i}", text)

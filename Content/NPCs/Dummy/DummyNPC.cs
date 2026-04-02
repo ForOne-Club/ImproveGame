@@ -1,4 +1,5 @@
-﻿using ImproveGame.Core;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Core;
 using Terraria.Map;
 
 namespace ImproveGame.Content.NPCs.Dummy;
@@ -225,7 +226,7 @@ public class DummyNPC : ModNPC
     {
         if (Config.AIStyle == DummyConfig.AIType.SelfDefine)
         {
-            if (MyUtils.Config.DummyCustomAIStyleAllowed || Main.netMode == NetmodeID.SinglePlayer)
+            if (ImproveConfigs.Instance.DummyCustomAIStyleAllowed || Main.netMode == NetmodeID.SinglePlayer)
             {
                 AIType = Config.customAIType;
                 var mimicNpc = new NPC();

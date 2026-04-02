@@ -12,7 +12,7 @@ namespace ImproveGame.Common.GlobalItems;
 public class GrabAndPickup : GlobalItem
 {
     // 抓取距离
-    public override void GrabRange(Item item, Player player, ref int grabRange) => grabRange += Config.GrabDistance * 16;
+    public override void GrabRange(Item item, Player player, ref int grabRange) => grabRange += ImproveConfigs.Instance.GrabDistance * 16;
 
     public override void Load()
     {
@@ -28,7 +28,7 @@ public class GrabAndPickup : GlobalItem
     /// </summary>
     public override bool GrabStyle(Item item, Player player)
     {
-        if (Config.GrabDistance > 0)
+        if (ImproveConfigs.Instance.GrabDistance > 0)
         {
             var dir = Vector2.Normalize(player.Center - item.Center) * 25f;
             item.velocity = (item.velocity * 9 + dir) / 10;
@@ -54,7 +54,7 @@ public class GrabAndPickup : GlobalItem
             if (!source.IsACoin)
             {
                 // 大背包
-                if (Config.SuperVault && self.GetModPlayer<UIPlayerSetting>().SuperVault_GrabItemsWhenOverflowing)
+                if (ImproveConfigs.Instance.SuperVault && self.GetModPlayer<UIPlayerSetting>().SuperVault_GrabItemsWhenOverflowing)
                 {
                     source.StackToArray(self.GetModPlayer<DataPlayer>().SuperVault);
                 }
@@ -62,7 +62,7 @@ public class GrabAndPickup : GlobalItem
                 if (source.IsAir) goto Finish;
 
                 // 猪猪 保险箱 ...
-                if (Config.SuperVoidVault && self.TryGetModPlayer(out ImprovePlayer improvePlayer))
+                if (ImproveConfigs.Instance.SuperVoidVault && self.TryGetModPlayer(out ImprovePlayer improvePlayer))
                 {
                     if (improvePlayer.HasPiggyBank)
                     {
@@ -167,7 +167,7 @@ public class GrabAndPickup : GlobalItem
         }
 
         // 大背包
-        if (Config.SuperVault &&
+        if (ImproveConfigs.Instance.SuperVault &&
             player.TryGetModPlayer(out UIPlayerSetting setting) &&
             player.TryGetModPlayer(out DataPlayer dataPlayer))
         {
@@ -178,7 +178,7 @@ public class GrabAndPickup : GlobalItem
             }
         }
 
-        if (Config.SuperVoidVault && player.TryGetModPlayer<ImprovePlayer>(out var improvePlayer))
+        if (ImproveConfigs.Instance.SuperVoidVault && player.TryGetModPlayer<ImprovePlayer>(out var improvePlayer))
         {
             if (improvePlayer.HasPiggyBank = improvePlayer.HasPiggyBank && item.CanStackToArray(player.bank.item))
             {
@@ -240,7 +240,7 @@ public class GrabAndPickup : GlobalItem
         if (source.IsAir) return false;
 
         // 大背包
-        if (Config.SuperVault &&
+        if (ImproveConfigs.Instance.SuperVault &&
             player.TryGetModPlayer(out UIPlayerSetting setting) && player.TryGetModPlayer(out DataPlayer dataPlayer) &&
             setting.SuperVault_PrioritizeGrabbing && source.TheArrayHas(dataPlayer.SuperVault))
         {
@@ -252,7 +252,7 @@ public class GrabAndPickup : GlobalItem
         if (source.IsAir) return false;
 
         // 虚空保险库 之 智能收纳
-        if (Config.SmartVoidVault && !source.IsACoin)
+        if (ImproveConfigs.Instance.SmartVoidVault && !source.IsACoin)
         {
             // 虚空保险库
             if (player.IsVoidVaultEnabled && source.TheArrayHas(player.bank4.item))
@@ -265,7 +265,7 @@ public class GrabAndPickup : GlobalItem
             if (source.IsAir) return false;
 
             // 猪猪 保险箱 ...
-            if (Config.SuperVoidVault)
+            if (ImproveConfigs.Instance.SuperVoidVault)
             {
                 if (improvePlayer.HasPiggyBank && source.TheArrayHas(player.bank.item))
                 {

@@ -1,4 +1,5 @@
-﻿using ImproveGame.UIFramework;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.SUIElements;
@@ -203,7 +204,7 @@ public class GrabBagInfoGUI : BaseBody
 
         foreach (DropRateInfo item2 in list)
         {
-            if (Config.ICanSeeForeverAllBag || item2.conditions == null || item2.conditions.All(condition => condition.CanShowItemDropInUI()))
+            if (ImproveConfigs.Instance.ICanSeeForeverAllBag || item2.conditions == null || item2.conditions.All(condition => condition.CanShowItemDropInUI()))
             {
                 new GrabBagInfoPanel(item2).JoinParent(InfoScroll.ListView);
                 noAnyDrop = false;

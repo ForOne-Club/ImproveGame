@@ -9,24 +9,24 @@ public sealed class PlayerAbility : Category
     public override void AddOptions(ConfigOptionsPanel panel)
     {
         var uiConfig = UIConfigs.Instance;
-        panel.AddToggle(Config, nameof(Config.SuperVault));
-        panel.AddToggle(Config, nameof(Config.SuperVoidVault));
-        panel.AddToggle(Config, nameof(Config.SmartVoidVault));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.SuperVault));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.SuperVoidVault));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.SmartVoidVault));
         panel.AddEnum(uiConfig, nameof(uiConfig.PlyInfo));
-        panel.AddValueSlider(Config, nameof(Config.GrabDistance));
-        panel.AddValueSlider(Config, nameof(Config.ExtraToolSpeed));
-        panel.AddToggle(Config, nameof(Config.ModifyPlayerPlaceSpeed));
-        panel.AddValueSlider(Config, nameof(Config.ModifyPlayerTileRange));
-        panel.AddList(Config, nameof(Config.TileSpeed_Blacklist));
-        panel.AddValueSlider(Config, nameof(Config.ExtraPlayerBuffSlots));
-        panel.AddToggle(Config, nameof(Config.RespawnWithFullHP));
-        panel.AddToggle(Config, nameof(Config.DontDeleteBuff));
-        panel.AddValueSlider(Config, nameof(Config.ResurrectionTimeShortened));
-        panel.AddValueSlider(Config, nameof(Config.BOSSBattleResurrectionTimeShortened));
-        panel.AddToggle(Config, nameof(Config.BanTombstone));
-        panel.AddToggle(Config, nameof(Config.LongerExpertDebuff));
-        panel.AddToggle(Config, nameof(Config.SimpleVeinMining));
-        panel.AddToggle(Config, nameof(Config.DisableVeinMiningPopup));
+        panel.AddValueSlider(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.GrabDistance));
+        panel.AddValueSlider(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.ExtraToolSpeed));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.ModifyPlayerPlaceSpeed));
+        panel.AddValueSlider(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.ModifyPlayerTileRange));
+        panel.AddList(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.TileSpeed_Blacklist));
+        panel.AddValueSlider(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.ExtraPlayerBuffSlots));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.RespawnWithFullHP));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.DontDeleteBuff));
+        panel.AddValueSlider(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.ResurrectionTimeShortened));
+        panel.AddValueSlider(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.BOSSBattleResurrectionTimeShortened));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.BanTombstone));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.LongerExpertDebuff));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.SimpleVeinMining));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.DisableVeinMiningPopup));
         panel.AddToggle(uiConfig, nameof(uiConfig.AutoSummon));
     }
 }

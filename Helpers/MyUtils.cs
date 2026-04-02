@@ -602,7 +602,7 @@ partial class MyUtils
             {"forge", player.bank3.item},
             {"void", player.bank4.item}
         };
-        if (Config.SuperVault && player.TryGetModPlayer<DataPlayer>(out var modPlayer))
+        if (ImproveConfigs.Instance.SuperVault && player.TryGetModPlayer<DataPlayer>(out var modPlayer))
         {
             items["mod"] = modPlayer.SuperVault;
         }
@@ -753,27 +753,6 @@ partial class MyUtils
     }
 
     #endregion
-
-    // 获取配置
-    // 使用了属性，这样如果值是null也不会崩了，防止各种奇奇怪怪的跨mod崩溃情况
-    public static ImproveConfigs Config
-    {
-        get
-        {
-            if (_config == null)
-            {
-                return ModContent.GetInstance<ImproveConfigs>() ?? _emptyConfig;
-            }
-
-            return _config;
-        }
-        set
-        {
-            _config = value;
-        }
-    }
-    private static ImproveConfigs _config;
-    private static readonly ImproveConfigs _emptyConfig = new ImproveConfigs();
 
     // 模组物品加载配置
     public static AvailableModItemConfigs AvailableConfig;

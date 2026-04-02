@@ -1,4 +1,5 @@
 ﻿using FuzzySearchNet;
+using ImproveGame.Common.Configs;
 using ImproveGame.Core;
 using ImproveGame.UIFramework.Common;
 using PinyinNet;
@@ -499,9 +500,9 @@ public static class ItemExtensions
 
     public static bool CanActivateRedPotionExtension(this Item item)
     {
-        bool isFtw = Config.RedPotionEverywhere || Main.getGoodWorld;
-        return item.type is ItemID.RedPotion && Config.InfiniteRedPotion && isFtw &&
-               item.stack >= Config.RedPotionRequirement && Config.NoConsume_Potion;
+        bool isFtw = ImproveConfigs.Instance.RedPotionEverywhere || Main.getGoodWorld;
+        return item.type is ItemID.RedPotion && ImproveConfigs.Instance.InfiniteRedPotion && isFtw &&
+               item.stack >= ImproveConfigs.Instance.RedPotionRequirement && ImproveConfigs.Instance.NoConsume_Potion;
     }
 
     public static void DrawIcon(this Item item, SpriteBatch sb, Color lightColor, Vector2 center,

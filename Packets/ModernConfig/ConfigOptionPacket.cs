@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.ModSystems;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Common.ModSystems;
 using ImproveGame.UI.ModernConfig;
 using Newtonsoft.Json;
 using Terraria.ModLoader.Config;
@@ -108,7 +109,7 @@ public class ConfigOptionPacket : NetModule
         var modConfig = ConfigManager.Configs[ModLoader.GetMod(_modName)].Find(i => i.Name == _configName);
         if (Main.netMode is NetmodeID.Server)
         {
-            if (_modName == "ImproveGame" && Config.OnlyHostByPassword && !NetPasswordSystem.Registered[Sender])// 理论上不可能出现的情况，没有验证还是发了包
+            if (_modName == "ImproveGame" && ImproveConfigs.Instance.OnlyHostByPassword && !NetPasswordSystem.Registered[Sender])// 理论上不可能出现的情况，没有验证还是发了包
             {
                 //ChatHelper.SendChatMessageToClient(
                 //        new NetworkText(GetText("Configs.ImproveConfigs.OnlyHostByPassword.Unaccepted"),

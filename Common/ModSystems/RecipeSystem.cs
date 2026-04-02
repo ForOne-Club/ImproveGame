@@ -1,4 +1,5 @@
-﻿using ImproveGame.Content.Items;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Content.Items;
 
 namespace ImproveGame.Common.ModSystems;
 
@@ -63,9 +64,9 @@ public class RecipeSystem : ModSystem
          * 1 Crimson Tigerfish, 1 Armored Cavefish, 1 Prismite, 1 Flarefin Koi, 2 Obsidifish, 1 Hemopiranha, 1 Ebonkoi
          */
         var redPotionCondition = new Condition("Mods.ImproveGame.Configs.ImproveConfigs.InfiniteRedPotion.Condition",
-            () => Config.InfiniteRedPotion);
+            () => ImproveConfigs.Instance.InfiniteRedPotion);
         var ftwCondition = new Condition("Mods.ImproveGame.Configs.ImproveConfigs.RedPotionEverywhere.Condition",
-            () => Config.RedPotionEverywhere || Condition.ForTheWorthyWorld.IsMet());
+            () => ImproveConfigs.Instance.RedPotionEverywhere || Condition.ForTheWorthyWorld.IsMet());
 
         Recipe.Create(ItemID.RedPotion)
             .AddTile(TileID.Bottles)

@@ -67,6 +67,6 @@ public class AvailableModItemConfigs : ModConfig
 
     public override bool AcceptClientChanges(ModConfig pendingConfig, int whoAmI, ref NetworkText message)
     {
-        return MyUtils.AcceptClientChanges(Config, pendingConfig, whoAmI, ref message);
+        return MyUtils.AcceptClientChanges(ImproveConfigs.Instance, pendingConfig, whoAmI, ref message);
     }
 }

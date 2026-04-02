@@ -1,4 +1,6 @@
-﻿namespace ImproveGame.Common.GlobalPylons;
+﻿using ImproveGame.Common.Configs;
+
+namespace ImproveGame.Common.GlobalPylons;
 
 public class PylonModify : GlobalPylon
 {
@@ -20,7 +22,7 @@ public class PylonModify : GlobalPylon
 
         On_Player.InInteractionRange += (orig, self, x, y, settings) =>
         {
-            if (_runningHandleTeleportRequest && Config.PylonTeleNoNear)
+            if (_runningHandleTeleportRequest && ImproveConfigs.Instance.PylonTeleNoNear)
                 return true;
             return orig.Invoke(self, x, y, settings);
         };
@@ -29,7 +31,7 @@ public class PylonModify : GlobalPylon
     private bool On_TeleportPylonsSystem_IsPlayerNearAPylon(On_TeleportPylonsSystem.orig_IsPlayerNearAPylon orig,
         Player player)
     {
-        if (Config.PylonTeleNoNear)
+        if (ImproveConfigs.Instance.PylonTeleNoNear)
         {
             return true;
         }
@@ -39,7 +41,7 @@ public class PylonModify : GlobalPylon
 
     public override bool? ValidTeleportCheck_PreAnyDanger(TeleportPylonInfo pylonInfo)
     {
-        if (Config.PylonTeleNoDanger)
+        if (ImproveConfigs.Instance.PylonTeleNoDanger)
         {
             return true;
         }
@@ -49,7 +51,7 @@ public class PylonModify : GlobalPylon
 
     public override bool? ValidTeleportCheck_PreBiomeRequirements(TeleportPylonInfo pylonInfo, SceneMetrics sceneData)
     {
-        if (Config.PylonTeleNoBiome)
+        if (ImproveConfigs.Instance.PylonTeleNoBiome)
         {
             return true;
         }
@@ -59,7 +61,7 @@ public class PylonModify : GlobalPylon
 
     public override bool? ValidTeleportCheck_PreNPCCount(TeleportPylonInfo pylonInfo, ref int defaultNecessaryNPCCount)
     {
-        if (Config.PylonTeleNoNPC)
+        if (ImproveConfigs.Instance.PylonTeleNoNPC)
         {
             return true;
         }
@@ -69,7 +71,7 @@ public class PylonModify : GlobalPylon
 
     public override bool? PreCanPlacePylon(int x, int y, int tileType, TeleportPylonType pylonType)
     {
-        if (Config.PylonPlaceNoRestriction)
+        if (ImproveConfigs.Instance.PylonPlaceNoRestriction)
             return true;
         return null;
     }

@@ -1,3 +1,4 @@
+using ImproveGame.Common.Configs;
 using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.ModPlayers;
 using ImproveGame.Common.ModSystems;
@@ -711,7 +712,7 @@ public class TEAutofisher : ModTileEntity
             if (bait.stack <= 0)
             {
                 bait.SetDefaults();
-                if (Config.EmptyAutofisher)
+                if (ImproveConfigs.Instance.EmptyAutofisher)
                 {
                     var center = new Point(Position.X + 1, Position.Y + 2);
                     GetMeterCoords(center, out NetworkText compassText, out NetworkText depthText);
@@ -793,7 +794,7 @@ public class TEAutofisher : ModTileEntity
         }
 
         numWaters = GetFishingPondSize(x, y, ref lava, ref honey, ref shimmer, ref chumCount);
-        if (ModIntegrationsSystem.NoLakeSizePenaltyLoaded || Config.NoLakeSizePenalty) // 不用if else是为了判定是否在熔岩/蜂蜜
+        if (ModIntegrationsSystem.NoLakeSizePenaltyLoaded || ImproveConfigs.Instance.NoLakeSizePenalty) // 不用if else是为了判定是否在熔岩/蜂蜜
             numWaters = 10000;
 
         if (honey)

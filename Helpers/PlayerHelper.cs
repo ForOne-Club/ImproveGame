@@ -1,4 +1,6 @@
-﻿namespace ImproveGame.Helpers;
+﻿using ImproveGame.Common.Configs;
+
+namespace ImproveGame.Helpers;
 
 public static class PlayerHelper
 {
@@ -22,7 +24,7 @@ public static class PlayerHelper
             if (requireAlive && teammate.DeadOrGhost) continue;
             // 距离检测
             var distance = teammate.Distance(player.Center);
-            if (Config.ShareRange != -1 && distance > Config.ShareRange * 16f) continue;
+            if (ImproveConfigs.Instance.ShareRange != -1 && distance > ImproveConfigs.Instance.ShareRange * 16f) continue;
 
             action.Invoke(teammate);
         }

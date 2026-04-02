@@ -75,7 +75,7 @@ public class PresetHandler
         TrUtils.TryCreatingDirectory(path);
 
         // Save current configs to the path
-        string jsonModConfig = JsonConvert.SerializeObject(Config, SerializerSettings);
+        string jsonModConfig = JsonConvert.SerializeObject(ImproveConfigs.Instance, SerializerSettings);
         File.WriteAllText(Path.Combine(path, FileNameModConfig), jsonModConfig);
 
         string jsonUIConfig = JsonConvert.SerializeObject(UIConfigs.Instance, SerializerSettings);

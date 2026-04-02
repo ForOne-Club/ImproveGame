@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.ModSystems;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Functions;
 using ImproveGame.Core;
 using ImproveGame.Modules.InfiniteBuff;
@@ -23,7 +24,7 @@ public class ApplyBuffItem : GlobalItem
             return true;
 
         // 非增益药剂
-        if (Config.NoConsume_Potion && item.stack >= Config.NoConsume_PotionRequirement &&
+        if (ImproveConfigs.Instance.NoConsume_Potion && item.stack >= ImproveConfigs.Instance.NoConsume_PotionRequirement &&
             Lookups.SpecialPotions.Contains(item.type))
             return true;
 
@@ -32,15 +33,15 @@ public class ApplyBuffItem : GlobalItem
             return true;
 
         // 随身增益站：旗帜
-        if (Config.NoPlace_BUFFTile_Banner && BannerPatches.AvailableBanners.Contains(item))
+        if (ImproveConfigs.Instance.NoPlace_BUFFTile_Banner && BannerPatches.AvailableBanners.Contains(item))
             return true;
 
         // 弹药
-        if (Config.NoConsume_Ammo && item.stack >= 3996 && item.ammo > 0)
+        if (ImproveConfigs.Instance.NoConsume_Ammo && item.stack >= 3996 && item.ammo > 0)
             return true;
 
         // 电线
-        if (Config.NoConsume_Wire && item.stack >= 3996 && item.type == ItemID.Wire)
+        if (ImproveConfigs.Instance.NoConsume_Wire && item.stack >= 3996 && item.type == ItemID.Wire)
             return true;
 
         // 花园侏儒
@@ -54,10 +55,10 @@ public class ApplyBuffItem : GlobalItem
     {
         if (ModIntegrationsSystem.ModdedInfBuffsIgnore.Contains(item.type)) return [];
 
-        if (Config.NoConsume_Potion)
+        if (ImproveConfigs.Instance.NoConsume_Potion)
         {
             // 普通药水
-            if (item.stack >= Config.NoConsume_PotionRequirement)
+            if (item.stack >= ImproveConfigs.Instance.NoConsume_PotionRequirement)
             {
                 if (_potionToBuffs.TryGetValue(item.type, out var buffsInTable))
                 {
@@ -80,7 +81,7 @@ public class ApplyBuffItem : GlobalItem
         }
 
         // 随身增益站：普通
-        if (Config.NoPlace_BUFFTile)
+        if (ImproveConfigs.Instance.NoPlace_BUFFTile)
         {
             if (_stationToBuffs.TryGetValue(item.type, out var buffsInTable))
                 return buffsInTable;
@@ -116,8 +117,8 @@ public class ApplyBuffItem : GlobalItem
     {
         if (item.ModItem?.Mod.Name is "Everglow") return base.ConsumeItem(item, player);
 
-        if (Config.NoConsume_Potion && !ModIntegrationsSystem.ModdedInfBuffsIgnore.Contains(item.type) &&
-            item.stack >= Config.NoConsume_PotionRequirement &&
+        if (ImproveConfigs.Instance.NoConsume_Potion && !ModIntegrationsSystem.ModdedInfBuffsIgnore.Contains(item.type) &&
+            item.stack >= ImproveConfigs.Instance.NoConsume_PotionRequirement &&
             !ModIntegrationsSystem.ModdedInfBuffsConsume.Contains(item.type) &&
            (item.buffType > 0 || Lookups.SpecialPotions.Contains(item.type)))
         {
@@ -135,7 +136,7 @@ public class ApplyBuffItem : GlobalItem
             return;
 
         if (IsBuffTileItem(item, out _) || item.type is ItemID.HoneyBucket or ItemID.GardenGnome ||
-            (item.stack >= Config.NoConsume_PotionRequirement && item.buffType > 0 && item.active))
+            (item.stack >= ImproveConfigs.Instance.NoConsume_PotionRequirement && item.buffType > 0 && item.active))
         {
             var buffTypes = GetItemBuffTypes(item);
             if (buffTypes.Count != 1)
@@ -205,7 +206,7 @@ public class ApplyBuffItem : GlobalItem
         }
 
         if (IsBuffTileItem(item, out _) || item.type is ItemID.HoneyBucket ||
-            (item.stack >= Config.NoConsume_PotionRequirement && item.buffType > 0 && item.active))
+            (item.stack >= ImproveConfigs.Instance.NoConsume_PotionRequirement && item.buffType > 0 && item.active))
         {
             var buffTypes = GetItemBuffTypes(item);
 
@@ -220,8 +221,8 @@ public class ApplyBuffItem : GlobalItem
             object arg = new
             {
                 BuffName = Lang.GetBuffName(buffType),
-                MaxSpawn = Config.SpawnRateMaxValue,
-                MinSpawn = Math.Min(Config.SpawnRateMinValue, Config.SpawnRateMaxValue).ToString("0.0"),
+                MaxSpawn = ImproveConfigs.Instance.SpawnRateMaxValue,
+                MinSpawn = Math.Min(ImproveConfigs.Instance.SpawnRateMinValue, ImproveConfigs.Instance.SpawnRateMaxValue).ToString("0.0"),
                 KeybindName = keybind
             };
             if (ItemSlot.ShiftInUse)

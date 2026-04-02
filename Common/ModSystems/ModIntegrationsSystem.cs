@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.ModPlayers;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Common.ModPlayers;
 using ImproveGame.Content.Functions;
 using ImproveGame.Content.Functions.ChainedAmmo;
 using ImproveGame.Content.Functions.HomeTeleporting;
@@ -290,7 +291,7 @@ public class ModIntegrationsSystem : ModSystem
             () => RefreshTravelShopSystem.DisplayText, // 文本
             "DialogueTweak/Interfaces/Assets/Icon_Help", // 显示的icon
             ClickAction, // 点击操作
-            () => Config.TravellingMerchantRefresh // 什么时候可用
+            () => ImproveConfigs.Instance.TravellingMerchantRefresh // 什么时候可用
             );
 
 

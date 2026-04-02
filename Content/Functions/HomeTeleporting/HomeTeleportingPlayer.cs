@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.ModSystems;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Projectiles;
 using ImproveGame.Core;
 using Terraria.DataStructures;
@@ -40,7 +41,7 @@ public class HomeTeleportingPlayer : ModPlayer
             if (totalStack is 0)
                 continue;
             // 是药水的条件下：必须同时满足“开启了无限药水”与“达到了药水需求量”
-            if (isPotion && (totalStack < Config.NoConsume_PotionRequirement || !Config.NoConsume_Potion))
+            if (isPotion && (totalStack < ImproveConfigs.Instance.NoConsume_PotionRequirement || !ImproveConfigs.Instance.NoConsume_Potion))
                 continue;
 
             Projectile.NewProjectile(new EntitySource_Sync(), Player.position, Vector2.Zero,

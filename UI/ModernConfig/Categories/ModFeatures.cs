@@ -14,19 +14,19 @@ public sealed class ModFeatures : Category
         var uiConfig = UIConfigs.Instance;
         panel.AddToggle(uiConfig, nameof(uiConfig.QoLAutoTrash));
         panel.AddToggle(uiConfig, nameof(uiConfig.RecipeSearch));
-        panel.AddToggle(Config, nameof(Config.WorldFeaturePanel));
-        panel.AddToggle(Config, nameof(Config.WeatherControl));
-        panel.AddToggle(Config, nameof(Config.QuickShimmer));
-        panel.AddToggle(Config, nameof(Config.MinimapMark));
-        panel.AddToggle(Config, nameof(Config.SuperVault));
-        panel.AddToggle(Config, nameof(Config.ImprovePrefix));
-        panel.AddToggle(Config, nameof(Config.AmmoChain));
-        panel.AddValueSlider(Config, nameof(Config.SpawnRateMaxValue));
-        panel.AddValueSlider(Config, nameof(Config.SpawnRateMinValue));
-        panel.AddToggle(Config, nameof(Config.EmptyAutofisher));
-        panel.AddValueSlider(Config, nameof(Config.ExStorageSearchDistance));
-        panel.AddToggle(Config, nameof(Config.ICanSeeForeverAllBag));
-        panel.AddToggle(Config, nameof(Config.WandMaterialNoConsume));
-        panel.AddToggle(Config, nameof(Config.DummyCustomAIStyleAllowed));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.WorldFeaturePanel));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.WeatherControl));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.QuickShimmer));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.MinimapMark));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.SuperVault));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.ImprovePrefix));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.AmmoChain));
+        panel.AddValueSlider(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.SpawnRateMaxValue));
+        panel.AddValueSlider(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.SpawnRateMinValue));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.EmptyAutofisher));
+        panel.AddValueSlider(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.ExStorageSearchDistance));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.ICanSeeForeverAllBag));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.WandMaterialNoConsume));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.DummyCustomAIStyleAllowed));
     }
 }

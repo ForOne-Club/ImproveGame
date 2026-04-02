@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.ModSystems;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Items;
 using ImproveGame.Content.Items.ItemContainer;
 using ImproveGame.Core;
@@ -43,7 +44,7 @@ public class ImprovePlayer : ModPlayer
 
     public override void OnEnterWorld()
     {
-        if (Config.TeamAutoJoin && Main.netMode is NetmodeID.MultiplayerClient)
+        if (ImproveConfigs.Instance.TeamAutoJoin && Main.netMode is NetmodeID.MultiplayerClient)
         {
             ShouldUpdateTeam = true;
         }
@@ -60,7 +61,7 @@ public class ImprovePlayer : ModPlayer
             _oldItemSelected = -1;
         }
 
-        if (Config.JourneyResearch)
+        if (ImproveConfigs.Instance.JourneyResearch)
         {
             foreach (var item in from i in Player.inventory where !i.IsAir select i)
             {
@@ -89,7 +90,7 @@ public class ImprovePlayer : ModPlayer
         HasSafe = false;
         HasDefendersForge = false;
 
-        if (Config.SuperVoidVault)
+        if (ImproveConfigs.Instance.SuperVoidVault)
         {
             if (!Player.IsVoidVaultEnabled)
             {
@@ -155,7 +156,7 @@ public class ImprovePlayer : ModPlayer
 
         // 计算要缩短多少时间
         float timeShortened = Player.respawnTimer *
-            MathHelper.Clamp(hasBoss ? Config.BOSSBattleResurrectionTimeShortened : Config.ResurrectionTimeShortened,
+            MathHelper.Clamp(hasBoss ? ImproveConfigs.Instance.BOSSBattleResurrectionTimeShortened : ImproveConfigs.Instance.ResurrectionTimeShortened,
                 0f, 100f) / 100f;
         if (timeShortened > 0f)
         {
@@ -179,8 +180,8 @@ public class ImprovePlayer : ModPlayer
     {
         // 非Boss战时快速复活
         // 计算要缩短多少时间 15*60=900
-        int minRemainingTime = (int)(900 * MathHelper.Clamp(100f - Config.ResurrectionTimeShortened, 0f, 100f) / 100f);
-        if (Config.ResurrectionTimeShortened is 0 || Player.respawnTimer <= minRemainingTime || CurrentFrameProperties.AnyActiveBoss)
+        int minRemainingTime = (int)(900 * MathHelper.Clamp(100f - ImproveConfigs.Instance.ResurrectionTimeShortened, 0f, 100f) / 100f);
+        if (ImproveConfigs.Instance.ResurrectionTimeShortened is 0 || Player.respawnTimer <= minRemainingTime || CurrentFrameProperties.AnyActiveBoss)
             return;
         Player.respawnTimer = minRemainingTime;
     }
@@ -220,7 +221,7 @@ public class ImprovePlayer : ModPlayer
 
     private static void PressSuperVaultKeybind()
     {
-        if (!Config.SuperVault) return;
+        if (!ImproveConfigs.Instance.SuperVault) return;
 
         if (BigBagGUI.Instance.Enabled && BigBagGUI.Instance.StartTimer.AnyOpen)
         {
@@ -264,7 +265,7 @@ public class ImprovePlayer : ModPlayer
     private static void PressQuickShimmerKeybind()
     {
         var ui = QuickShimmerGUI.Instance;
-        if (ui is null || !Config.QuickShimmer || !QuickShimmerSystem.Unlocked) return;
+        if (ui is null || !ImproveConfigs.Instance.QuickShimmer || !QuickShimmerSystem.Unlocked) return;
 
         if (ui.Enabled && ui.StartTimer.AnyOpen)
             ui.Close();

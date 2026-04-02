@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Conditions;
+using ImproveGame.Common.Configs;
 using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.ModSystems;
@@ -149,7 +150,7 @@ public class BannerChest : ModItem, IItemOverrideLeftClick, IItemOverrideHover, 
             if (tooltip.Text == "{TooltipByKeybind}")
                 tooltip.Text = GetTextWith($"Items.{Name}.TooltipByKeybind", new { KeybindName = keybind });
 
-        if (!Config.NoPlace_BUFFTile_Banner)
+        if (!ImproveConfigs.Instance.NoPlace_BUFFTile_Banner)
         {
             tooltips.Add(new TooltipLine(Mod, "BannerChestUseless", GetText("Tips.BannerChestUseless"))
             {

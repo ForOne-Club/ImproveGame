@@ -1,4 +1,6 @@
-﻿namespace ImproveGame.Common.ModPlayers
+﻿using ImproveGame.Common.Configs;
+
+namespace ImproveGame.Common.ModPlayers
 {
     public class RespawnTweakPlayer : ModPlayer
     {
@@ -6,7 +8,7 @@
 
         public override void OnRespawn()
         {
-            if (Config.RespawnWithFullHP)
+            if (ImproveConfigs.Instance.RespawnWithFullHP)
             {
                 respawnFullHPTimer = 1;
             }
@@ -15,7 +17,7 @@
         // 为了让满血复活获得Buff效果，在PostUpdate中隔一帧执行
         public override void PostUpdate()
         {
-            if (Config.RespawnWithFullHP && respawnFullHPTimer == 0)
+            if (ImproveConfigs.Instance.RespawnWithFullHP && respawnFullHPTimer == 0)
             {
                 respawnFullHPTimer = -1;
                 Player.statLife = Player.statLifeMax2;

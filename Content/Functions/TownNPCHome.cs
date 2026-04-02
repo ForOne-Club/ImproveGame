@@ -1,4 +1,6 @@
-﻿namespace ImproveGame.Content.Functions;
+﻿using ImproveGame.Common.Configs;
+
+namespace ImproveGame.Content.Functions;
 
 public class TownNPCHome : ModSystem
 {
@@ -46,7 +48,7 @@ public class TownNPCHome : ModSystem
     private void WorldGen_moveRoom(On_WorldGen.orig_moveRoom orig, int x, int y, int n)
     {
         orig.Invoke(x, y, n);
-        if (Config.TownNPCHome && !TownNPCHomeLoaded && Main.npc.IndexInRange(n) && Main.npc[n] is not null)
+        if (ImproveConfigs.Instance.TownNPCHome && !TownNPCHomeLoaded && Main.npc.IndexInRange(n) && Main.npc[n] is not null)
             _indexReadyToTeleport = n;
         // TownEntitiesTeleportToHome(Main.npc[n], Main.npc[n].homeTileX, Main.npc[n].homeTileY);
     }
@@ -67,7 +69,7 @@ public class TownNPCHome : ModSystem
                 "ImproveGame: Quick Home Feature",
                 () =>
                 {
-                    if (!Main.playerInventory || TownNPCHomeLoaded || !Config.TownNPCHome)
+                    if (!Main.playerInventory || TownNPCHomeLoaded || !ImproveConfigs.Instance.TownNPCHome)
                     {
                         return true;
                     }
