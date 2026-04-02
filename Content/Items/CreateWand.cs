@@ -30,8 +30,8 @@ public partial class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClicka
     {
         CreateRecipe()
             .AddRecipeGroup(RecipeGroupID.Wood, 24)
-            .AddRecipeGroup(RecipeSystem.AnyGoldBar, 12)
-            .AddIngredient(ItemID.FallenStar, 2)
+            .AddRecipeGroup(RecipeSystem.AnyIronBar, 8)
+            .AddIngredient(ItemID.FallenStar, 6)
             .Register();
     }
 

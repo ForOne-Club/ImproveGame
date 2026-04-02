@@ -8,6 +8,9 @@ public class RecipeSystem : ModSystem
     /// <summary>任意铜锭（铜/锡）</summary>
     internal static RecipeGroup AnyCopperBar;
 
+    /// <summary>任意铁锭（铁/铅）</summary>
+    internal static RecipeGroup AnyIronBar;
+
     /// <summary>任意银锭（银/钨）</summary>
     internal static RecipeGroup AnySilverBar;
 
@@ -35,6 +38,7 @@ public class RecipeSystem : ModSystem
     public override void Unload()
     {
         AnyCopperBar = null;
+        AnyIronBar = null;
         AnySilverBar = null;
         AnyGoldBar = null;
         AnyDemoniteBar = null;
@@ -47,6 +51,7 @@ public class RecipeSystem : ModSystem
     public override void AddRecipeGroups()
     {
         AnyCopperBar = new RecipeGroup(() => GetText($"RecipeGroup.{nameof(AnyCopperBar)}"), 20, 703);
+        AnyIronBar = new RecipeGroup(() => GetText($"RecipeGroup.{nameof(AnyIronBar)}"), 22, 704);
         AnySilverBar = new RecipeGroup(() => GetText($"RecipeGroup.{nameof(AnySilverBar)}"), 21, 705);
         AnyGoldBar = new RecipeGroup(() => GetText($"RecipeGroup.{nameof(AnyGoldBar)}"), 19, 706);
         AnyDemoniteBar = new RecipeGroup(() => GetText($"RecipeGroup.{nameof(AnyDemoniteBar)}"), 57, 1257);
@@ -61,6 +66,7 @@ public class RecipeSystem : ModSystem
         AnyGoldBar = RecipeGroup.recipeGroups[RecipeGroup.RegisterGroup("GoldBar", AnyGoldBar)];
         AnySilverBar = RecipeGroup.recipeGroups[RecipeGroup.RegisterGroup("SilverBar", AnySilverBar)];
         AnyCopperBar = RecipeGroup.recipeGroups[RecipeGroup.RegisterGroup("CopperBar", AnyCopperBar)];
+        AnyIronBar = RecipeGroup.recipeGroups[RecipeGroup.RegisterGroup("IronBar", AnyIronBar)];
         AnyShadowScale = RecipeGroup.recipeGroups[RecipeGroup.RegisterGroup("ShadowScale", AnyShadowScale)];
         AnyDemoniteBar = RecipeGroup.recipeGroups[RecipeGroup.RegisterGroup("DemoniteBar", AnyDemoniteBar)];
         AnyCobaltBar = RecipeGroup.recipeGroups[RecipeGroup.RegisterGroup("CobaltBar", AnyCobaltBar)];
