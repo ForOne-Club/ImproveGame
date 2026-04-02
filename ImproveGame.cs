@@ -25,8 +25,6 @@ public class ImproveGame : Mod
         ChatManager.Register<QotGlyphTagHandler>("qotglyph");
     }
 
-    public override void Unload() => ImproveConfigs.Instance = null;
-
     public override void HandlePacket(BinaryReader reader, int whoAmI) => NetModule.ReceiveModule(reader, whoAmI);
 
     public override object Call(params object[] args) => ModIntegrationsSystem.Call(args);
