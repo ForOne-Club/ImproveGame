@@ -5,14 +5,31 @@ namespace ImproveGame.Common.ModSystems;
 
 public class RecipeSystem : ModSystem
 {
+    /// <summary>任意铜锭（铜/锡）</summary>
     internal static RecipeGroup AnyCopperBar;
+
+    /// <summary>任意银锭（银/钨）</summary>
     internal static RecipeGroup AnySilverBar;
+
+    /// <summary>任意金锭（金/铂）</summary>
     internal static RecipeGroup AnyGoldBar;
+
+    /// <summary>任意魔金锭（魔金/猩红）</summary>
     internal static RecipeGroup AnyDemoniteBar;
+
+    /// <summary>任意暗影鳞片（暗影鳞片/组织样本）</summary>
     internal static RecipeGroup AnyShadowScale;
+
+    /// <summary>任意钴锭（钴/钯金）</summary>
     internal static RecipeGroup AnyCobaltBar;
+
+    /// <summary>任意秘银锭（秘银/山铜）</summary>
     internal static RecipeGroup AnyMythrilBar;
+
+    /// <summary>任意精金锭（精金/钛金）</summary>
     internal static RecipeGroup AnyAdamantiteBar;
+
+    /// <summary>任意宝石</summary>
     internal static RecipeGroup AnyGem;
 
     public override void Unload()

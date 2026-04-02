@@ -4,6 +4,7 @@ using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.UI;
 using ImproveGame.UIFramework;
+using ImproveGame.UserInterfaces.CreateWand;
 using System.Collections.ObjectModel;
 
 namespace ImproveGame.Content.Items;
@@ -36,10 +37,12 @@ public partial class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClicka
 
     public override bool CanUseItem(Player player)
     {
-        if (player.noBuilding)
-            return false;
+        if (player.noBuilding) return false;
+
         if (player.altFunctionUse == 2 && !Main.dedServ && player.whoAmI == Main.myPlayer)
         {
+            CreateWandUI.Instance.Toggle();
+
             if (!ArchitectureGUI.Visible)
                 UISystem.Instance.ArchitectureGUI.Open(this);
             else
