@@ -2,6 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using SilkyUIFramework;
 using SilkyUIFramework.Attributes;
 using SilkyUIFramework.Elements;
+using SilkyUIFramework.Extensions;
 
 namespace ImproveGame.UserInterfaces.CreateWand;
 
@@ -41,17 +42,28 @@ public partial class CreateWandController : BaseBody
             Title.Text = vm.Title;
         };
 
-        Add.Texture2D = ModAsset.Add;
         Download.Texture2D = ModAsset.Download;
         X.Texture2D = ModAsset.X;
         X.LeftMouseDown += delegate { Enabled = false; };
 
-        SetHoverAnim(Add, Download, X);
+        SetHeaderButtonHoverAnim(Download, X);
 
-        SetHoverAnim2(MaterialButton, StructureButton);
+        SetNavButtonHoverAnim(MaterialButton, StructureButton);
+
+        for (int i = 0; i < 24; i++)
+        {
+            new SUIItemSlot()
+            {
+                Width = new Dimension(48),
+                Height = new Dimension(48),
+                BorderRadius = new Vector4(8),
+                BorderColor = SUIColor.Border * 0.75f,
+                BackgroundColor = SUIColor.Background * 0.5f,
+            }.Join(ItemSlot_Container);
+        }
     }
 
-    static void SetHoverAnim(params SUIImage[] images)
+    static void SetHeaderButtonHoverAnim(params SUIImage[] images)
     {
         foreach (var image in images)
         {
@@ -59,11 +71,16 @@ public partial class CreateWandController : BaseBody
         }
     }
 
-    static void SetHoverAnim2(params UIView[] buttons)
+    static void SetNavButtonHoverAnim(params UIView[] buttons)
     {
         foreach (var button in buttons)
         {
             button.OnUpdateStatus += (_) => button.BackgroundColor = Color.Black * button.HoverTimer.Lerp(0f, 0.25f);
         }
+    }
+
+    protected override void UpdateStatus(GameTime gameTime)
+    {
+        base.UpdateStatus(gameTime);
     }
 }

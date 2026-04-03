@@ -5,21 +5,32 @@
       Border="0" BorderColor="#00000000" BackgroundColor="#00000000"
       Gap="0" FitWidth="true" FitHeight="true" Left="50#" Top="50#">
 	<ElementGroup Name="MainContainer" Border="2" BorderRadius="8"
-                  FitWidth="false" FitHeight="true" Width="400px" Height="300px"
+                  FitWidth="true" FitHeight="true" Height="300px"
                   FlexDirection="Column" CrossAlignment="Stretch">
 		<DraggableView Name="Header" FitWidth="true" Height="36px"
                        Padding="8 0" FlexDirection="Row" MainAlignment="Start" CrossAlignment="Center">
 			<!-- Title -->
 			<TextView Name="Title" Text="建造魔杖控制器" TextScale="0.4" FlexGrow="1" DisableMouseInteraction="true"/>
 			<Image Name="Download" Width="30px" ImageAlign="1 0.5"/>
-			<Image Name="Add" Width="30px" ImageAlign="1 0.5"/>
 			<Image Name="X" Width="30px" ImageAlign="1 0.5"/>
 		</DraggableView>
 		<HR BackgroundColor="rgba(0,0,0,0.75)"/>
-		<ElementGroup FitWidth="true" Height="250px" FlexDirection="Column"
-                      CrossAlignment="Stretch" Gap="6" Padding="6">
+		<ElementGroup FitWidth="true" FitHeight="true" FlexDirection="Column"
+                      CrossAlignment="Stretch" Padding="8">
+			<!-- 根据 ItemSlot 计算的大小，没有 Grid 之前只能先这样 -->
+			<ElementGroup Width="328px" Height="220px">
+				<ElementGroup Name="ItemSlot_Container" Width="100%" Height="100%"
+							  FlexDirection="Row" FlexWrap="true" Gap="8">
+
+				</ElementGroup>
+				<ScrollView Invalid="true" Name="W" Width="100%" Height="100%">
+					<M.Mask Width="100%" Height="100%" />
+					<M.Container Width="100%" FitHeight="true" FlexDirection="Row" MainAlignment="Start"/>
+				</ScrollView>
+			</ElementGroup>
 		</ElementGroup>
 		<HR BackgroundColor="rgba(0,0,0,0.75)"/>
+		<!-- 导航栏 -->
 		<ElementGroup Name="NavBar" Height="36px" FlexDirection="Row" CrossAlignment="Stretch" BackgroundColor="rgba(0,0,0,0.25)">
 			<ElementGroup Padding="4" FlexGrow="1" FlexDirection="Row" CrossAlignment="Stretch">
 				<TextView Name="MaterialButton" BorderRadius="4" FlexGrow="1"
