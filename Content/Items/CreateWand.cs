@@ -41,7 +41,7 @@ public partial class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClicka
 
         if (player.altFunctionUse == 2 && !Main.dedServ && player.whoAmI == Main.myPlayer)
         {
-            CreateWandUI.Instance.Toggle();
+            CreateWandController.Instance.Toggle();
 
             if (!ArchitectureGUI.Visible)
                 UISystem.Instance.ArchitectureGUI.Open(this);

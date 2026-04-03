@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
         <PackageReference Include="FuzzySearch.Net" Version="1.1.0" />
         <!-- 夜幽模组构建工具 -->
         <PackageReference Include="Solaestas.tModLoader.ModBuilder" Version="1.6.1" />
