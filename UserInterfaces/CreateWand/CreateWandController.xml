@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!-- Class 填写对应类名 -->
 <Body Class="ImproveGame.UserInterfaces.CreateWand.CreateWandController"
-      Enabled="true" EnableBlur="true"
+      Enabled="false" EnableBlur="true"
       Border="0" BorderColor="#00000000" BackgroundColor="#00000000"
       Gap="0" FitWidth="true" FitHeight="true" Left="50#" Top="50#">
 	<ElementGroup Name="MainContainer" Border="2" BorderRadius="8"
@@ -10,8 +10,10 @@
 		<DraggableView Name="Header" FitWidth="true" Height="36px"
                        Padding="8 0" FlexDirection="Row" MainAlignment="Start" CrossAlignment="Center">
 			<!-- Title -->
-			<TextView Name="Title" Text="建造魔杖控制器" TextScale="0.4" FlexGrow="1" DisableMouseInteraction="true"/>
-			<Image Name="Download" Width="30px" ImageAlign="1 0.5"/>
+			<TextView Name="Title" Bind.Text="Title" TextScale="0.4" FlexGrow="1" DisableMouseInteraction="true"/>
+			<ButtonBase Name="Download" Bind.Command="DownloadTitleCommand" FitWidth="true" FitHeight="true">
+				<Image Bind.Texture2D="Download" Width="30px" ImageAlign="1 0.5"/>
+			</ButtonBase>
 			<Image Name="X" Width="30px" ImageAlign="1 0.5"/>
 		</DraggableView>
 		<HR BackgroundColor="rgba(0,0,0,0.75)"/>

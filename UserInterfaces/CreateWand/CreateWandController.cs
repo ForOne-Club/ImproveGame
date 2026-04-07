@@ -1,15 +1,34 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using SilkyUIFramework;
 using SilkyUIFramework.Attributes;
 using SilkyUIFramework.Elements;
 using SilkyUIFramework.Extensions;
+using System.Threading.Tasks;
 
 namespace ImproveGame.UserInterfaces.CreateWand;
 
 public partial class CreateWandViewModel : ObservableObject
 {
     [ObservableProperty]
-    public partial string Title { get; set; }
+    public partial Asset<Texture2D> Download { get; set; } = ModAsset.Download;
+
+    [ObservableProperty]
+    public partial string Title { get; set; } = "请尽快下载标题！";
+
+    [RelayCommand]
+    private async Task DownloadTitle()
+    {
+        Title = $"建造魔杖控制器 1";
+        await Task.Delay(500);
+        Title = $"建造魔杖控制器 2";
+        await Task.Delay(500);
+        Title = $"建造魔杖控制器 3";
+        await Task.Delay(500);
+        Title = $"建造魔杖控制器 4";
+        await Task.Delay(500);
+        Title = $"建造魔杖控制器 5";
+    }
 }
 
 [RegisterUI]
@@ -21,11 +40,11 @@ public partial class CreateWandController : BaseBody
 
     public override IEnumerable<UIView> BlurElements => [MainContainer];
 
-    private readonly CreateWandViewModel _vm = new();
-
     protected override void OnInitialize()
     {
         Instance = this;
+
+        LocalDataContext = new CreateWandViewModel();
 
         InitializeComponent();
 
@@ -35,18 +54,10 @@ public partial class CreateWandController : BaseBody
         Header.ControlTarget = this;
         Title.UseDeathText();
 
-        _vm.PropertyChanged += (s, e) =>
-        {
-            if (!e.PropertyName.Equals("Title")) return;
-            if (s is not CreateWandViewModel vm) return;
-            Title.Text = vm.Title;
-        };
-
-        Download.Texture2D = ModAsset.Download;
         X.Texture2D = ModAsset.X;
         X.LeftMouseDown += delegate { Enabled = false; };
 
-        SetHeaderButtonHoverAnim(Download, X);
+        SetHeaderButtonHoverAnim(X);
 
         SetNavButtonHoverAnim(MaterialButton, StructureButton);
 
