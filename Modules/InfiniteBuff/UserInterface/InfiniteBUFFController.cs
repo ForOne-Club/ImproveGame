@@ -8,6 +8,18 @@ using Terraria.ModLoader.UI;
 
 namespace ImproveGame.Modules.InfiniteBuff.UserInterface;
 
+[XmlElementMapping("InfiniteBuffSlider")]
+public class QotSlider : SUISlider
+{
+    protected override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+    {
+        base.Draw(gameTime, spriteBatch);
+
+        if (!Thumb.IsMouseHovering && !Thumb.LeftMousePressed) return;
+        UICommon.TooltipMouseText($"{InfiniteBuffHelper.RemapSliderToSpawnRate(Value):0.##}");
+    }
+}
+
 [RegisterUI]
 public partial class InfiniteBUFFController : BaseBody
 {
@@ -19,7 +31,11 @@ public partial class InfiniteBUFFController : BaseBody
             : base.ContainsPoint(point);
 
     protected override void OnEnterTree() => LocalDataContext = new InfiniteBuffViewModel();
-    protected override void OnExitTree() => LocalDataContext = null;
+    protected override void OnExitTree()
+    {
+        (LocalDataContext as IDisposable)?.Dispose();
+        LocalDataContext = null;
+    }
 
     protected override void OnInitialize()
     {
@@ -34,22 +50,13 @@ public partial class InfiniteBUFFController : BaseBody
         Close.LeftMouseDown += (_, _) => Enabled = false;
         Close.OnUpdateStatus += (_) => Close.ImageColor = Color.White * Close.HoverTimer.Lerp(0.5f, 1f);
 
-        ResetEditText.OnUpdateStatus += delegate
-        {
-            ResetEditText.ImageColor = Color.White * ResetEditText.HoverTimer.Lerp(0.5f, 1f);
-        };
+        ResetEditText.OnUpdateStatus += (_) => ResetEditText.ImageColor = Color.White * ResetEditText.HoverTimer.Lerp(0.5f, 1f);
+        ResetEditText.LeftMouseDown += (_, _) => InputBox.Text = "";
 
-        ResetEditText.LeftMouseDown += delegate { FilterInputBox.Text = ""; };
-
-        MarkerContainer.RemoveAllChildren();
         var quantity = 3;
-        for (int i = 0; i < quantity; i++)
+        for (int i = 0; i < 3; i++)
         {
-            var mark = new UIScaleMarks()
-            {
-                Progress = i / (quantity - 1f)
-            }.Join(MarkerContainer);
-
+            var mark = new UIScaleMarks { Progress = i / (quantity - 1f) }.Join(MarkerContainer);
             mark.Bind(nameof(InfiniteBuffViewModel.SetSliderValueCommand), nameof(UIScaleMarks.Command));
         }
     }
@@ -58,14 +65,8 @@ public partial class InfiniteBUFFController : BaseBody
     {
         base.UpdateStatus(gameTime);
 
-        (DataContext as IUpdatable)?.Update(gameTime);
+        (LocalDataContext as IUpdatable)?.Update(gameTime);
         UpdateBuffsContainer();
-
-        // 拖动条悬浮提示
-        if (DataContext is not InfiniteBuffViewModel vm) return;
-        if (!Slider.Thumb.IsMouseHovering && !Slider.Thumb.LeftMousePressed) return;
-
-        UICommon.TooltipMouseText(vm.SpawnRateText);
     }
 
     private readonly BuffTypesState _typesState = new();
@@ -76,9 +77,9 @@ public partial class InfiniteBUFFController : BaseBody
     private void UpdateBuffsContainer()
     {
         if (BuffsContainer is null) return;
+        var str = InputBox?.Text ?? string.Empty;
 
-        var filterString = FilterInputBox?.Text ?? string.Empty;
-        _typesState.Rebuild(filterString);
+        _typesState.Rebuild(str);
         if (!_typesState.ConsumeDirty()) return;
 
         BuffsContainer.RemoveAllChildren();

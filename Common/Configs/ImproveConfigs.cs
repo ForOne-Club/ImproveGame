@@ -508,7 +508,7 @@ public class ImproveConfigs : ModConfig
     /// <summary> 敌人生成速度倍率最小值 </summary>
     [Slider]
     [DefaultValue(0f)]
-    [Range(0f, 2f)]
+    [Range(0f, 1f)]
     [Increment(0.1f)]
     [CustomModConfigItem(typeof(Round4FloatElement))]
     public float SpawnRateMinValue;

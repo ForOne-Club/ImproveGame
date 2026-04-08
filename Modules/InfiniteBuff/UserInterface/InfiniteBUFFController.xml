@@ -28,7 +28,7 @@
 					Border="2" BorderColor="rgba(0,0,0,0.5)" BackgroundColor="rgba(0,0,0,0.25)"
 					CrossAlignment="Stretch">
 					<!-- 输入框 -->
-					<EditText Name="FilterInputBox" Bind.Placeholder="Placeholder"
+					<EditText Name="InputBox" Bind.Placeholder="Placeholder"
 						MaxHeight="100%" Padding="8 0" FlexGrow="1" FlexShrink="1"
 						MaximumCharacters="22" TextAlign="0 0.5" TextScale="0.75" />
 					<Image Name="ResetEditText" Width="28px" FitHeight="true" ImageScale="0.8"
@@ -53,7 +53,7 @@
 		Padding="12 8" Gap="8" BackgroundColor="rgba(0,0,0,0.25)" BorderRadius="8">
 		<!-- Title -->
 		<TextView Bind.Text="EnemySpawnRate" TextScale="0.8" Padding="4" />
-		<Slider Name="Slider" Bind.DragCommand="SetSliderValueCommand" Bind.Value ="SliderValue" Height="20px" />
+		<InfiniteBuffSlider Bind.DragCommand="SetSliderValueCommand" Bind.Value ="SliderValue" Height="20px" />
 		<ElementGroup Name="MarkerContainer" Padding="10 0" FitHeight="true" MainAlignment="SpaceBetween" />
 	</ElementGroup>
 </Body>

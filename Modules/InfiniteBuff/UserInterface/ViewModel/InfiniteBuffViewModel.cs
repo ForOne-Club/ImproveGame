@@ -6,7 +6,7 @@ using System.ComponentModel;
 
 namespace ImproveGame.Modules.InfiniteBuff.UserInterface.ViewModel;
 
-public partial class InfiniteBuffViewModel : IUpdatable
+public sealed partial class InfiniteBuffViewModel : ObservableObject, IUpdatable, IDisposable
 {
     private static string GetTextValue(string key) => Language.GetTextValue($"Mods.ImproveGame.UI.InfiniteBUFFController.{key}");
 
@@ -24,23 +24,20 @@ public partial class InfiniteBuffViewModel : IUpdatable
 
     [ObservableProperty]
     public partial Asset<Texture2D> EyeSwitch { get; set; } = ModAsset.EyeSwitch;
-}
 
-public sealed partial class InfiniteBuffViewModel : ObservableObject
-{
     private readonly SpawnRateSliderValueModPlayer _model;
 
     public InfiniteBuffViewModel()
     {
         _model = Main.LocalPlayer.GetModPlayer<SpawnRateSliderValueModPlayer>();
-        _model.PropertyChanged += Model_PropertyChanged;
+        _model.PropertyChanged += OnModelPropertyChanged;
 
         if (_model is not SpawnRateSliderValueModPlayer player) return;
         OpenSlider = player.ShowSlider;
         SliderValue = player.SpawnRateSliderValue;
     }
 
-    private void Model_PropertyChanged(object sender, PropertyChangedEventArgs e)
+    private void OnModelPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
         if (sender is not SpawnRateSliderValueModPlayer player) return;
         switch (e.PropertyName)
@@ -83,9 +80,6 @@ public sealed partial class InfiniteBuffViewModel : ObservableObject
 
     public Color EyeColor => OpenSlider ? Color.White : Color.White * 0.5f;
 
-    /// <summary> 实际刷怪倍率 </summary>
-    public string SpawnRateText => $"{InfiniteBuffHelper.RemapSliderToSpawnRate(SliderValue):0.##}";
-
     [RelayCommand] public void ToggleShowSlider() => _model.ShowSlider = !_model.ShowSlider;
 
     void IUpdatable.Update(GameTime gameTime)
@@ -93,4 +87,6 @@ public sealed partial class InfiniteBuffViewModel : ObservableObject
         if (!Main.LocalPlayer.TryGetModPlayer<InfiniteBuffModPlayer>(out var infinitePlayer)) return;
         HiddenSliderEyeButton = !infinitePlayer.MeetsBattlerCombination();
     }
+
+    public void Dispose() => _model.PropertyChanged -= OnModelPropertyChanged;
 }
