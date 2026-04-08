@@ -1,35 +1,9 @@
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using SilkyUIFramework;
 using SilkyUIFramework.Attributes;
 using SilkyUIFramework.Elements;
 using SilkyUIFramework.Extensions;
-using System.Threading.Tasks;
 
 namespace ImproveGame.UserInterfaces.CreateWand;
-
-public partial class CreateWandViewModel : ObservableObject
-{
-    [ObservableProperty]
-    public partial Asset<Texture2D> Download { get; set; } = ModAsset.Download;
-
-    [ObservableProperty]
-    public partial string Title { get; set; } = "请尽快下载标题！";
-
-    [RelayCommand]
-    private async Task DownloadTitle()
-    {
-        Title = $"建造魔杖控制器 1";
-        await Task.Delay(500);
-        Title = $"建造魔杖控制器 2";
-        await Task.Delay(500);
-        Title = $"建造魔杖控制器 3";
-        await Task.Delay(500);
-        Title = $"建造魔杖控制器 4";
-        await Task.Delay(500);
-        Title = $"建造魔杖控制器 5";
-    }
-}
 
 [RegisterUI]
 public partial class CreateWandController : BaseBody

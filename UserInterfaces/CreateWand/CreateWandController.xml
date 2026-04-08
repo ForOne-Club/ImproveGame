@@ -11,9 +11,7 @@
                        Padding="8 0" FlexDirection="Row" MainAlignment="Start" CrossAlignment="Center">
 			<!-- Title -->
 			<TextView Name="Title" Bind.Text="Title" TextScale="0.4" FlexGrow="1" DisableMouseInteraction="true"/>
-			<ButtonBase Name="Download" Bind.Command="DownloadTitleCommand" FitWidth="true" FitHeight="true">
-				<Image Bind.Texture2D="Download" Width="30px" ImageAlign="1 0.5"/>
-			</ButtonBase>
+			<Image Name="Download" Bind.Texture2D="Download" Width="30px" ImageAlign="1 0.5"/>
 			<Image Name="X" Width="30px" ImageAlign="1 0.5"/>
 		</DraggableView>
 		<HR BackgroundColor="rgba(0,0,0,0.75)"/>

@@ -6,6 +6,10 @@ RecipeSearchUI.Tips:
 	You may disable it in Personal Config of Quality of Terraria
 	'''
 
+CreateWandController: {
+	Title: 建造魔杖控制器 114514
+}
+
 InfiniteBUFFController: {
 	DisplayName: BUFF Controller
 	Placeholder: Please enter the name

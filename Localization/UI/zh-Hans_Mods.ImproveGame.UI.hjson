@@ -6,6 +6,10 @@ RecipeSearchUI.Tips:
 	你可以在更好的体验的个人配置中关闭它
 	'''
 
+CreateWandController: {
+	Title: 建造魔杖控制器
+}
+
 InfiniteBUFFController: {
 	DisplayName: 增益控制器
 	Placeholder: 请输入名称

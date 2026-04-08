@@ -3,6 +3,7 @@ using SilkyUIFramework;
 using SilkyUIFramework.Attributes;
 using SilkyUIFramework.Elements;
 using SilkyUIFramework.Extensions;
+using SilkyUIFramework.Interfaces;
 using Terraria.ModLoader.UI;
 
 namespace ImproveGame.Modules.InfiniteBuff.UserInterface;
@@ -10,126 +11,61 @@ namespace ImproveGame.Modules.InfiniteBuff.UserInterface;
 [RegisterUI]
 public partial class InfiniteBUFFController : BaseBody
 {
-    public static string GetTextValue(string key) => Language.GetTextValue($"Mods.ImproveGame.UI.InfiniteBUFFController.{key}");
-
-    private InfiniteBuffViewModel _vm;
-
-    protected override void OnExitTree() => _vm.Dispose();
-
-    /// <summary>
-    /// Buff 列表滚动容器的内容区域。
-    /// </summary>
-    public SUIScrollContainer ScrollContainer { get; private set; }
-
-    /// <summary>
-    /// 需要参与背景模糊的主要子视图。
-    /// </summary>
+    public SUIScrollContainer BuffsContainer { get; private set; }
     public override IEnumerable<UIView> BlurElements => [MainContainer, SliderContainer];
 
-    public override bool ContainsPoint(Vector2 point)
-    {
-        if (SliderContainer is not { Invalid: false }) return base.ContainsPoint(point);
+    public override bool ContainsPoint(Vector2 point) => SliderContainer is { Invalid: false }
+            ? SliderContainer.Bounds.Contains(point) || base.ContainsPoint(point)
+            : base.ContainsPoint(point);
 
-        return SliderContainer.Bounds.Contains(point) || base.ContainsPoint(point);
-    }
+    protected override void OnEnterTree() => LocalDataContext = new InfiniteBuffViewModel();
+    protected override void OnExitTree() => LocalDataContext = null;
 
     protected override void OnInitialize()
     {
         InitializeComponent();
 
-        MainContainer.BorderColor = SUIColor.Border;
-        MainContainer.BackgroundColor = SUIColor.Background * 0.75f;
-
-        SliderContainer.BorderColor = SUIColor.Border;
-        SliderContainer.BackgroundColor = SUIColor.Background * 0.75f;
-
-        ScrollContainer = ScrollView.Container;
+        BuffsContainer = ScrollView.Container;
 
         Header.ControlTarget = this;
 
-        Title.Text = GetTextValue("DisplayName");
         Title.UseDeathText();
 
-        SliderSwitch.Texture2D = ModAsset.EyeSwitch;
+        Close.LeftMouseDown += (_, _) => Enabled = false;
+        Close.OnUpdateStatus += (_) => Close.ImageColor = Color.White * Close.HoverTimer.Lerp(0.5f, 1f);
 
-        var searchCancel = Main.Assets.Request<Texture2D>("Images/UI/SearchCancel");
-
-        Close.Texture2D = searchCancel;
-        Close.LeftMouseDown += delegate { Enabled = false; };
-        Close.OnUpdateStatus += delegate
+        ResetEditText.OnUpdateStatus += delegate
         {
-            Close.ImageColor = Color.White * Close.HoverTimer.Lerp(0.5f, 1f);
+            ResetEditText.ImageColor = Color.White * ResetEditText.HoverTimer.Lerp(0.5f, 1f);
         };
 
-        FilterBox.Placeholder = GetTextValue("Placeholder");
+        ResetEditText.LeftMouseDown += delegate { FilterInputBox.Text = ""; };
 
-        ClearEditText.Texture2D = searchCancel;
-        ClearEditText.OnUpdateStatus += delegate
-        {
-            ClearEditText.ImageColor = Color.White * ClearEditText.HoverTimer.Lerp(0.5f, 1f);
-        };
-
-        ClearEditText.LeftMouseDown += delegate { FilterBox.Text = ""; };
-
-        SliderTitle.Text = GetTextValue("EnemySpawnRate");
-
-        _vm = new InfiniteBuffViewModel();
-        _vm.SliderValueChanged += UpdateSliderValue;
-        _vm.ShowSliderChanged += UpdateShowSlider;
-
-        UpdateSliderValue(this, _vm.SliderValue);
-        UpdateShowSlider(this, _vm.ShowSlider);
-
-        // 拖动滑块时只上报给 VM
-        Slider.Drag += (_, value) => _vm?.SetSliderValue(value);
-        SliderSwitch.LeftMouseDown += (_, _) => _vm.ToggleShowSlider();
-
-        UpdateScaleMarks(3);
-    }
-
-    void UpdateSliderValue(object sender, float value) => Slider.Value = value;
-
-    void UpdateShowSlider(object sender, bool value) =>
-        SliderSwitch.ImageColor = value ? Color.White : Color.White * 0.5f;
-
-    private void UpdateScaleMarks(int quantity)
-    {
-        if (_vm is null) return;
         MarkerContainer.RemoveAllChildren();
+        var quantity = 3;
         for (int i = 0; i < quantity; i++)
         {
-            new UIScaleMarks()
+            var mark = new UIScaleMarks()
             {
                 Progress = i / (quantity - 1f)
-            }.Join(MarkerContainer).LeftMouseDown += ClickScaleMarks;
+            }.Join(MarkerContainer);
+
+            mark.Bind(nameof(InfiniteBuffViewModel.SetSliderValueCommand), nameof(UIScaleMarks.Command));
         }
     }
-
-    private void ClickScaleMarks(UIView view, SilkyUIFramework.UIMouseEvent _)
-        => _vm.SetSliderValue((view as UIScaleMarks).Progress);
 
     protected override void UpdateStatus(GameTime gameTime)
     {
         base.UpdateStatus(gameTime);
 
+        (DataContext as IUpdatable)?.Update(gameTime);
         UpdateBuffsContainer();
 
         // 拖动条悬浮提示
-        if (_vm != null &&
-            (Slider.Thumb.IsMouseHovering || Slider.Thumb.LeftMousePressed))
-        {
-            UICommon.TooltipMouseText(_vm.SpawnRateText);
-        }
+        if (DataContext is not InfiniteBuffViewModel vm) return;
+        if (!Slider.Thumb.IsMouseHovering && !Slider.Thumb.LeftMousePressed) return;
 
-        // 没有激活组合时不显示控制器
-        if (!Main.LocalPlayer.TryGetModPlayer<InfiniteBuffModPlayer>(out var infinitePlayer)) return;
-        var meets = infinitePlayer.MeetsBattlerCombination();
-        SliderSwitch.Invalid = !meets;
-        var invalid = !_vm.ShowSlider || !meets;
-        if (SliderContainer.Invalid == invalid) return;
-
-        SliderContainer.Invalid = invalid;
-        MarkLayoutDirty();
+        UICommon.TooltipMouseText(vm.SpawnRateText);
     }
 
     private readonly BuffTypesState _typesState = new();
@@ -139,17 +75,17 @@ public partial class InfiniteBUFFController : BaseBody
     /// </summary>
     private void UpdateBuffsContainer()
     {
-        if (ScrollContainer is null) return;
+        if (BuffsContainer is null) return;
 
-        var filterString = FilterBox?.Text ?? string.Empty;
+        var filterString = FilterInputBox?.Text ?? string.Empty;
         _typesState.Rebuild(filterString);
         if (!_typesState.ConsumeDirty()) return;
 
-        ScrollContainer.RemoveAllChildren();
+        BuffsContainer.RemoveAllChildren();
 
         foreach (var type in _typesState.Types)
         {
-            ScrollContainer.AddChild(ButtonPool.GetOrAdd(type, key => new SUIBuffButton() { BuffType = key }));
+            BuffsContainer.AddChild(ButtonPool.GetOrAdd(type, key => new SUIBuffButton() { BuffType = key }));
         }
     }
 
@@ -168,6 +104,8 @@ public class UIScaleMarks : UITextView
         FitWidth = false;
         Width = new Dimension(35);
     }
+
+    protected override object CommandParameter => Progress;
 
     /// <summary>
     /// 代表刻度值，修改随之改变位置和文本

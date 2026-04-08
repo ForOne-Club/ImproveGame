@@ -1,45 +1,21 @@
-﻿using ImproveGame.Packets;
-using SilkyUIFramework;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using ImproveGame.Packets;
 using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Modules.InfiniteBuff;
 
-public class SpawnRateSliderValueModPlayer : ModPlayer
+[INotifyPropertyChanged]
+public partial class SpawnRateSliderValueModPlayer : ModPlayer
 {
-    public event EventHandler<bool> ShowSliderChanged;
+    [ObservableProperty]
+    public partial bool ShowSlider { get; set; } = true;
 
-    public bool ShowSlider
-    {
-        get; set
-        {
-            if (ShowSlider == value) return;
-
-            field = value;
-            ShowSliderChanged?.Invoke(this, field);
-        }
-    } = true;
-
-    public event EventHandler<float> SpawnRateSliderValueChanged;
-
-    /// <summary>
-    /// 刷怪倍率滑块值, 范围 [0,1]
-    /// </summary>
-    public float SpawnRateSliderValue
-    {
-        get; set
-        {
-            // 先投影到实际倍率区间，再映射回滑块空间，得到稳定值。
-            value = MathF.Round(value / 0.01f) * 0.01f;
-            if (SMath.NearlyEqual(field, value)) return;
-
-            field = value;
-            SpawnRateSliderValueChanged?.Invoke(this, field);
-        }
-    } = 0.5f;
+    [ObservableProperty]
+    public partial float SpawnRateSliderValue { get; private set; } = 0.5f;
 
     public void SetSpawnRateSliderValue(float value)
     {
-        SpawnRateSliderValue = value;
+        SpawnRateSliderValue = MathF.Round(value / 0.01f) * 0.01f;
         SpawnRateSlider.Get(Player.whoAmI, SpawnRateSliderValue).Send();
     }
 

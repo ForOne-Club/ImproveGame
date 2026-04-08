@@ -1,46 +1,96 @@
-﻿namespace ImproveGame.Modules.InfiniteBuff.UserInterface.ViewModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using SilkyUIFramework;
+using SilkyUIFramework.Interfaces;
+using System.ComponentModel;
 
-public sealed class InfiniteBuffViewModel : IDisposable
+namespace ImproveGame.Modules.InfiniteBuff.UserInterface.ViewModel;
+
+public partial class InfiniteBuffViewModel : IUpdatable
+{
+    private static string GetTextValue(string key) => Language.GetTextValue($"Mods.ImproveGame.UI.InfiniteBUFFController.{key}");
+
+    [ObservableProperty]
+    public partial string Title { get; set; } = GetTextValue("DisplayName");
+
+    [ObservableProperty]
+    public partial string Placeholder { get; set; } = GetTextValue("Placeholder");
+
+    [ObservableProperty]
+    public partial string EnemySpawnRate { get; set; } = GetTextValue("EnemySpawnRate");
+
+    [ObservableProperty]
+    public partial Asset<Texture2D> SearchCancel { get; set; } = Main.Assets.Request<Texture2D>("Images/UI/SearchCancel");
+
+    [ObservableProperty]
+    public partial Asset<Texture2D> EyeSwitch { get; set; } = ModAsset.EyeSwitch;
+}
+
+public sealed partial class InfiniteBuffViewModel : ObservableObject
 {
     private readonly SpawnRateSliderValueModPlayer _model;
-
-    public event EventHandler<float> SliderValueChanged;
-
-    public event EventHandler<bool> ShowSliderChanged;
 
     public InfiniteBuffViewModel()
     {
         _model = Main.LocalPlayer.GetModPlayer<SpawnRateSliderValueModPlayer>();
-        _model.SpawnRateSliderValueChanged += OnModelSliderValueChanged;
-        _model.ShowSliderChanged += OnShowSliderChanged;
+        _model.PropertyChanged += Model_PropertyChanged;
+
+        if (_model is not SpawnRateSliderValueModPlayer player) return;
+        OpenSlider = player.ShowSlider;
+        SliderValue = player.SpawnRateSliderValue;
     }
 
-    /// <summary>
-    /// 给 View 绑定的滑块值，范围 [0,1]
-    /// </summary>
-    public float SliderValue => _model.SpawnRateSliderValue;
+    private void Model_PropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+        if (sender is not SpawnRateSliderValueModPlayer player) return;
+        switch (e.PropertyName)
+        {
+            case nameof(SpawnRateSliderValueModPlayer.ShowSlider):
+            {
+                OpenSlider = player.ShowSlider;
+                break;
+            }
+            case nameof(SpawnRateSliderValueModPlayer.SpawnRateSliderValue):
+            {
+                SliderValue = player.SpawnRateSliderValue;
+                break;
+            }
+        }
+    }
 
-    public bool ShowSlider => _model.ShowSlider;
+    [ObservableProperty]
+    public partial Color BorderColor { get; set; } = SUIColor.Border;
 
-    /// <summary>
-    /// 给 View 显示的实际刷怪倍率文本
-    /// </summary>
+    [ObservableProperty]
+    public partial Color BackgroundColor { get; set; } = SUIColor.Background * 0.75f;
+
+    [ObservableProperty]
+    public partial float SliderValue { get; private set; }
+
+    [RelayCommand]
+    private void SetSliderValue(float value) => _model.SetSpawnRateSliderValue(value);
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HiddenSlider))]
+    public partial bool HiddenSliderEyeButton { get; private set; }
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HiddenSlider))]
+    [NotifyPropertyChangedFor(nameof(EyeColor))]
+    public partial bool OpenSlider { get; private set; }
+
+    public bool HiddenSlider => HiddenSliderEyeButton || !OpenSlider;
+
+    public Color EyeColor => OpenSlider ? Color.White : Color.White * 0.5f;
+
+    /// <summary> 实际刷怪倍率 </summary>
     public string SpawnRateText => $"{InfiniteBuffHelper.RemapSliderToSpawnRate(SliderValue):0.##}";
 
-    /// <summary>
-    /// 用户拖动滑块
-    /// </summary>
-    public void SetSliderValue(float value) => _model.SetSpawnRateSliderValue(value);
+    [RelayCommand] public void ToggleShowSlider() => _model.ShowSlider = !_model.ShowSlider;
 
-    private void OnModelSliderValueChanged(object sender, float value) => SliderValueChanged?.Invoke(this, value);
-
-    public void ToggleShowSlider() => _model.ShowSlider = !_model.ShowSlider;
-
-    private void OnShowSliderChanged(object sender, bool value) => ShowSliderChanged?.Invoke(this, value);
-
-    public void Dispose()
+    void IUpdatable.Update(GameTime gameTime)
     {
-        _model.SpawnRateSliderValueChanged -= OnModelSliderValueChanged;
-        _model.ShowSliderChanged -= OnShowSliderChanged;
+        if (!Main.LocalPlayer.TryGetModPlayer<InfiniteBuffModPlayer>(out var infinitePlayer)) return;
+        HiddenSliderEyeButton = !infinitePlayer.MeetsBattlerCombination();
     }
 }

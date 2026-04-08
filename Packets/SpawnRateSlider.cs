@@ -21,7 +21,7 @@ public class SpawnRateSlider : NetModule
         if (!Main.player[_whoAmI].TryGetModPlayer<SpawnRateSliderValueModPlayer>(out var battler))
             return;
 
-        battler.SpawnRateSliderValue = _sliderValue;
+        battler.SetSpawnRateSliderValue(_sliderValue);
 
         if (Main.netMode is NetmodeID.Server) Send(-1, _whoAmI, false);
     }
