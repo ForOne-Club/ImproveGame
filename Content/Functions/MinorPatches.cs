@@ -816,7 +816,7 @@ public class MinorPatches : ModSystem
         {
             var tileTargetX = Player.tileTargetX;
             var tileTargetY = Player.tileTargetY;
-            if (Main.netMode != NetmodeID.MultiplayerClient) return;
+            if (Main.dedServ) return;
             if (ImproveConfigs.Instance.StaffOfRegenerationAutomaticPlanting &&
                 _herbType is TileID.BloomingHerbs or TileID.MatureHerbs &&
                 _herbStyle >= 0)
@@ -837,7 +837,7 @@ public class MinorPatches : ModSystem
             }
             else
             {
-                if (!Main.tile[tileTargetX, tileTargetY].HasTile)
+                if (!Main.tile[tileTargetX, tileTargetY].HasTile && Main.netMode == NetmodeID.MultiplayerClient)
                     NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, tileTargetX, tileTargetY);
             }
         });
@@ -899,7 +899,7 @@ public class MinorPatches : ModSystem
         {
             var tileTargetX = Player.tileTargetX;
             var tileTargetY = Player.tileTargetY;
-            if (Main.netMode != NetmodeID.MultiplayerClient) return;
+            if (Main.dedServ) return;
             if (ImproveConfigs.Instance.StaffOfRegenerationAutomaticPlanting &&
                 _herbType is TileID.BloomingHerbs or TileID.MatureHerbs &&
                 _herbStyle >= 0)
@@ -920,7 +920,7 @@ public class MinorPatches : ModSystem
             }
             else
             {
-                if (!Main.tile[tileTargetX, tileTargetY].HasTile)
+                if (!Main.tile[tileTargetX, tileTargetY].HasTile && Main.netMode == NetmodeID.MultiplayerClient)
                     NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, tileTargetX, tileTargetY);
             }
         });
