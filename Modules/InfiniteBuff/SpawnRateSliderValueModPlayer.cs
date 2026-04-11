@@ -13,13 +13,14 @@ public partial class SpawnRateSliderValueModPlayer : ModPlayer
     [ObservableProperty]
     public partial float SpawnRateSliderValue { get; private set; } = 0.5f;
 
-    public void SetSpawnRateSliderValue(float value)
+    public void SetSpawnRateSliderValue(float value, bool syncRequired)
     {
         SpawnRateSliderValue = MathF.Round(value / 0.01f) * 0.01f;
-        SpawnRateSlider.Get(Player.whoAmI, SpawnRateSliderValue).Send();
+        if (syncRequired)
+            SpawnRateSlider.Get(Player.whoAmI, SpawnRateSliderValue).Send();
     }
 
-    public override void SyncPlayer(int toWho, int fromWho, bool newPlayer) => SpawnRateSlider.Get(Player.whoAmI, SpawnRateSliderValue).Send();
+    public override void SyncPlayer(int toWho, int fromWho, bool newPlayer) => SpawnRateSlider.Get(Player.whoAmI, SpawnRateSliderValue).Send(toWho, fromWho);
 
     public override void LoadData(TagCompound tag)
     {

@@ -65,7 +65,7 @@ public sealed partial class InfiniteBuffViewModel : ObservableObject, IUpdatable
     public partial float SliderValue { get; private set; }
 
     [RelayCommand]
-    private void SetSliderValue(float value) => _model.SetSpawnRateSliderValue(value);
+    private void SetSliderValue(float value) => _model.SetSpawnRateSliderValue(value, true);
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(HiddenSlider))]
