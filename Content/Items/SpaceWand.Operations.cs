@@ -75,6 +75,8 @@ public partial class SpaceWand
                     // 物品放置的瓷砖就是位置对应的瓷砖则无需替换
                     if (!ValidTileForReplacement(item, x, y))
                     {
+                        //取消物块的制动
+                        originalTile.IsActuated = false;
                         // 至少还可以设置个斜坡
                         SetSlopeFor(placeType, blockType, x, y, tilesHashSet);
                         return;
@@ -95,6 +97,8 @@ public partial class SpaceWand
                         // PickItemInInventory(player, GetConditions(placeType), false, out int index);
                         HandleItemConsumption(player, indexOfItemBeingConsumed, itemsConsumed, usingTileWand);
                         SetSlopeFor(placeType, blockType, x, y, tilesHashSet);
+                        //取消物块的制动
+                        originalTile.IsActuated = false;
                     }
                     else
                     {
@@ -107,6 +111,8 @@ public partial class SpaceWand
                             // PickItemInInventory(player, GetConditions(placeType), false, out int index);
                             HandleItemConsumption(player, indexOfItemBeingConsumed, itemsConsumed, usingTileWand);
                             SetSlopeFor(placeType, blockType, x, y, tilesHashSet);
+                            //取消物块的制动
+                            originalTile.IsActuated = false;
                         }
                     }
                 }
