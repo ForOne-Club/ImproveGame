@@ -6,9 +6,18 @@ using System.ComponentModel;
 
 namespace ImproveGame.Modules.InfiniteBuff.UserInterface.ViewModel;
 
+public class DefaultStyle
+{
+    public Color BorderColor { get; set; } = SUIColor.Border;
+    public Color BackgroundColor { get; set; } = SUIColor.Background * 0.75f;
+}
+
 public sealed partial class InfiniteBuffViewModel : ObservableObject, IUpdatable, IDisposable
 {
     private static string GetTextValue(string key) => Language.GetTextValue($"Mods.ImproveGame.UI.InfiniteBUFFController.{key}");
+
+    [ObservableProperty]
+    public partial DefaultStyle Style { get; set; } = new();
 
     [ObservableProperty]
     public partial string Title { get; set; } = GetTextValue("DisplayName");
@@ -54,12 +63,6 @@ public sealed partial class InfiniteBuffViewModel : ObservableObject, IUpdatable
             }
         }
     }
-
-    [ObservableProperty]
-    public partial Color BorderColor { get; set; } = SUIColor.Border;
-
-    [ObservableProperty]
-    public partial Color BackgroundColor { get; set; } = SUIColor.Background * 0.75f;
 
     [ObservableProperty]
     public partial float SliderValue { get; private set; }

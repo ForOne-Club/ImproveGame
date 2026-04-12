@@ -41,6 +41,7 @@ public partial class InfiniteBUFFController : BaseBody
     {
         InitializeComponent();
 
+        MainContainer.OverflowHidden = true;
         BuffsContainer = ScrollView.Container;
 
         Header.ControlTarget = this;
