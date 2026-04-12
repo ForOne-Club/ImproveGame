@@ -72,102 +72,66 @@ namespace ImproveGame.UI.ModernConfig.OptionElements
 
         protected override void SetupList()
         {
-            //ListPanel.Clear();
             OptionView.ListView.RemoveAllChildren();
             dataWrapperList = new List<IDictionaryElementWrapper>();
             Type genericType = typeof(DictionaryElementWrapper<,>).MakeGenericType(keyType, valueType);
+            if (Data is not IDictionary dictionary) return;
+            var keys = dictionary.Keys;
+            var values = dictionary.Values;
+            var keysEnumerator = keys.GetEnumerator();
+            var valuesEnumerator = values.GetEnumerator();
+            int i = 0;
 
-            if (Data != null)
+            while (keysEnumerator.MoveNext())
             {
-                var keys = ((IDictionary)Data).Keys;
-                var values = ((IDictionary)Data).Values;
-                var keysEnumerator = keys.GetEnumerator();
-                var valuesEnumerator = values.GetEnumerator();
-                int i = 0;
+                valuesEnumerator.MoveNext();
+                var proxy = (IDictionaryElementWrapper)Activator.CreateInstance(genericType, [keysEnumerator.Current, valuesEnumerator.Current, (IDictionary)Data]);
 
-                while (keysEnumerator.MoveNext())
+                dataWrapperList.Add(proxy);
+                Type itemType = VariableInfo.Type.GetGenericArguments()[0];
+                wrappermemberInfo ??= ConfigManager.GetFieldsAndProperties(this).ToList()[0];
+
+                var deleteButton = new SUICross()
                 {
-                    valuesEnumerator.MoveNext();
-                    var proxy = (IDictionaryElementWrapper)Activator.CreateInstance(genericType, [keysEnumerator.Current, valuesEnumerator.Current, (IDictionary)Data]);
+                    Spacing = new Vector2(4f, 10f),
+                    Top = { Pixels = 8f },
+                    BgColor = Color.Black * 0.4f,
+                    Rounded = new Vector4(4f),
+                    Width = new(25, .0f),
+                    Height = new(25, .0f),
+                };
+                object o = keysEnumerator.Current;
+                deleteButton.OnLeftClick += (evt, elem) =>
+                {
+                    ((IDictionary)Data).Remove(o);
+                    SetupList();
+                    pendingChanges = true;
+                    NetSyncManually();
+                };
+                var e = WrapIt(OptionView.ListView, Config, wrappermemberInfo, Item, dataWrapperList, genericType, i, this, preLabelAppend: deleteButton.JoinParent);
 
-                    dataWrapperList.Add(proxy);
-                    Type itemType = VariableInfo.Type.GetGenericArguments()[0];
-                    wrappermemberInfo ??= ConfigManager.GetFieldsAndProperties(this).ToList()[0];
-
-                    var deleteButton = new SUICross()
-                    {
-                        Spacing = new Vector2(4f, 10f),
-                        Top = { Pixels = 8f },
-                        BgColor = Color.Black * 0.4f,
-                        Rounded = new Vector4(4f),
-                        Width = new(25, .0f),
-                        Height = new(25, .0f),
-                    };
-                    object o = keysEnumerator.Current;
-                    deleteButton.OnLeftClick += (evt, elem) =>
-                    {
-                        ((IDictionary)Data).Remove(o);
-                        SetupList();
-                        pendingChanges = true;
-                        NetSyncManually();
-                    };
-                    var e = WrapIt(OptionView.ListView, Config, wrappermemberInfo, Item, dataWrapperList, genericType, i, this, preLabelAppend: deleteButton.JoinParent);
-
-                    if (e.Elements[0] is OptionLabelElement label)
-                    {
-                        label.Left = new(30, 0);
-                    }
-                    if (Main.netMode == NetmodeID.MultiplayerClient)
-                    {
-                        int idx = i;
-                        e.OnUpdate += (elem) =>
-                        {
-                            if ((int)(Main.GlobalTimeWrappedHourly * 60) % 20 == 0)
-                            {
-                                var keyObject = ConfigHelper.GetItemViaPath(Data, [idx.ToString(), "Key"], true);
-                                if (keyObject != proxy.Key)
-                                    ConfigHelper.SetItemViaPath(proxy, ["_key"], keyObject);
-                                var valueObject = ConfigHelper.GetItemViaPath(Data, [idx.ToString(), "Value"], true);
-                                if (valueObject != proxy.Value)
-                                    ConfigHelper.SetItemViaPath(proxy, ["_value"], valueObject);
-                            }
-
-                        };
-                    }
-
-                    /*e.OnRightMouseDown += (evt, elem) =>
-                    {
-                        var pair = (IDictionaryElementWrapper)Activator.CreateInstance(genericType, [null,null, (IDictionary)Data]);
-                        object keyValue;
-
-                        if (defaultDictionaryKeyValueAttribute != null)
-                        {
-                            keyValue = defaultDictionaryKeyValueAttribute.Value;
-                        }
-                        else
-                        {
-                            keyValue = ConfigManager.AlternateCreateInstance(keyType);
-
-                            if (!keyType.IsValueType && keyType != typeof(string))
-                            {
-                                string json = jsonDefaultDictionaryKeyValueAttribute?.Json ?? "{}";
-
-                                JsonConvert.PopulateObject(json, keyValue, ConfigManager.serializerSettings);
-                            }
-                        }
-                        genericType.GetField("_key", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(pair,keyValue);
-
-                        var itemValue = CreateCollectionElementInstance(valueType);
-                        genericType.GetField("_value", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(pair, itemValue);
-                        var oldPair = (IDictionaryElementWrapper)e.List[e.index];
-                        ((IDictionary)Data).Remove(oldPair.Key);
-                        e.SetValueDirect(pair);
-                        ((IDictionary)Data)[keyValue] = itemValue;
-                        SetupList();
-                    };*/
-
-                    i++;
+                if (e.Elements[0] is OptionLabelElement label)
+                {
+                    label.Left = new(30, 0);
                 }
+                if (Main.netMode == NetmodeID.MultiplayerClient)
+                {
+                    int idx = i;
+                    e.OnUpdate += (elem) =>
+                    {
+                        if ((int)(Main.GlobalTimeWrappedHourly * 60) % 20 == 0)
+                        {
+                            var keyObject = ConfigHelper.GetItemViaPath(Data, [idx.ToString(), "Key"], true);
+                            if (keyObject != proxy.Key)
+                                ConfigHelper.SetItemViaPath(proxy, ["_key"], keyObject);
+                            var valueObject = ConfigHelper.GetItemViaPath(Data, [idx.ToString(), "Value"], true);
+                            if (valueObject != proxy.Value)
+                                ConfigHelper.SetItemViaPath(proxy, ["_value"], valueObject);
+                        }
+
+                    };
+                }
+                i++;
             }
         }
     }
