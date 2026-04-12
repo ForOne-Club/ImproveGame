@@ -36,7 +36,7 @@ public class OptionArray : OptionCollections
     {
         //ListPanel.Clear();
         OptionView.ListView.RemoveAllChildren();
-        Array array = VariableInfo.GetValue(Item) as Array;
+        if (VariableInfo.GetValue(Item) is not Array array) return;
         int count = array.Length;
         for (int i = 0; i < count; i++)
         {
