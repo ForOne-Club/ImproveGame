@@ -1,23 +1,17 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using SilkyUIFramework;
+using ImproveGame.Styles;
 using SilkyUIFramework.Interfaces;
 using System.ComponentModel;
 
 namespace ImproveGame.Modules.InfiniteBuff.UserInterface.ViewModel;
-
-public class DefaultStyle
-{
-    public Color BorderColor { get; set; } = SUIColor.Border;
-    public Color BackgroundColor { get; set; } = SUIColor.Background * 0.75f;
-}
 
 public sealed partial class InfiniteBuffViewModel : ObservableObject, IUpdatable, IDisposable
 {
     private static string GetTextValue(string key) => Language.GetTextValue($"Mods.ImproveGame.UI.InfiniteBUFFController.{key}");
 
     [ObservableProperty]
-    public partial DefaultStyle Style { get; set; } = new();
+    public partial object Style { get; set; } = new DefaultStyle();
 
     [ObservableProperty]
     public partial string Title { get; set; } = GetTextValue("DisplayName");
@@ -83,7 +77,7 @@ public sealed partial class InfiniteBuffViewModel : ObservableObject, IUpdatable
 
     public Color EyeColor => OpenSlider ? Color.White : Color.White * 0.5f;
 
-    [RelayCommand] public void ToggleShowSlider() => _model.ShowSlider = !_model.ShowSlider;
+    [RelayCommand] public void ToggleSliderVisibility() => _model.ShowSlider = !_model.ShowSlider;
 
     void IUpdatable.Update(GameTime gameTime)
     {
