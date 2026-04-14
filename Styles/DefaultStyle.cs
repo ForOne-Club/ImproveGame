@@ -8,6 +8,9 @@ namespace ImproveGame.Styles;
 /// </summary>
 public partial class DefaultStyle : ObservableObject
 {
+    /// <summary> 可复用单例 </summary>
+    public static DefaultStyle Instance { get; } = new();
+
     [ObservableProperty]
     public partial Color BorderColor { get; set; } = SUIColor.Border;
 

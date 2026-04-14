@@ -6,24 +6,24 @@ using System.ComponentModel;
 
 namespace ImproveGame.Modules.InfiniteBuff.UserInterface.ViewModel;
 
-public partial class InfiniteBuffLocalization : ObservableObject
+public partial class InfiniteBuffLocalization
 {
     private static string GetTextValue(string key) => Language.GetTextValue($"Mods.ImproveGame.UI.InfiniteBUFFController.{key}");
 
-    [ObservableProperty]
-    public partial string Title { get; set; } = GetTextValue("DisplayName");
+    public string Title { get; set; } = GetTextValue("DisplayName");
 
-    [ObservableProperty]
-    public partial string Placeholder { get; set; } = GetTextValue("Placeholder");
+    public string Placeholder { get; set; } = GetTextValue("Placeholder");
 
-    [ObservableProperty]
-    public partial string EnemySpawnRate { get; set; } = GetTextValue("EnemySpawnRate");
+    public string EnemySpawnRate { get; set; } = GetTextValue("EnemySpawnRate");
 }
 
 public sealed partial class InfiniteBuffViewModel : ObservableObject, IUpdatable, IDisposable
 {
+    /// <summary>
+    /// 共享唯一一个 <see cref="DefaultStyle"/>
+    /// </summary>
     [ObservableProperty]
-    public partial object Style { get; set; } = new DefaultStyle();
+    public partial DefaultStyle Style { get; set; } = DefaultStyle.Instance;
 
     [ObservableProperty]
     public partial InfiniteBuffLocalization Localization { get; set; } = new();
@@ -34,11 +34,11 @@ public sealed partial class InfiniteBuffViewModel : ObservableObject, IUpdatable
     [ObservableProperty]
     public partial Asset<Texture2D> EyeSwitch { get; set; } = ModAsset.EyeSwitch;
 
-    private readonly SpawnRateSliderValueModPlayer _model;
+    private readonly SpawnRateSliderModPlayer _model;
 
     public InfiniteBuffViewModel()
     {
-        _model = Main.LocalPlayer.GetModPlayer<SpawnRateSliderValueModPlayer>();
+        _model = Main.LocalPlayer.GetModPlayer<SpawnRateSliderModPlayer>();
         _model.PropertyChanged += OnModelPropertyChanged;
 
         OpenSlider = _model.ShowSlider;
@@ -47,18 +47,16 @@ public sealed partial class InfiniteBuffViewModel : ObservableObject, IUpdatable
 
     private void OnModelPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
-        if (sender is not SpawnRateSliderValueModPlayer player) return;
+        if (sender is not SpawnRateSliderModPlayer player) return;
         switch (e.PropertyName)
         {
-            case nameof(SpawnRateSliderValueModPlayer.ShowSlider):
+            case nameof(SpawnRateSliderModPlayer.ShowSlider):
             {
-                OpenSlider = player.ShowSlider;
-                break;
+                OpenSlider = player.ShowSlider; break;
             }
-            case nameof(SpawnRateSliderValueModPlayer.SpawnRateSliderValue):
+            case nameof(SpawnRateSliderModPlayer.SpawnRateSliderValue):
             {
-                SliderValue = player.SpawnRateSliderValue;
-                break;
+                SliderValue = player.SpawnRateSliderValue; break;
             }
         }
     }
@@ -67,7 +65,7 @@ public sealed partial class InfiniteBuffViewModel : ObservableObject, IUpdatable
     public partial float SliderValue { get; private set; }
 
     [RelayCommand]
-    private void SetSliderValue(float value) => _model.SetSpawnRateSliderValue(value);
+    private void SetSliderValue(float value) => _model.SpawnRateSliderValue = value;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(HiddenSlider))]

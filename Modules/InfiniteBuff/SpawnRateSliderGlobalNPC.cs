@@ -1,13 +1,13 @@
 ﻿namespace ImproveGame.Modules.InfiniteBuff;
 
-public class BattlerSpawnRateGlobalNPC : GlobalNPC
+public class SpawnRateSliderGlobalNPC : GlobalNPC
 {
     public override void Load()
     {
         // SlimeRain 史莱姆雨
         On_NPC.SlimeRainSpawns += (orig, plr) =>
         {
-            if (!Main.player[plr].TryGetModPlayer<SpawnRateSliderValueModPlayer>(out var battler) ||
+            if (!Main.player[plr].TryGetModPlayer<SpawnRateSliderModPlayer>(out var battler) ||
                 !Main.player[plr].TryGetModPlayer<InfiniteBuffModPlayer>(out var infinitePlayer) ||
                 !infinitePlayer.MeetsBattlerCombination())
             {
@@ -33,7 +33,7 @@ public class BattlerSpawnRateGlobalNPC : GlobalNPC
 
     public override void EditSpawnRate(Player player, ref int spawnRate, ref int maxSpawns)
     {
-        if (!player.TryGetModPlayer<SpawnRateSliderValueModPlayer>(out var battler)) return;
+        if (!player.TryGetModPlayer<SpawnRateSliderModPlayer>(out var battler)) return;
         if (!player.TryGetModPlayer<InfiniteBuffModPlayer>(out var infinitePlayer)) return;
         if (!infinitePlayer.MeetsBattlerCombination()) return;
 
