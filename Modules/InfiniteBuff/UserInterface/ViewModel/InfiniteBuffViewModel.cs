@@ -6,12 +6,9 @@ using System.ComponentModel;
 
 namespace ImproveGame.Modules.InfiniteBuff.UserInterface.ViewModel;
 
-public sealed partial class InfiniteBuffViewModel : ObservableObject, IUpdatable, IDisposable
+public partial class InfiniteBuffLocalization : ObservableObject
 {
     private static string GetTextValue(string key) => Language.GetTextValue($"Mods.ImproveGame.UI.InfiniteBUFFController.{key}");
-
-    [ObservableProperty]
-    public partial object Style { get; set; } = new DefaultStyle();
 
     [ObservableProperty]
     public partial string Title { get; set; } = GetTextValue("DisplayName");
@@ -21,6 +18,15 @@ public sealed partial class InfiniteBuffViewModel : ObservableObject, IUpdatable
 
     [ObservableProperty]
     public partial string EnemySpawnRate { get; set; } = GetTextValue("EnemySpawnRate");
+}
+
+public sealed partial class InfiniteBuffViewModel : ObservableObject, IUpdatable, IDisposable
+{
+    [ObservableProperty]
+    public partial object Style { get; set; } = new DefaultStyle();
+
+    [ObservableProperty]
+    public partial InfiniteBuffLocalization Localization { get; set; } = new();
 
     [ObservableProperty]
     public partial Asset<Texture2D> SearchCancel { get; set; } = Main.Assets.Request<Texture2D>("Images/UI/SearchCancel");
@@ -35,9 +41,8 @@ public sealed partial class InfiniteBuffViewModel : ObservableObject, IUpdatable
         _model = Main.LocalPlayer.GetModPlayer<SpawnRateSliderValueModPlayer>();
         _model.PropertyChanged += OnModelPropertyChanged;
 
-        if (_model is not SpawnRateSliderValueModPlayer player) return;
-        OpenSlider = player.ShowSlider;
-        SliderValue = player.SpawnRateSliderValue;
+        OpenSlider = _model.ShowSlider;
+        SliderValue = _model.SpawnRateSliderValue;
     }
 
     private void OnModelPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -62,7 +67,7 @@ public sealed partial class InfiniteBuffViewModel : ObservableObject, IUpdatable
     public partial float SliderValue { get; private set; }
 
     [RelayCommand]
-    private void SetSliderValue(float value) => _model.SetSpawnRateSliderValue(value, true);
+    private void SetSliderValue(float value) => _model.SetSpawnRateSliderValue(value);
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(HiddenSlider))]

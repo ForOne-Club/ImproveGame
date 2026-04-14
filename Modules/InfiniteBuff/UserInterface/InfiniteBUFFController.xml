@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!-- Class 填写对应类名 -->
-<Body Class="ImproveGame.Modules.InfiniteBuff.UserInterface.InfiniteBUFFController"
+<Body Class="ImproveGame.Modules.InfiniteBuff.UserInterface.InfiniteBuffController"
 	Enabled="false" EnableBlur="true" BorderColor="#00000000" BackgroundColor="#00000000"
 	Gap="0" BorderRadius="8" FitWidth="true" FitHeight="true" Left="50#" Top="50#"
 	CrossAlignment="Stretch">
@@ -12,7 +12,7 @@
 		<DraggableView Name="Header" FitWidth="true" Height="36px"
 			Padding="8 0" FlexDirection="Row" MainAlignment="Start" CrossAlignment="Center">
 			<!-- Title -->
-			<TextView Name="Title" Bind.Text="Title" TextScale="0.4" FlexGrow="1" DisableMouseInteraction="true" />
+			<TextView Name="Title" Bind.Text="Localization.Title" TextScale="0.4" FlexGrow="1" DisableMouseInteraction="true" />
 			<!-- 切换显示 -->
 			<Image Width="30px" ImageAlign="1 0.5" Bind.Invalid="HiddenSliderEyeButton"
 				   Bind.Command="ToggleSliderVisibilityCommand" Bind.Texture2D="EyeSwitch" Bind.ImageColor="EyeColor" />
@@ -28,7 +28,7 @@
 					Border="2" BorderColor="rgba(0,0,0,0.5)" BackgroundColor="rgba(0,0,0,0.25)"
 					CrossAlignment="Stretch">
 					<!-- 输入框 -->
-					<EditText Name="InputBox" Bind.Placeholder="Placeholder"
+					<EditText Name="InputBox" Bind.Placeholder="Localization.Placeholder"
 						MaxHeight="100%" Padding="8 0" FlexGrow="1" FlexShrink="1"
 						MaximumCharacters="22" TextAlign="0 0.5" TextScale="0.75" />
 					<Image Name="ResetEditText" Width="28px" FitHeight="true" ImageScale="0.8"
@@ -52,8 +52,8 @@
 		FitHeight="true"
 		Padding="12 8" Gap="8" BackgroundColor="rgba(0,0,0,0.25)" BorderRadius="8">
 		<!-- Title -->
-		<TextView Bind.Text="EnemySpawnRate" TextScale="0.8" Padding="4" />
-		<InfiniteBuffSlider Bind.DragCommand="SetSliderValueCommand" Bind.Value ="SliderValue" Height="20px" />
+		<TextView Bind.Text="Localization.EnemySpawnRate" TextScale="0.8" Padding="4" />
+		<SpawnRateSlider Bind.DragCommand="SetSliderValueCommand" Bind.Value ="SliderValue" Height="20px" />
 		<ElementGroup Name="MarkerContainer" Padding="10 0" FitHeight="true" MainAlignment="SpaceBetween" />
 	</ElementGroup>
 </Body>

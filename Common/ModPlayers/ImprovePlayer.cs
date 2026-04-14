@@ -241,7 +241,7 @@ public class ImprovePlayer : ModPlayer
 
     private static void PressBuffTrackerKeybind()
     {
-        if (!SilkyUISystem.Instance.SilkyUIManager.TryGetInstance<InfiniteBUFFController>(out var controller)) return;
+        if (!SilkyUISystem.Instance.SilkyUIManager.TryGetInstance<InfiniteBuffController>(out var controller)) return;
 
         controller.Enabled = !controller.Enabled;
 
