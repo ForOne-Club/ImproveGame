@@ -60,8 +60,6 @@ namespace ImproveGame.Common
                 size += new Vector2(3f); // 这里拿来作间隔的，应当大一点了，GetStringLength不知道拿来干啥的反正绘制没用
                 return true;
             }
-
-            public override float GetStringLength(DynamicSpriteFont font) => 54f * Scale * 0.65f;
         }
 
         TextSnippet ITagHandler.Parse(string text, Color baseColor, string options)
@@ -125,7 +123,7 @@ namespace ImproveGame.Common
                 str += "f,";
             if (item.stack != 1)
                 str += "s" + item.stack + ",";
-            return str + ":" + item.netID + "]";
+            return str + ":" + item.type + "]";
         }
     }
 }

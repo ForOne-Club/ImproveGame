@@ -14,14 +14,14 @@ internal class PortableStationSystem : ModSystem
     {
         // 便携制作站
         IL_Player.AdjTiles += AddPortableStations;
-        On_Recipe.FindRecipes += AddZoneStation;
+        On_Recipe.UpdateRecipeList += On_Recipe_UpdateRecipeList;
     }
 
-    private void AddZoneStation(On_Recipe.orig_FindRecipes orig, bool canDelayCheck)
+    private void On_Recipe_UpdateRecipeList(On_Recipe.orig_UpdateRecipeList orig)
     {
         if (!ImproveConfigs.Instance.PortableCraftingStation)
         {
-            orig.Invoke(canDelayCheck);
+            orig.Invoke();
             return;
         }
         var flag = Main.LocalPlayer.ZoneGraveyard;
@@ -31,7 +31,7 @@ internal class PortableStationSystem : ModSystem
         if (ImproveConfigs.Instance.ShareCraftingStation)
             PlayerHelper.ForEachTeammate(Main.myPlayer, CheckZoneItemFromPlayer);
 
-        orig.Invoke(canDelayCheck);
+        orig.Invoke();
 
         Main.LocalPlayer.ZoneGraveyard = flag;
         Main.LocalPlayer.ZoneSnow = flag2;
@@ -178,7 +178,7 @@ internal class PortableStationSystem : ModSystem
 
             if (item.type is ItemID.WaterBucket or ItemID.BottomlessBucket)
             {
-                Main.LocalPlayer.adjWater = true;
+                Main.LocalPlayer.adjWaterSource = true;
             }
 
             if (item.type is ItemID.LavaBucket or ItemID.BottomlessLavaBucket)
@@ -197,17 +197,17 @@ internal class PortableStationSystem : ModSystem
     private static void CheckChainedStations(int tileType, Player player)
     {
         player.adjTile[tileType] = true;
-        if (TileID.Sets.CountsAsWaterSource[tileType])
+        if (TileID.Sets.CountsAsWaterForCrafting[tileType])
         {
-            player.adjWater = true;
+            player.adjWaterSource = true;
         }
 
-        if (TileID.Sets.CountsAsLavaSource[tileType])
+        if (TileID.Sets.CountsAsLavaForCrafting[tileType])
         {
             player.adjLava = true;
         }
 
-        if (TileID.Sets.CountsAsHoneySource[tileType])
+        if (TileID.Sets.CountsAsHoneyForCrafting[tileType])
         {
             player.adjHoney = true;
         }

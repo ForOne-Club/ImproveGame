@@ -81,13 +81,12 @@ public class AmmoChainItem : ModItem
         Item.color = Chain.Color;
         return base.PreDrawInInventory(spriteBatch, position, frame, drawColor, itemColor, origin, scale);
     }
-
-    public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation,
+    public override bool PreDrawInWorld(WorldItem item, SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation,
         ref float scale,
         int whoAmI)
     {
         Item.color = Chain.Color;
-        return base.PreDrawInWorld(spriteBatch, lightColor, alphaColor, ref rotation, ref scale, whoAmI);
+        return base.PreDrawInWorld(item, spriteBatch, lightColor, alphaColor, ref rotation, ref scale, whoAmI);
     }
 
     public static void AddAmmoChainTooltips(Mod mod, AmmoChain ammoChain, List<TooltipLine> tooltips)

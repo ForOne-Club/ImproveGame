@@ -587,7 +587,7 @@ public partial class CreateWand
                 NetMessage.SendTileSquare(player.whoAmI, position.X, position.Y, Prison.Width, Prison.Height);
 
             // 重新刷新合成配方，这样如果一个物品没了就可以把它的合成配方刷新掉
-            Recipe.FindRecipes();
+            // Recipe.FindRecipes();
             // 同步UI物品
             UISystem.Instance.ArchitectureGUI.RefreshSlots(this);
         }

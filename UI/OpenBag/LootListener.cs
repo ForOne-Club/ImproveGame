@@ -8,8 +8,7 @@ public class LootListener : GlobalItem
     /// -1为不在监听中，此外的数值为正在为某个袋子监听，该袋子的ID
     /// </summary>
     public static int _listening;
-
-    public override void OnSpawn(Item item, IEntitySource source)
+    public override void OnSpawn(WorldItem item, IEntitySource source)
     {
         if (_listening is -1 || Main.netMode is NetmodeID.Server)
             return;
@@ -28,14 +27,14 @@ public class LootListener : GlobalItem
         foreach (var destination in keeper.Loots.Where(destination =>
                      destination is not null && !destination.IsAir && destination.type == item.type))
         {
-            ItemLoader.TryStackItems(destination, item, out var _);
+            ItemLoader.TryStackItems(destination, item.inner, out var _);
 
             if (item.IsAir)
                 return;
         }
 
         // 还有剩余，加在后面
-        keeper.Loots.Add(item.Clone());
+        keeper.Loots.Add(item.inner.Clone());
 
         item.TurnToAir();
     }

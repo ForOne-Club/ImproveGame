@@ -47,7 +47,7 @@ public class InvToChestPacket : NetModule
 
         Operate(items);
 
-        Recipe.FindRecipes();
+        // Recipe.FindRecipes();
     }
 
     /// <summary>

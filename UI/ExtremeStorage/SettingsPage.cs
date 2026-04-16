@@ -46,7 +46,7 @@ namespace ImproveGame.UI.ExtremeStorage
                 {
                     Storage.UsePortableStations = state;
                     SyncDataPacket.Get(Storage.ID).Send();
-                    Recipe.FindRecipes();
+                    // Recipe.FindRecipes();
                 },
                 "UI.ExtremeStorage.UsePortableStation")
             {
@@ -60,7 +60,7 @@ namespace ImproveGame.UI.ExtremeStorage
                 {
                     Storage.UsePortableBanner = state;
                     SyncDataPacket.Get(Storage.ID).Send();
-                    Recipe.FindRecipes();
+                    // Recipe.FindRecipes();
                 },
                 "UI.ExtremeStorage.UsePortableBanner")
             {

@@ -5,7 +5,7 @@ namespace ImproveGame.Content.Functions.AutoPiggyBank;
 
 public class AutoMoneyItemListener : GlobalItem
 {
-    public override bool OnPickup(Item item, Player player)
+    public override bool OnPickup(WorldItem item, Player player)
     {
         if (item.type is ItemID.PiggyBank or ItemID.ChesterPetItem or ItemID.MoneyTrough &&
             player.TryGetModPlayer<AutoMoneyPlayerListener>(out var listener) && !listener.AutoSaveUnlocked)
@@ -24,9 +24,9 @@ public class AutoMoneyItemListener : GlobalItem
     /// <param name="item">物品</param>
     /// <param name="player">玩家</param>
     /// <returns>是否成功</returns>
-    public static bool TryDepositCustomCurrency(Item item, Player player)
+    public static bool TryDepositCustomCurrency(WorldItem item, Player player)
     {
-        if (!CustomCurrencyManager.IsCustomCurrency(item))
+        if (!CustomCurrencyManager.IsCustomCurrency(item.inner))
             return false;
 
         // 无空位
@@ -41,9 +41,9 @@ public class AutoMoneyItemListener : GlobalItem
 
         int type = item.type;
 
-        PopupText.NewText(PopupTextContext.RegularItemPickup, item, item.stack);
+        PopupText.NewText(PopupTextContext.RegularItemPickup, item.inner, item.position, item.stack);
         SoundEngine.PlaySound(SoundID.Grab, player.position);
-        item.StackToArray(player.bank.item);
+        item.inner.StackToArray(player.bank.item);
         return item.IsAir;
     }
 }

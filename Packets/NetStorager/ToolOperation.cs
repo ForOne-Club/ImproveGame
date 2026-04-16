@@ -51,7 +51,7 @@ public class ToolOperation : NetModule
             for (int i = 0; i < Chest.maxItems; i++)
             {
                 var item = Main.chest[chestIndex].item[i];
-                items.Add((chestIndex, i, (item.netID, item.stack, item.prefix)));
+                items.Add((chestIndex, i, (item.type, item.stack, item.prefix)));
             }
         }
 
@@ -171,17 +171,17 @@ public class ToolOperation : NetModule
                 continue;
             }
 
-            inventoryItemIds.Add(item.netID);
-            if (itemIdToInvSlot.ContainsKey(item.netID))
-                itemIdToInvSlot[item.netID].Add(i);
+            inventoryItemIds.Add(item.type);
+            if (itemIdToInvSlot.ContainsKey(item.type))
+                itemIdToInvSlot[item.type].Add(i);
             else
-                itemIdToInvSlot.Add(item.netID, new List<int> { i });
+                itemIdToInvSlot.Add(item.type, new List<int> { i });
         }
 
         foreach (var item in items)
         {
-            if (!inventoryItemIds.Contains(item.netID)) continue;
-            itemIdToInvSlot[item.netID].ForEach(i =>
+            if (!inventoryItemIds.Contains(item.type)) continue;
+            itemIdToInvSlot[item.type].ForEach(i =>
             {
                 if (item.stack <= 0) return;
 
@@ -240,21 +240,21 @@ public class ToolOperation : NetModule
                 continue;
             }
 
-            storageItemIds.Add(item.netID);
-            if (itemIdToStorageSlot.ContainsKey(item.netID))
-                itemIdToStorageSlot[item.netID].Add(i);
+            storageItemIds.Add(item.type);
+            if (itemIdToStorageSlot.ContainsKey(item.type))
+                itemIdToStorageSlot[item.type].Add(i);
             else
-                itemIdToStorageSlot.Add(item.netID, new List<int> { i });
+                itemIdToStorageSlot.Add(item.type, new List<int> { i });
         }
 
         for (int k = 10; k < 50; k++)
         {
             var item = inventory[k];
             if (item.favorited) continue;
-            if (!storageItemIds.Contains(item.netID)) continue;
+            if (!storageItemIds.Contains(item.type)) continue;
 
             bool changed = false;
-            itemIdToStorageSlot[item.netID].ForEach(i =>
+            itemIdToStorageSlot[item.type].ForEach(i =>
             {
                 if (item.stack <= 0) return;
 

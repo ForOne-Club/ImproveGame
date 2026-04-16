@@ -40,7 +40,7 @@ namespace ImproveGame.UI.ExtremeStorage
                 case NetmodeID.SinglePlayer:
                     MouseClickSlot();
                     ExtremeStorageGUI.RefreshCachedAllItems();
-                    Recipe.FindRecipes();
+                    // Recipe.FindRecipes();
                     break;
                 case NetmodeID.MultiplayerClient:
                     switch (Main.cursorOverride)
@@ -99,7 +99,7 @@ namespace ImproveGame.UI.ExtremeStorage
 
             if (Main.netMode is not NetmodeID.SinglePlayer) return;
             ExtremeStorageGUI.RefreshCachedAllItems();
-            Recipe.FindRecipes();
+            // Recipe.FindRecipes();
         }
 
         // 覆写父类的方法，让宝藏袋右键不开启而是拿取

@@ -98,7 +98,7 @@ public class AutoMoneyPlayerListener : ModPlayer, IHookPostSetup
         }
 
         if (isDepositSucceed)
-            Recipe.FindRecipes();
+            // Recipe.FindRecipes();
     }
 
     // 返回的是物品禁用状态，true就是没禁用，false就是禁用了

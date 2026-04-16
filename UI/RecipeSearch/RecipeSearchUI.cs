@@ -49,7 +49,7 @@ public class RecipeSearchUI : BaseBody
             RelativeMode = RelativeMode.Vertical
         };
         // _searchBar.OnDraw += SearchBarOnDraw;
-        _searchBar.OnSearchContentsChanged += _ => Recipe.FindRecipes();
+        _searchBar.OnSearchContentsChanged += _ => // Recipe.FindRecipes();
         _searchBar.JoinParent(_mainPanel);
 
         _rightSidePanel = new View()
@@ -95,7 +95,7 @@ public class RecipeSearchUI : BaseBody
             state =>
             {
                 setting.FuzzySearch = state;
-                Recipe.FindRecipes();
+                // Recipe.FindRecipes();
             },
             "UI.ItemSearcher.FuzzySearch")
         {
@@ -111,7 +111,7 @@ public class RecipeSearchUI : BaseBody
             state =>
             {
                 setting.SearchTooltip = state;
-                Recipe.FindRecipes();
+                // Recipe.FindRecipes();
             },
             "UI.ItemSearcher.SearchTooltip")
         {

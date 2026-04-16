@@ -235,7 +235,7 @@ public class ExtremeStorageGUI : BaseBody, ISidedView
         _prevChestIndexes = chestIndexes;
         _itemGrid.ResetInventory(items);
         RefreshCachedAllItems();
-        Recipe.FindRecipes();
+        // Recipe.FindRecipes();
     }
 
     private IEnumerable<int> GetDisplayedItemIndexes(IReadOnlyList<Item> chestItems)
@@ -385,7 +385,7 @@ public class ExtremeStorageGUI : BaseBody, ISidedView
         Main.blockInput = false;
         SoundEngine.PlaySound(SoundID.MenuClose);
         ChestSelection.IsSelecting = false;
-        Recipe.FindRecipes();
+        // Recipe.FindRecipes();
     }
 
     public static void SetGroup(ItemGroup group)

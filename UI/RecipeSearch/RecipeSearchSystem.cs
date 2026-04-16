@@ -68,7 +68,7 @@ public class RecipeSearchSystem : ModSystem
     {
         if (_oldRecBigList != Main.recBigList && UIConfigs.Instance.RecipeSearch)
         {
-            Recipe.FindRecipes();
+            // Recipe.FindRecipes();
             _oldRecBigList = Main.recBigList;
         }
     }

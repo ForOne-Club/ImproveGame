@@ -109,7 +109,7 @@ public class ShiftClickSlotPlayer : ModPlayer
                         inventory[slot] =
                             ExtremeStorageGUI.Storage.StackToNearbyChests(inventory[slot], ExtremeStorageGUI.RealGroup);
                         ExtremeStorageGUI.RefreshCachedAllItems();
-                        Recipe.FindRecipes();
+                        // Recipe.FindRecipes();
                         break;
                 }
 
@@ -124,7 +124,7 @@ public class ShiftClickSlotPlayer : ModPlayer
                 {
                     ItemContainerGUI.Instace.Container.ItemIntoContainer(inventory[slot]);
 
-                    Recipe.FindRecipes();
+                    // Recipe.FindRecipes();
                     SoundEngine.PlaySound(SoundID.Grab);
                 }
 
@@ -135,7 +135,7 @@ public class ShiftClickSlotPlayer : ModPlayer
             {
                 inventory[slot] =
                     ItemStackToInventory(Player.GetModPlayer<DataPlayer>().SuperVault, inventory[slot], false);
-                Recipe.FindRecipes();
+                // Recipe.FindRecipes();
                 SoundEngine.PlaySound(SoundID.Grab);
 
                 return true; // 阻止原版代码运行
@@ -151,7 +151,7 @@ public class ShiftClickSlotPlayer : ModPlayer
                 if (Main.netMode == NetmodeID.MultiplayerClient)
                     for (int i = 0; i < fisher.fish.Length; i++)
                         ItemSyncPacket.Get(fisher.ID, (byte)i).Send(runLocally: false);
-                Recipe.FindRecipes();
+                // Recipe.FindRecipes();
                 SoundEngine.PlaySound(SoundID.Grab);
                 return true; // 阻止原版代码运行
             }
@@ -173,7 +173,7 @@ public class ShiftClickSlotPlayer : ModPlayer
                     {
                         itemSlot.Value.SwapItem(ref placeItem);
                         SoundEngine.PlaySound(SoundID.Grab);
-                        Recipe.FindRecipes();
+                        // Recipe.FindRecipes();
                         // 和魔杖实例同步
                         itemSlot.Value.ItemChange();
                         return true; // 阻止原版代码运行
@@ -187,7 +187,7 @@ public class ShiftClickSlotPlayer : ModPlayer
                         placeItem.stack -= stackAddition;
                         slotItem.stack += stackAddition;
                         SoundEngine.PlaySound(SoundID.Grab);
-                        Recipe.FindRecipes();
+                        // Recipe.FindRecipes();
                         // 和魔杖实例同步
                         itemSlot.Value.ItemChange();
                         return true; // 阻止原版代码运行

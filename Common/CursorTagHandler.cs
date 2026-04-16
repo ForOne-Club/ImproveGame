@@ -49,5 +49,4 @@ public class CursorSnippet : TextSnippet
         return $"%$#??>{color.Hex3()}%$#??>";
     }
 
-    public override float GetStringLength(DynamicSpriteFont font) => 0f;
 }

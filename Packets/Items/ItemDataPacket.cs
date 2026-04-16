@@ -94,7 +94,7 @@ public class InventoryItemDataPacket : NetModule
 
         if (Main.netMode is NetmodeID.MultiplayerClient)
         {
-            Recipe.FindRecipes();
+            // Recipe.FindRecipes();
         }
     }
 }
