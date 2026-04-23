@@ -4,6 +4,7 @@ namespace ImproveGame.Content.Items;
 
 public partial class CreateWand
 {
+    /*
     [CloneByReference] public Item Block = new Item();
     [CloneByReference] public Item Platform = new Item();
     [CloneByReference] public Item Workbench = new Item();
@@ -27,141 +28,95 @@ public partial class CreateWand
     [CloneByReference] public Item Toilet = new Item();
     [CloneByReference] public Item Torch = new Item();
     [CloneByReference] public Item Campfire = new Item();
-    [CloneByReference] public Item Wall = new Item();
+    [CloneByReference] public Item Wall = new Item(); 
+    */
+    private void HandleLegacyData(TagCompound tag) 
+    {
+        if (tag.TryGet("Block", out Item block))
+            BuildingMaterials[0] = block;
+        if (tag.TryGet("Platform", out Item platform))
+            BuildingMaterials[1] = platform;
+        if (tag.TryGet("Workbench", out Item workbench))
+            BuildingMaterials[2] = workbench;
+        if (tag.TryGet("Table", out Item table))
+            BuildingMaterials[3] = table;
+        if (tag.TryGet("Chair", out Item chair))
+            BuildingMaterials[4] = chair;
+        if (tag.TryGet("Door", out Item door))
+            BuildingMaterials[5] = door;
+        if (tag.TryGet("Chest", out Item chest))
+            BuildingMaterials[6] = chest;
+        if (tag.TryGet("Bed", out Item bed))
+            BuildingMaterials[7] = bed;
+        if (tag.TryGet("Bookcase", out Item bookcase))
+            BuildingMaterials[8] = bookcase;
+        if (tag.TryGet("Bathtub", out Item bathtub))
+            BuildingMaterials[9] = bathtub;
+        if (tag.TryGet("Candelabra", out Item candelabra))
+            BuildingMaterials[10] = candelabra;
+        if (tag.TryGet("Candle", out Item candle))
+            BuildingMaterials[11] = candle;
+        if (tag.TryGet("Chandelier", out Item chandelier))
+            BuildingMaterials[12] = chandelier;
+        if (tag.TryGet("Clock", out Item clock))
+            BuildingMaterials[13] =  clock;
+        if (tag.TryGet("Dresser", out Item dresser))
+            BuildingMaterials[14] = dresser;
+        if (tag.TryGet("Lamp", out Item lamp))
+            BuildingMaterials[15] = lamp;
+        if (tag.TryGet("Lantern", out Item lantern))
+            BuildingMaterials[16] = lantern;
+        if (tag.TryGet("Piano", out Item piano))
+            BuildingMaterials[17] = piano;
+        if (tag.TryGet("Sink", out Item sink))
+            BuildingMaterials[18] = sink;
+        if (tag.TryGet("Sofa", out Item sofa))
+            BuildingMaterials[19] = sofa;
+        if (tag.TryGet("Toilet", out Item toliet))
+            BuildingMaterials[20] = toliet;
+        if (tag.TryGet("Torch", out Item torch))
+            BuildingMaterials[21] = torch;
+        if (tag.TryGet("Campfire", out Item campfire))
+            BuildingMaterials[22] = campfire;
+        if (tag.TryGet("Wall", out Item wall))
+            BuildingMaterials[23] = wall;
+    }
+
+    [CloneByReference]
+    public readonly Item[] BuildingMaterials;
+
+    public CreateWand()
+    {
+        BuildingMaterials = new Item[24];
+        for (int n = 0; n < 24; n++)
+            BuildingMaterials[n] = new();
+    }
 
     public override void SaveData(TagCompound tag)
     {
-        tag[nameof(Block)] = Block;
-        tag[nameof(Platform)] = Platform;
-        tag[nameof(Workbench)] = Workbench;
-        tag[nameof(Table)] = Table;
-        tag[nameof(Chair)] = Chair;
-        tag[nameof(Door)] = Door;
-        tag[nameof(Chest)] = Chest;
-        tag[nameof(Bed)] = Bed;
-        tag[nameof(Bookcase)] = Bookcase;
-        tag[nameof(Bathtub)] = Bathtub;
-        tag[nameof(Candelabra)] = Candelabra;
-        tag[nameof(Candle)] = Candle;
-        tag[nameof(Chandelier)] = Chandelier;
-        tag[nameof(Clock)] = Clock;
-        tag[nameof(Dresser)] = Dresser;
-        tag[nameof(Lamp)] = Lamp;
-        tag[nameof(Lantern)] = Lantern;
-        tag[nameof(Piano)] = Piano;
-        tag[nameof(Sink)] = Sink;
-        tag[nameof(Sofa)] = Sofa;
-        tag[nameof(Toilet)] = Toilet;
-        tag[nameof(Torch)] = Torch;
-        tag[nameof(Campfire)] = Campfire;
-        tag[nameof(Wall)] = Wall;
+        for (int n = 0; n < 24; n++)
+            tag[$"m_{n}"] = BuildingMaterials[n];
     }
 
     public override void LoadData(TagCompound tag)
     {
-        if (tag.TryGet(nameof(Block), out Item block))
-            Block = block;
-        if (tag.TryGet(nameof(Platform), out Item platform))
-            Platform = platform;
-        if (tag.TryGet(nameof(Workbench), out Item workbench))
-            Workbench = workbench;
-        if (tag.TryGet(nameof(Table), out Item table))
-            Table = table;
-        if (tag.TryGet(nameof(Chair), out Item chair))
-            Chair = chair;
-        if (tag.TryGet(nameof(Door), out Item door))
-            Door = door;
-        if (tag.TryGet(nameof(Chest), out Item chest))
-            Chest = chest;
-        if (tag.TryGet(nameof(Bed), out Item bed))
-            Bed = bed;
-        if (tag.TryGet(nameof(Bookcase), out Item bookcase))
-            Bookcase = bookcase;
-        if (tag.TryGet(nameof(Bathtub), out Item bathtub))
-            Bathtub = bathtub;
-        if (tag.TryGet(nameof(Candelabra), out Item candelabra))
-            Candelabra = candelabra;
-        if (tag.TryGet(nameof(Candle), out Item candle))
-            Candle = candle;
-        if (tag.TryGet(nameof(Chandelier), out Item chandelier))
-            Chandelier = chandelier;
-        if (tag.TryGet(nameof(Clock), out Item clock))
-            Clock = clock;
-        if (tag.TryGet(nameof(Dresser), out Item dresser))
-            Dresser = dresser;
-        if (tag.TryGet(nameof(Lamp), out Item lamp))
-            Lamp = lamp;
-        if (tag.TryGet(nameof(Lantern), out Item lantern))
-            Lantern = lantern;
-        if (tag.TryGet(nameof(Piano), out Item piano))
-            Piano = piano;
-        if (tag.TryGet(nameof(Sink), out Item sink))
-            Sink = sink;
-        if (tag.TryGet(nameof(Sofa), out Item sofa))
-            Sofa = sofa;
-        if (tag.TryGet(nameof(Toilet), out Item toliet))
-            Toilet = toliet;
-        if (tag.TryGet(nameof(Torch), out Item torch))
-            Torch = torch;
-        if (tag.TryGet(nameof(Campfire), out Item campfire))
-            Campfire = campfire;
-        if (tag.TryGet(nameof(Wall), out Item wall))
-            Wall = wall;
+        HandleLegacyData(tag);
+        for (int n = 0; n < 24; n++) 
+        {
+            if (tag.TryGet($"m_{n}", out Item item))
+                BuildingMaterials[n] = item;
+        }
     }
 
     public override void NetSend(BinaryWriter writer)
     {
-        ItemIO.Send(Block, writer, true, true);
-        ItemIO.Send(Platform, writer, true, true);
-        ItemIO.Send(Workbench, writer, true, true);
-        ItemIO.Send(Table, writer, true, true);
-        ItemIO.Send(Chair, writer, true, true);
-        ItemIO.Send(Door, writer, true, true);
-        ItemIO.Send(Chest, writer, true, true);
-        ItemIO.Send(Bed, writer, true, true);
-        ItemIO.Send(Bookcase, writer, true, true);
-        ItemIO.Send(Bathtub, writer, true, true);
-        ItemIO.Send(Candelabra, writer, true, true);
-        ItemIO.Send(Candle, writer, true, true);
-        ItemIO.Send(Chandelier, writer, true, true);
-        ItemIO.Send(Clock, writer, true, true);
-        ItemIO.Send(Dresser, writer, true, true);
-        ItemIO.Send(Lamp, writer, true, true);
-        ItemIO.Send(Lantern, writer, true, true);
-        ItemIO.Send(Piano, writer, true, true);
-        ItemIO.Send(Sink, writer, true, true);
-        ItemIO.Send(Sofa, writer, true, true);
-        ItemIO.Send(Toilet, writer, true, true);
-        ItemIO.Send(Torch, writer, true, true);
-        ItemIO.Send(Campfire, writer, true, true);
-        ItemIO.Send(Wall, writer, true, true);
+        for(int n = 0;n < 24; n++)
+            ItemIO.Send(BuildingMaterials[n], writer, true, true);
     }
 
     public override void NetReceive(BinaryReader reader)
     {
-        Block = ItemIO.Receive(reader, true, true);
-        Platform = ItemIO.Receive(reader, true, true);
-        Workbench = ItemIO.Receive(reader, true, true);
-        Table = ItemIO.Receive(reader, true, true);
-        Chair = ItemIO.Receive(reader, true, true);
-        Door = ItemIO.Receive(reader, true, true);
-        Chest = ItemIO.Receive(reader, true, true);
-        Bed = ItemIO.Receive(reader, true, true);
-        Bookcase = ItemIO.Receive(reader, true, true);
-        Bathtub = ItemIO.Receive(reader, true, true);
-        Candelabra = ItemIO.Receive(reader, true, true);
-        Candle = ItemIO.Receive(reader, true, true);
-        Chandelier = ItemIO.Receive(reader, true, true);
-        Clock = ItemIO.Receive(reader, true, true);
-        Dresser = ItemIO.Receive(reader, true, true);
-        Lamp = ItemIO.Receive(reader, true, true);
-        Lantern = ItemIO.Receive(reader, true, true);
-        Piano = ItemIO.Receive(reader, true, true);
-        Sink = ItemIO.Receive(reader, true, true);
-        Sofa = ItemIO.Receive(reader, true, true);
-        Toilet = ItemIO.Receive(reader, true, true);
-        Torch = ItemIO.Receive(reader, true, true);
-        Campfire = ItemIO.Receive(reader, true, true);
-        Wall = ItemIO.Receive(reader, true, true);
+        for (int n = 0; n < 24; n++)
+            BuildingMaterials[n] = ItemIO.Receive(reader, true, true);
     }
 }

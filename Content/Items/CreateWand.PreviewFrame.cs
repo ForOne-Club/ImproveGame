@@ -1,4 +1,5 @@
-﻿using ImproveGame.Content.Functions.Construction;
+﻿using ImproveGame.Common.ModSystems;
+using ImproveGame.Content.Functions.Construction;
 using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Content.Items;
@@ -25,7 +26,7 @@ public partial class CreateWand
         for (int x = 0; x < width; x++)
             for (int y = 0; y < height; y++)
             {
-                var sort = Color2TileInfo(colors[x + y * width]);
+                var sort = TileInfo.FromColor(colors[x + y * width]);
                 if (multitileOverrideCoords.Contains(new(x, y)))
                 {
                     sorts[x, y].HasWall = sort.HasWall;
@@ -105,6 +106,7 @@ public partial class CreateWand
                             for (int v = 0; v < 2; v++)
                             {
                                 sorts[x + u - 1, y - v].Sort = sort.Sort;
+                                sorts[x + u - 1, y - v].Flip = sort.Flip;
                                 multitileOverrideCoords.Add(new(x + u - 1, y - v));
                             }
                         }
@@ -114,6 +116,7 @@ public partial class CreateWand
                     case TileSort.Chair:
                     case TileSort.Toilet:
                         sorts[x, y - 1].Sort = sort.Sort;
+                        sorts[x, y - 1].Flip = sort.Flip;
                         break;
 
                     // 2x1
@@ -356,13 +359,19 @@ public partial class CreateWand
             // 1x2
             case TileSort.Chair:
             {
-                tileFrameX = 18;
+                if (current.Flip)
+                    tileFrameX = 18;
+                else
+                    tileFrameX = 0;
                 tileFrameY = j > 0 && datas[i, j - 1].Sort is TileSort.Chair ? 18 : 0;
                 break;
             }
             case TileSort.Toilet:
             {
-                tileFrameX = 18;
+                if (current.Flip)
+                    tileFrameX = 18;
+                else
+                    tileFrameX = 0;
                 tileFrameY = j > 0 && datas[i, j - 1].Sort is TileSort.Toilet ? 58 : 40;
                 break;
             }
@@ -405,7 +414,6 @@ public partial class CreateWand
             case TileSort.Bathtub:
             {
                 MultiTileFraming(datas, sort, i, j, 4, 2, out tileFrameX, out tileFrameY);
-                tileFrameX += 72;
                 break;
             }
 
