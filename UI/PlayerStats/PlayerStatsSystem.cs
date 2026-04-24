@@ -58,8 +58,9 @@ public class PlayerStatsSystem : ModSystem
                 return BonusSyntax((sm.Additive * sm.Multiplicative - 1f) * 100, true);
             }));
 
-        // 远程暴击与穿甲
+        // 远程暴击攻速与穿甲
         AddCritStat(ranged, DamageClass.Ranged);
+        AddAttackSpeedStat(ranged, DamageClass.Ranged);
         AddArmorPenetrationStat(ranged, DamageClass.Ranged);
 
         #endregion
@@ -69,9 +70,10 @@ public class PlayerStatsSystem : ModSystem
         BaseStatsCategory magic =
             new BaseStatsCategory(ModAsset.Magic.Value, "UI.PlayerStats.Magic");
 
-        // 法术伤害与暴击
+        // 法术伤害暴击与攻速
         AddDamageStat(magic, DamageClass.Magic);
         AddCritStat(magic, DamageClass.Magic);
+        AddAttackSpeedStat(magic, DamageClass.Magic);
 
         // 法术回复
         magic.BaseProperties.Add(new BaseStat(magic, "UI.PlayerStats.Regen",
