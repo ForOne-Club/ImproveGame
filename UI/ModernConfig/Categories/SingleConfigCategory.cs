@@ -21,6 +21,13 @@ namespace ImproveGame.UI.ModernConfig.Categories
                 CrossModCategoryCard.AddOptionToPanel(variable, config, panel);
             }
         }
+
         public override string Label => config.DisplayName.Value;
+        private LocalizedText Description { get; } = 
+            Language.Exists(config.GetLocalizationKey("Description")) 
+            ? config.GetLocalization("Description") 
+            : null;
+
+        public override string Tooltip => Description?.Value ?? base.Tooltip;
     }
 }
