@@ -18,10 +18,10 @@ public partial class CreateWand
             var prison1 = ModAsset.Prison1.Value;
             var prison2 = ModAsset.Prison2.Value;
             var prison3 = ModAsset.Prison3.Value;
-            using FileStream fsShowcase = new FileStream(Path.Combine(directory, "buildingShowcase.png"), FileMode.CreateNew);
-            using FileStream fs1 = new FileStream(Path.Combine(directory, "Prison1.png"), FileMode.CreateNew);
-            using FileStream fs2 = new FileStream(Path.Combine(directory, "Prison2.png"), FileMode.CreateNew);
-            using FileStream fs3 = new FileStream(Path.Combine(directory, "Prison3.png"), FileMode.CreateNew);
+            using FileStream fsShowcase = new FileStream(Path.Combine(directory, "buildingShowcase.png"), FileMode.Create);
+            using FileStream fs1 = new FileStream(Path.Combine(directory, "Prison1.png"), FileMode.Create);
+            using FileStream fs2 = new FileStream(Path.Combine(directory, "Prison2.png"), FileMode.Create);
+            using FileStream fs3 = new FileStream(Path.Combine(directory, "Prison3.png"), FileMode.Create);
 
             building.SaveAsPng(
                 fsShowcase,
@@ -54,7 +54,9 @@ public partial class CreateWand
             Main.QueueMainThreadAction(() =>
             {
                 string directory = Path.Combine(Main.SavePath, "Mods", "ImproveGame", "CreateWand");
-                if (!Directory.Exists(directory))
+                if (!Directory.Exists(directory)
+                    || (Directory.GetFiles(directory) is { Length: 1 } files 
+                        && Path.GetFileNameWithoutExtension(files[0]) is "buildingShowcase"))
                 {
                     Directory.CreateDirectory(directory);
                     CreateShowcase(directory);
