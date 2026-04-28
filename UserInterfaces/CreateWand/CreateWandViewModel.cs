@@ -100,4 +100,10 @@ public partial class CreateWandViewModel : ObservableObject
     {
         CWand.OpenDialogAndChooseDataMap();
     }
+
+    [RelayCommand]
+    public static void OpenFolder() 
+    {
+        TrUtils.OpenFolder(Path.Combine(Main.SavePath, "Mods", "ImproveGame", "CreateWand"));
+    }
 }
