@@ -29,7 +29,7 @@ public class FavoriteDetourSubscriber : ILoadable
 
         // Hook到SaveConfig，给特殊的Config - FavoritedConfigs保存用
         var saveConfigMethodInfo = typeof(UIModConfig).GetMethod("SaveConfig",
-            BindingFlags.Public | BindingFlags.Instance);
+            BindingFlags.NonPublic | BindingFlags.Instance);
         if (saveConfigMethodInfo is not null)
             MonoModHooks.Add(saveConfigMethodInfo, SaveConfigDetour);
     }
