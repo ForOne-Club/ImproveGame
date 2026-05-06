@@ -6,12 +6,18 @@
 /// </summary>
 public class AutofishAvailabliltyCheckPlayer : ModPlayer
 {
-    public bool Available { get; private set; }
+    public bool Available => Main.netMode switch
+    {
+        NetmodeID.SinglePlayer => true,
+        NetmodeID.MultiplayerClient => ModNet.netMods != null,
+        NetmodeID.Server or _ => _availableForServer
+    };
+    private bool _availableForServer;
     public override void SyncPlayer(int toWho, int fromWho, bool newPlayer)
     {
         if (Main.dedServ 
             && fromWho != -1
             && Main.player[fromWho].TryGetModPlayer<AutofishAvailabliltyCheckPlayer>(out var mplr))
-            mplr.Available = true;
+            mplr._availableForServer = true;
     }
 }
