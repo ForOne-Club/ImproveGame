@@ -65,6 +65,10 @@ public class IndicatorMapLayer : ModMapLayer
         // 花岗岩洞
         ProcessStructureWithMultiplePositions(ref context, ref text, true, StructureDatas.GraniteCavePositions,
             UIConfigs.Instance.MarkGraniteCave, "Mods.ImproveGame.Items.GraniteCaveGlobe.BiomeName", new SpriteFrame(columns, rows, 2, 1));
+
+        // 蜂巢
+        ProcessStructureWithMultiplePositions(ref context, ref text, true, StructureDatas.HivePositions,
+            UIConfigs.Instance.MarkGraniteCave, "Mods.ImproveGame.Items.HiveGlobe.BiomeName", new SpriteFrame(columns, rows, 3, 1));
     }
 
     private void ProcessStructure(ref MapOverlayDrawContext context, ref string text, bool isUnlocked, Point16 position,
@@ -130,6 +134,8 @@ public class StructureDatas : ModSystem
     public static List<Point16> MarbleCavePositions { get; set; }
     public static List<Point16> AllGraniteCavePositions { get; set; }
     public static List<Point16> GraniteCavePositions { get; set; }
+    public static List<Point16> AllHivePositions { get; set; }
+    public static List<Point16> HivePositions { get; set; }
     public static List<Point16> BaitlessAutofisherPositions { get; set; }
 
     public static string QotVersionInWorldGeneration
@@ -222,11 +228,15 @@ public class StructureDatas : ModSystem
             return false;
         };
 
+        // 可恶的醉酒会互换大理石和花岗岩，但没关系，我也会互换嘻嘻
         On_MarbleBiome.Place += (orig, marbleBiome, origin, structures) =>
         {
             if (orig(marbleBiome, origin, structures))
             {
-                AllMarbleCavePositions.Add(new Point16(origin.X, origin.Y));
+                if (Main.drunkWorld)
+                    AllGraniteCavePositions.Add(new Point16(origin.X, origin.Y));
+                else
+                    AllMarbleCavePositions.Add(new Point16(origin.X, origin.Y));
                 return true;
             }
 
@@ -237,7 +247,21 @@ public class StructureDatas : ModSystem
         {
             if (orig(graniteBiome, origin, structures))
             {
-                AllGraniteCavePositions.Add(new Point16(origin.X, origin.Y));
+                if (Main.drunkWorld)
+                    AllMarbleCavePositions.Add(new Point16(origin.X, origin.Y));
+                else
+                    AllGraniteCavePositions.Add(new Point16(origin.X, origin.Y));
+                return true;
+            }
+
+            return false;
+        };
+
+        On_HiveBiome.Place += (orig, hiveBiome, origin, structures) =>
+        {
+            if (orig(hiveBiome, origin, structures))
+            {
+                AllHivePositions.Add(new Point16(origin.X, origin.Y));
                 return true;
             }
 
@@ -286,6 +310,8 @@ public class StructureDatas : ModSystem
         MarbleCavePositions = new List<Point16>();
         AllGraniteCavePositions = new List<Point16>();
         GraniteCavePositions = new List<Point16>();
+        AllHivePositions = new List<Point16>();
+        HivePositions = new List<Point16>();
         BaitlessAutofisherPositions = new List<Point16>();
     }
 
@@ -303,6 +329,8 @@ public class StructureDatas : ModSystem
         tag["marbleCave"] = MarbleCavePositions ?? [];
         tag["allGraniteCave"] = AllGraniteCavePositions ?? [];
         tag["graniteCave"] = GraniteCavePositions ?? [];
+        tag["allHive"] = AllHivePositions ?? [];
+        tag["hive"] = HivePositions ?? [];
         tag["versionData"] = QotVersionInWorldGeneration;
     }
 
@@ -320,6 +348,8 @@ public class StructureDatas : ModSystem
         MarbleCavePositions = tag.Get<List<Point16>>("marbleCave") ?? [];
         AllGraniteCavePositions = tag.Get<List<Point16>>("allGraniteCave") ?? [];
         GraniteCavePositions = tag.Get<List<Point16>>("graniteCave") ?? [];
+        AllHivePositions = tag.Get<List<Point16>>("allHive") ?? [];
+        HivePositions = tag.Get<List<Point16>>("hive") ?? [];
         if (tag.TryGet<string>("versionData", out var value))
             QotVersionInWorldGeneration = value;
         else
@@ -342,6 +372,8 @@ public class StructureDatas : ModSystem
         writer.Write(MarbleCavePositions);
         writer.Write(AllGraniteCavePositions);
         writer.Write(GraniteCavePositions);
+        writer.Write(AllHivePositions);
+        writer.Write(HivePositions);
         writer.Write(BaitlessAutofisherPositions);
     }
 
@@ -360,6 +392,8 @@ public class StructureDatas : ModSystem
         MarbleCavePositions = reader.ReadPoint16List().ToList();
         AllGraniteCavePositions = reader.ReadPoint16List().ToList();
         GraniteCavePositions = reader.ReadPoint16List().ToList();
+        AllHivePositions = reader.ReadPoint16List().ToList();
+        HivePositions = reader.ReadPoint16List().ToList();
         BaitlessAutofisherPositions = reader.ReadPoint16List().ToList();
     }
 }
