@@ -1,4 +1,5 @@
-﻿using ImproveGame.Content.Items;
+﻿#if false
+using ImproveGame.Content.Items;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.SUIElements;
@@ -330,3 +331,4 @@ public class ArchitectureGUI : BaseBody
         SoundEngine.PlaySound(SoundID.MenuClose);
     }
 }
+#endif

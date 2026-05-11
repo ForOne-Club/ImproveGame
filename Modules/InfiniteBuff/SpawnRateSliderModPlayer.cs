@@ -5,20 +5,21 @@ using Terraria.ModLoader.IO;
 namespace ImproveGame.Modules.InfiniteBuff;
 
 [INotifyPropertyChanged]
-public partial class SpawnRateSliderValueModPlayer : ModPlayer
+public partial class SpawnRateSliderModPlayer : ModPlayer
 {
     [ObservableProperty]
     public partial bool ShowSlider { get; set; } = true;
 
-    [ObservableProperty]
-    public partial float SpawnRateSliderValue { get; private set; } = 0.5f;
-
-    public void SetSpawnRateSliderValue(float value, bool syncRequired)
+    public float SpawnRateSliderValue
     {
-        SpawnRateSliderValue = MathF.Round(value / 0.01f) * 0.01f;
-        if (syncRequired)
-            SpawnRateSlider.Get(Player.whoAmI, SpawnRateSliderValue).Send();
-    }
+        get; set
+        {
+            SetProperty(ref field, MathF.Round(value / 0.01f) * 0.01f);
+
+            if (Player.whoAmI != Main.myPlayer || Main.netMode is NetmodeID.Server) return;
+            SpawnRateSlider.Get(Player.whoAmI, field).Send();
+        }
+    } = 0.5f;
 
     public override void SyncPlayer(int toWho, int fromWho, bool newPlayer) => SpawnRateSlider.Get(Player.whoAmI, SpawnRateSliderValue).Send(toWho, fromWho);
 

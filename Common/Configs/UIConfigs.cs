@@ -260,5 +260,13 @@ public class UIConfigs : ModConfig
     [Slider]
     [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
     [CustomModConfigItem(typeof(Round4FloatElement))]
+    public float MarkHive;
+
+    [DefaultValue(0.8f)]
+    [Increment(0.1f)]
+    [Range(0f, 1.5f)]
+    [Slider]
+    [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
+    [CustomModConfigItem(typeof(Round4FloatElement))]
     public float MarkEmptyAutofisher;
 }

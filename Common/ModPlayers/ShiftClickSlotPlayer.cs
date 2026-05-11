@@ -7,6 +7,7 @@ using ImproveGame.UI.Autofisher;
 using ImproveGame.UI.ExtremeStorage;
 using ImproveGame.UI.ItemContainer;
 using ImproveGame.UIFramework;
+using ImproveGame.UserInterfaces.CreateWand;
 using ItemSlot = Terraria.UI.ItemSlot;
 
 namespace ImproveGame.Common.ModPlayers;
@@ -47,10 +48,10 @@ public class ShiftClickSlotPlayer : ModPlayer
             }
 
             // 建筑法杖
-            if (ArchitectureGUI.Visible &&
-                UISystem.Instance.ArchitectureGUI.ItemSlot.Any(s =>
-                    s.Value.CanPlaceItem(item) &&
-                    CanPlaceInSlot(s.Value.Item, item) is 2 or 3))
+            if (CreateWandController.Instance is { Enabled : true} controller &&
+                controller.ItemSlots.Any(s =>
+                    s.CanPutInItemSlot(item) &&
+                    CanPlaceInSlot(s.Item, item) is 2 or 3))
             {
                 Main.cursorOverride = CursorOverrideID.InventoryToChest;
                 return true;
@@ -156,26 +157,26 @@ public class ShiftClickSlotPlayer : ModPlayer
                 return true; // 阻止原版代码运行
             }
 
-            if (!inventory[slot].IsAir && ArchitectureGUI.Visible)
+            if (!inventory[slot].IsAir && CreateWandController.Instance is { Enabled : true} controller)
             {
-                foreach (var itemSlot in from s in UISystem.Instance.ArchitectureGUI.ItemSlot
-                                         where s.Value.CanPlaceItem(inventory[slot])
+                foreach (var itemSlot in from s in controller.ItemSlots
+                                         where s.CanPutInItemSlot(inventory[slot])
                                          select s)
                 {
                     // 放到建筑GUI里面
-                    ref Item slotItem = ref itemSlot.Value.Item;
-                    ref Item placeItem = ref inventory[slot];
+                    Item slotItem = itemSlot.Item;
+                    Item placeItem = inventory[slot];
 
                     byte placeMode = CanPlaceInSlot(slotItem, placeItem);
 
                     // type不同直接切换吧
-                    if (placeMode is 1 or 3)
+                    if (placeMode is 3)
                     {
-                        itemSlot.Value.SwapItem(ref placeItem);
                         SoundEngine.PlaySound(SoundID.Grab);
                         // Recipe.FindRecipes();
                         // 和魔杖实例同步
-                        itemSlot.Value.ItemChange();
+                        itemSlot.Item = placeItem;
+                        inventory[slot] = slotItem;
                         return true; // 阻止原版代码运行
                     }
 
@@ -187,9 +188,7 @@ public class ShiftClickSlotPlayer : ModPlayer
                         placeItem.stack -= stackAddition;
                         slotItem.stack += stackAddition;
                         SoundEngine.PlaySound(SoundID.Grab);
-                        // Recipe.FindRecipes();
-                        // 和魔杖实例同步
-                        itemSlot.Value.ItemChange();
+                        Recipe.FindRecipes();
                         return true; // 阻止原版代码运行
                     }
                 }

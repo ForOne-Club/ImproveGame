@@ -114,7 +114,7 @@ public class GameRectangle
             bool reversal = Main.LocalPlayer.gravDir == -1;
             if (reversal)
                 pos = new Vector2(pos.X + Texture2D.Size().X, Main.screenHeight - pos.Y);
-            Main.spriteBatch.Draw(Texture2D, pos, null, Color.White * 0.5f, (reversal ? 3.14f : 0), Vector2.Zero, 1f, (reversal ? SpriteEffects.FlipHorizontally : 0), 0);
+            Main.spriteBatch.Draw(Texture2D, pos + new Vector2(-2), null, Color.White * 0.5f, (reversal ? 3.14f : 0), Vector2.Zero, 1f, (reversal ? SpriteEffects.FlipHorizontally : 0), 0);
         }
     }
 

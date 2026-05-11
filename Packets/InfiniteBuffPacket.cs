@@ -76,6 +76,7 @@ public class InfiniteBuffPacket : NetModule
         infinite.PlayerBuffItems.Clear();
         infinite.PlayerBuffItems.AddRange(_items);
 
+        Array.Clear(infinite.ActivationFlags);
         foreach (var i in _flags)
         {
             infinite.ActivationFlags[i] = true;

@@ -395,6 +395,7 @@ public class ModIntegrationsSystem : ModSystem
                 .Add<DungeonGlobe>(silver: 80)
                 .Add<GraniteCaveGlobe>(gold: 1)
                 .Add<MarbleCaveGlobe>(gold: 1)
+                .Add<HiveGlobe>(gold: 1)
                 .Add<EnchantedSwordGlobe>(gold: 8)
                 .Add<PlanteraGlobe>(Item.buyPrice(gold: 16), Condition.Hardmode)
                 .Add<TempleGlobe>(Item.buyPrice(gold: 20), Condition.DownedPlantera));

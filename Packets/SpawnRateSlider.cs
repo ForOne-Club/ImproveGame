@@ -18,10 +18,10 @@ public class SpawnRateSlider : NetModule
 
     public override void Receive()
     {
-        if (!Main.player[_whoAmI].TryGetModPlayer<SpawnRateSliderValueModPlayer>(out var battler))
-            return;
+        if (_whoAmI == Main.myPlayer) return;
+        if (!Main.player[_whoAmI].TryGetModPlayer<SpawnRateSliderModPlayer>(out var battler)) return;
 
-        battler.SetSpawnRateSliderValue(_sliderValue, false);
+        battler.SpawnRateSliderValue = _sliderValue;
 
         if (Main.netMode is NetmodeID.Server) Send(-1, _whoAmI, false);
     }

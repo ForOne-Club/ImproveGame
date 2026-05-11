@@ -1060,6 +1060,11 @@ UIConfigs: {
 		Tooltip: 在地图上显示的已标记的花岗岩洞的图标的大小，设为0以隐藏图标
 	}
 
+	MarkHive: {
+		Label: "[centeritem:ImproveGame/GraniteCaveGlobe] 蜂巢图标大小"
+		Tooltip: 在地图上显示的已标记的蜂巢的图标的大小，设为0以隐藏图标
+	}
+
 	MarkEmptyAutofisher: {
 		Label: "[centeritem:ImproveGame/Autofisher] 缺少鱼饵的钓鱼机图标大小"
 		Tooltip: 在地图上显示的所有缺少鱼饵的钓鱼机的图标的大小，设为0以隐藏图标

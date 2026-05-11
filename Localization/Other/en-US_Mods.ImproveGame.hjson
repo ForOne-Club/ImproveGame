@@ -178,12 +178,14 @@ Tips: {
 			'''
 		CreateWand:
 			'''
-			Use the wand by Middle-Click and choose a png for customize buildings
+			You can import Building style by Datamap or Structure file of ConstructWand in the CreateWand Controller
 			Files in [c/88CCEE:"Document/My Games/Terraria/tModLoader]
 			[c/88CCEE:/Mods/ImproveGame/CreateWand"]
 			will import automatically
 
+			In Datamap:
 			B channel of FF means there's wall, 00 means no wall.
+			A channel of FF means Left Direction, 7F means Right Direction
 			RG channel's tile table as followed:
 			| Color |    Hex   |        Tile        |
 			| ------- | ---------- | ------------------- |
@@ -366,7 +368,7 @@ LifeAnalyzer: {
 
 Architecture: {
 	Materials: House Materials
-	StoredMaterials: (Stored: {MaterialCount})
+	StoredMaterials: (All: {MaterialCountTotal}, Stored: {MaterialCountWand}, Inventory: {MaterialCountInventory})
 	MaterialsRequired: "Materials Needed: "
 	Block: Block
 	Platform: Platform

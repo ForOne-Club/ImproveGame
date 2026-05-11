@@ -179,6 +179,7 @@ namespace ImproveGame.UIFramework.UIElements
             {
                 File.Move(FilePath, newPath);
                 UISystem.Instance.StructureGUI.CacheSetupStructures = true;
+                FileOperator.CallFileListChanged();
             }
         }
 
@@ -188,7 +189,10 @@ namespace ImproveGame.UIFramework.UIElements
             if (File.Exists(FilePath))
                 FileUtilities.Delete(FilePath, false);
             if (UISystem.Instance.StructureGUI is not null)
+            {
                 UISystem.Instance.StructureGUI.CacheSetupStructures = true;
+                FileOperator.CallFileListChanged();
+            }
         }
 
         public override void Update(GameTime gameTime)

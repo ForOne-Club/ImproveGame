@@ -70,7 +70,8 @@ public class RollItemRequest : NetModule
                     try
                     {
                         var player = TEAutofisher.GetClosestPlayer(autofisher.Position);
-                        autofisher.GiveCatchToStorage(player, _rolledItemDrop);
+                        if (player != null)
+                            autofisher.GiveCatchToStorage(player, _rolledItemDrop);
                     }
                     catch
                     {

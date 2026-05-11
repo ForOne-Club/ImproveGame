@@ -7,7 +7,12 @@ RecipeSearchUI.Tips:
 	'''
 
 CreateWandController: {
-	Title: 建造魔杖控制器 114514
+	Title: CreateWand Controller
+	BuildingMaterial: Building Materials
+	StructureSelection: Building Selection
+	ImportFromStructureFile: Import - ConstructWand
+	ImportFromDatamap: Import - Datamap
+	BackToBuildingDataList: Back to List
 }
 
 InfiniteBUFFController: {

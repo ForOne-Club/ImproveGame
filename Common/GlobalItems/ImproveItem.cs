@@ -329,7 +329,7 @@ public class ImproveItem : GlobalItem, IItemOverrideHover, IItemMiddleClickable
     {
         if (ApplyBuffItem.IsItemAvailable(item))
         {
-            sb.ReBegin(null, Main.UIScaleMatrix);
+            sb.ReBegin(null, Main.spriteBatch.transformMatrix);
         }
     }
 }

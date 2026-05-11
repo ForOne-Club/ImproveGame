@@ -91,8 +91,8 @@ public class UIPlayer : ModPlayer
         //UISystem.Instance.BuffTrackerGUI.BuffTrackerBattler.ResetDataForNewPlayer(Main.LocalPlayer.whoAmI);
 
         // 建筑法杖
-        uiSystem.ArchitectureGUI = new ArchitectureGUI();
-        uiSystem.ArchitectureTrigger.SetRootBody(uiSystem.ArchitectureGUI);
+        //uiSystem.ArchitectureGUI = new ArchitectureGUI();
+        //uiSystem.ArchitectureTrigger.SetRootBody(uiSystem.ArchitectureGUI);
 
         // 构造法杖
         uiSystem.StructureGUI = new StructureGUI();

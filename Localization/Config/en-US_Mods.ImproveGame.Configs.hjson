@@ -1054,6 +1054,11 @@ UIConfigs: {
 		Tooltip: Size of map icons of marked Granite Caves, set to 0 to hide
 	}
 
+	MarkHive: {
+		Label: "[centeritem:ImproveGame/GraniteCaveGlobe] 蜂巢图标大小"
+		Tooltip: 在地图上显示的已标记的蜂巢的图标的大小，设为0以隐藏图标
+	}
+
 	MarkEmptyAutofisher: {
 		Label: "[centeritem:ImproveGame/Autofisher] Bait-Lacking Fishing Machine Icon Size"
 		Tooltip: Size of map icons of bait-lacking Fishing Machines, set to 0 to hide

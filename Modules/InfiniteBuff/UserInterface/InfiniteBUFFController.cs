@@ -8,8 +8,8 @@ using Terraria.ModLoader.UI;
 
 namespace ImproveGame.Modules.InfiniteBuff.UserInterface;
 
-[XmlElementMapping("InfiniteBuffSlider")]
-public class QotSlider : SUISlider
+[XmlElementMapping("SpawnRateSlider")]
+public class SpawnRateSlider : SUISlider
 {
     protected override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
     {
@@ -21,7 +21,7 @@ public class QotSlider : SUISlider
 }
 
 [RegisterUI]
-public partial class InfiniteBUFFController : BaseBody
+public partial class InfiniteBuffController : BaseBody
 {
     public SUIScrollContainer BuffsContainer { get; private set; }
     public override IEnumerable<UIView> BlurElements => [MainContainer, SliderContainer];
@@ -41,6 +41,7 @@ public partial class InfiniteBUFFController : BaseBody
     {
         InitializeComponent();
 
+        MainContainer.OverflowHidden = true;
         BuffsContainer = ScrollView.Container;
 
         Header.ControlTarget = this;

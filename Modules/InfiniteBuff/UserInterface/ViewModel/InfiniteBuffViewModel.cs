@@ -1,23 +1,32 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using SilkyUIFramework;
+using ImproveGame.Styles;
 using SilkyUIFramework.Interfaces;
 using System.ComponentModel;
 
 namespace ImproveGame.Modules.InfiniteBuff.UserInterface.ViewModel;
 
-public sealed partial class InfiniteBuffViewModel : ObservableObject, IUpdatable, IDisposable
+public partial class InfiniteBuffLocalization
 {
     private static string GetTextValue(string key) => Language.GetTextValue($"Mods.ImproveGame.UI.InfiniteBUFFController.{key}");
 
+    public string Title { get; set; } = GetTextValue("DisplayName");
+
+    public string Placeholder { get; set; } = GetTextValue("Placeholder");
+
+    public string EnemySpawnRate { get; set; } = GetTextValue("EnemySpawnRate");
+}
+
+public sealed partial class InfiniteBuffViewModel : ObservableObject, IUpdatable, IDisposable
+{
+    /// <summary>
+    /// 共享唯一一个 <see cref="DefaultStyle"/>
+    /// </summary>
     [ObservableProperty]
-    public partial string Title { get; set; } = GetTextValue("DisplayName");
+    public partial DefaultStyle Style { get; set; } = DefaultStyle.Instance;
 
     [ObservableProperty]
-    public partial string Placeholder { get; set; } = GetTextValue("Placeholder");
-
-    [ObservableProperty]
-    public partial string EnemySpawnRate { get; set; } = GetTextValue("EnemySpawnRate");
+    public partial InfiniteBuffLocalization Localization { get; set; } = new();
 
     [ObservableProperty]
     public partial Asset<Texture2D> SearchCancel { get; set; } = Main.Assets.Request<Texture2D>("Images/UI/SearchCancel");
@@ -25,47 +34,38 @@ public sealed partial class InfiniteBuffViewModel : ObservableObject, IUpdatable
     [ObservableProperty]
     public partial Asset<Texture2D> EyeSwitch { get; set; } = ModAsset.EyeSwitch;
 
-    private readonly SpawnRateSliderValueModPlayer _model;
+    private readonly SpawnRateSliderModPlayer _model;
 
     public InfiniteBuffViewModel()
     {
-        _model = Main.LocalPlayer.GetModPlayer<SpawnRateSliderValueModPlayer>();
+        _model = Main.LocalPlayer.GetModPlayer<SpawnRateSliderModPlayer>();
         _model.PropertyChanged += OnModelPropertyChanged;
 
-        if (_model is not SpawnRateSliderValueModPlayer player) return;
-        OpenSlider = player.ShowSlider;
-        SliderValue = player.SpawnRateSliderValue;
+        OpenSlider = _model.ShowSlider;
+        SliderValue = _model.SpawnRateSliderValue;
     }
 
     private void OnModelPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
-        if (sender is not SpawnRateSliderValueModPlayer player) return;
+        if (sender is not SpawnRateSliderModPlayer player) return;
         switch (e.PropertyName)
         {
-            case nameof(SpawnRateSliderValueModPlayer.ShowSlider):
+            case nameof(SpawnRateSliderModPlayer.ShowSlider):
             {
-                OpenSlider = player.ShowSlider;
-                break;
+                OpenSlider = player.ShowSlider; break;
             }
-            case nameof(SpawnRateSliderValueModPlayer.SpawnRateSliderValue):
+            case nameof(SpawnRateSliderModPlayer.SpawnRateSliderValue):
             {
-                SliderValue = player.SpawnRateSliderValue;
-                break;
+                SliderValue = player.SpawnRateSliderValue; break;
             }
         }
     }
 
     [ObservableProperty]
-    public partial Color BorderColor { get; set; } = SUIColor.Border;
-
-    [ObservableProperty]
-    public partial Color BackgroundColor { get; set; } = SUIColor.Background * 0.75f;
-
-    [ObservableProperty]
     public partial float SliderValue { get; private set; }
 
     [RelayCommand]
-    private void SetSliderValue(float value) => _model.SetSpawnRateSliderValue(value, true);
+    private void SetSliderValue(float value) => _model.SpawnRateSliderValue = value;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(HiddenSlider))]
@@ -80,7 +80,7 @@ public sealed partial class InfiniteBuffViewModel : ObservableObject, IUpdatable
 
     public Color EyeColor => OpenSlider ? Color.White : Color.White * 0.5f;
 
-    [RelayCommand] public void ToggleShowSlider() => _model.ShowSlider = !_model.ShowSlider;
+    [RelayCommand] public void ToggleSliderVisibility() => _model.ShowSlider = !_model.ShowSlider;
 
     void IUpdatable.Update(GameTime gameTime)
     {

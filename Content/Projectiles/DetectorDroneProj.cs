@@ -80,7 +80,8 @@ public class DetectorDroneProj : ModProjectile
         if (player.DistanceSQ(Projectile.Center) > Math.Pow(16 * 600, 2))
         {
             shouldBeKilled = true;
-            AddNotification(this.GetLocalizedValue("TooFarAway"));
+            if (Projectile.owner == Main.myPlayer)
+                AddNotification(this.GetLocalizedValue("TooFarAway"));
         }
 
         if (shouldBeKilled)

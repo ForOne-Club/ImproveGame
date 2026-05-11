@@ -6,6 +6,15 @@ RecipeSearchUI.Tips:
 	Вы можете выключить его в конфигурации «Quality of Terraria»
 	'''
 
+CreateWandController: {
+	// Title: CreateWand Controller
+	// BuildingMaterial: Building Materials
+	// StructureSelection: Building Selection
+	// ImportFromStructureFile: Import - ConstructWand
+	// ImportFromDatamap: Import - Datamap
+	// BackToBuildingDataList: Back to List
+}
+
 InfiniteBUFFController: {
 	// DisplayName: BUFF Controller
 	// Placeholder: Please enter the name

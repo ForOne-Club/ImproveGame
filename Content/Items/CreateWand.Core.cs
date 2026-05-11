@@ -1,388 +1,115 @@
 ﻿using ImproveGame.Common;
 using ImproveGame.Common.Configs;
 using ImproveGame.Common.ModSystems;
-using ImproveGame.Content.Functions.Construction;
-using ImproveGame.UIFramework;
-using Terraria.ModLoader.IO;
 using Terraria.Utilities.FileBrowser;
 
 namespace ImproveGame.Content.Items;
 
 public partial class CreateWand
 {
-    #region 辅助类型
-    private enum TileSort : byte
+
+    #region 建筑预览
+    private static Dictionary<BuildingData, Texture2D> BuildingDataPreview_Internal { get; } = [];
+    public static IReadOnlyDictionary<BuildingData, Texture2D> BuildingDataPreview => BuildingDataPreview_Internal;
+    public static event Action<BuildingData> OnBuildingDataPreviewAdded;
+    private static void SetDefaultPair() 
     {
-        None,
-        Block,
-        Platform,
-        Workbench,
-        Table,
-        Chair,
-        Door,
-        Chest,
-        Bed,
-        Bookcase,
-        Bathtub,
-        Candelabra,
-        Candle,
-        Chandelier,
-        Clock,
-        Dresser,
-        Lamp,
-        Lantern,
-        Piano,
-        Sink,
-        Sofa,
-        Toilet,
-        Torch,
-        Campfire
+        var pair = BuildingDataPreview.FirstOrDefault();
+        CurrentBuildData = pair.Key;
+        CurrentBuildPreview = pair.Value;
     }
-    private struct TileInfo(TileSort sort, bool hasWall)
+    private static BuildingData CurrentBuildData 
     {
-        public TileSort Sort { get; set; } = sort;
-        public bool HasWall { get; set; } = hasWall;
-    }
-    private record TileData(TileInfo Info, int X, int Y);
-    #endregion
-
-    #region 建筑信息
-    private static List<Texture2D> _prisons;
-    private static List<Texture2D> _prisonsPreView;
-    private static List<Color[]> _colors;
-
-    private static bool _colorsLoaded;
-    private static Queue<string> _customAutoLoadQueue = [];
-    private static int _styleIndex;
-
-    private static bool _isWaitingPreview;
-    private static string _tempFilePath;
-
-    public static Texture2D Prison => _prisons[_styleIndex];
-    public static Texture2D PrisonsPreView => _prisonsPreView[_styleIndex];
-    public static Color[] Colors => _colors[_styleIndex];
-    #endregion
-
-    #region 加载数据
-    public static void AddNewPrisonStyle(Texture2D dataTexture, Texture2D previewTexture, bool useRunOnMainThread = true)
-    {
-        _prisons.Add(dataTexture);
-        _prisonsPreView.Add(previewTexture);
-        if (useRunOnMainThread)
-            Main.RunOnMainThread(() =>
-            {
-                _colors.Add(GetColors(dataTexture));
-            });
-        else
-            _colors.Add(GetColors(dataTexture));
-    }
-
-    public override void Load()
-    {
-        if (!Main.dedServ)
+        get 
         {
-            _colorsLoaded = false;
-            _customAutoLoadQueue.Clear();
-            // 把读取放到主线程上
-            Main.QueueMainThreadAction(() =>
-            {
-                if (_colorsLoaded)
-                    return;
-
-                _prisons =
-                [
-                    ModAsset.Prison1.Value, ModAsset.Prison2.Value, ModAsset.Prison3.Value
-                ];
-
-                _prisonsPreView =
-                [
-                    ModAsset.PrisonPreview1.Value, ModAsset.PrisonPreview2.Value, ModAsset.PrisonPreview3.Value
-                ];
-
-                _colors = [GetColors(_prisons[0]), GetColors(_prisons[1]), GetColors(_prisons[2])];
-                _colorsLoaded = true;
-
-                string directory = Path.Combine(Main.SavePath, "Mods", "ImproveGame", "CreateWand");
-                if (!Directory.Exists(directory))
-                {
-                    Directory.CreateDirectory(directory);
-
-                    var building = ModAsset.PrisonComplex.Value;
-                    using FileStream fs = new FileStream(Path.Combine(directory, "buildingShowcase.png"), FileMode.CreateNew);
-                    building.SaveAsPng(
-                        fs,
-                        building.Width,
-                        building.Height
-                        );
-                }
-
-                foreach (var file in Directory.GetFiles(directory, "*.png"))
-                    _customAutoLoadQueue.Enqueue(file);
-            }
-            );
+            if (field == null)
+                SetDefaultPair();
+            return field;
         }
-        else
-        {
-            _colorsLoaded = true;
-        }
+        set;
     }
-
-    public override void Unload()
+    private static Texture2D CurrentBuildPreview 
     {
-        if (!Main.dedServ)
+        get
         {
-            _prisons = null;
-            _prisonsPreView = null;
-            _colors = null;
+            if (field == null)
+                SetDefaultPair();
+            return field;
         }
-
-        _colorsLoaded = false;
+        set;
+    }
+    public static void SetBuildingData(BuildingData data)
+    {
+        CurrentBuildData = data;
+        if (BuildingDataPreview.TryGetValue(data, out var texture))
+            CurrentBuildPreview = texture;
     }
     #endregion
 
-    #region 辅助函数
-    /// <summary>
-    /// 颜色对应的物块类型
-    /// </summary>
-    /// <param name="color"></param>
-    /// <returns></returns>
-    private static TileInfo Color2TileInfo(Color color)
+    #region 导入建筑信息
+    public static void AddNewPrisonStyle(Texture2D dataTexture, Texture2D previewTexture)
     {
-        int index = (color.R + 1) / 64 * 5 + (color.G + 1) / 64;
-        if (index is > 23 or < 0) index = 0;
-        TileSort sort = (TileSort)index;
-        bool hasWall = color.B > 127;
-        return new TileInfo(sort, hasWall);
+        BuildingRegisterSystem._loadQueue.Enqueue(BuildingLoadData.FromDataMap(dataTexture));
     }
-
-
-    /// <summary>
-    /// 从<see cref="string"/>类型的名称获取对应的物品实例，为了方便而设置
-    /// </summary>
-    /// <param name="itemType">物品实例名称</param>
-    /// <param name="item">物品实例</param>
-    internal void GetStoredItemInstance(string itemType, out Item item)
+    public static void OpenDialogAndChooseDataMap()
     {
-        item = itemType switch
-        {
-            nameof(Block) => Block,
-            nameof(Platform) => Platform,
-            nameof(Workbench) => Workbench,
-            nameof(Table) => Table,
-            nameof(Chair) => Chair,
-            nameof(Door) => Door,
-            nameof(Chest) => Chest,
-            nameof(Bed) => Bed,
-            nameof(Bookcase) => Bookcase,
-            nameof(Bathtub) => Bathtub,
-            nameof(Candelabra) => Candelabra,
-            nameof(Candle) => Candle,
-            nameof(Chandelier) => Chandelier,
-            nameof(Clock) => Clock,
-            nameof(Dresser) => Dresser,
-            nameof(Lamp) => Lamp,
-            nameof(Lantern) => Lantern,
-            nameof(Piano) => Piano,
-            nameof(Sink) => Sink,
-            nameof(Sofa) => Sofa,
-            nameof(Toilet) => Toilet,
-            nameof(Torch) => Torch,
-            nameof(Campfire) => Campfire,
-            nameof(Wall) => Wall,
-            _ => null
-        };
-    }
-
-    /// <summary>
-    /// 设置物品，用于UI和物品存储数据间的同步
-    /// </summary>
-    /// <param name="itemType">物品存储类型</param>
-    /// <param name="item">物品实例</param>
-    internal void SetItem(string itemType, Item item)
-    {
-        switch (itemType)
-        {
-            case nameof(Block):
-                Block = item;
-                break;
-            case nameof(Platform):
-                Platform = item;
-                break;
-            case nameof(Wall):
-                Wall = item;
-                break;
-            case nameof(Torch):
-                Torch = item;
-                break;
-            case nameof(Workbench):
-                Workbench = item;
-                break;
-            case nameof(Chair):
-                Chair = item;
-                break;
-            case nameof(Bed):
-                Bed = item;
-                break;
-            case nameof(Table):
-                Table = item;
-                break;
-            case nameof(Door):
-                Door = item;
-                break;
-            case nameof(Chest):
-                Chest = item;
-                break;
-            case nameof(Bookcase):
-                Bookcase = item;
-                break;
-            case nameof(Bathtub):
-                Bathtub = item;
-                break;
-            case nameof(Candelabra):
-                Candelabra = item;
-                break;
-            case nameof(Candle):
-                Candle = item;
-                break;
-            case nameof(Chandelier):
-                Chandelier = item;
-                break;
-            case nameof(Clock):
-                Clock = item;
-                break;
-            case nameof(Dresser):
-                Dresser = item;
-                break;
-            case nameof(Lamp):
-                Lamp = item;
-                break;
-            case nameof(Lantern):
-                Lantern = item;
-                break;
-            case nameof(Piano):
-                Piano = item;
-                break;
-            case nameof(Sink):
-                Sink = item;
-                break;
-            case nameof(Sofa):
-                Sofa = item;
-                break;
-            case nameof(Toilet):
-                Toilet = item;
-                break;
-            case nameof(Campfire):
-                Campfire = item;
-                break;
-        }
-    }
-
-    // 切换样式
-    internal static void NextStyle()
-    {
-        _styleIndex++;
-        _styleIndex %= _prisons.Count;
-    }
-
-    #region 中键添加自定义样式支持
-    private static void HandleMiddleClick(Player player)
-    {
-        // 需要按下特殊物品交互键(默认中键)并且没在使用物品
-        if (!KeybindSystem.ItemInteractKeybind.JustPressed || player.itemAnimation != 0) return;
-
-        // 设置使用物品时间防止后续放置
-        player.itemAnimation = player.itemAnimationMax = 5;
-        player.altFunctionUse = 1;
-
-        //var coord = Main.MouseWorld.ToTileCoordinates();
-        //var tile = Framing.GetTileSafely(coord);
-
-        //Main.NewText((tile.TileFrameX / 18, tile.TileFrameY / 18, tile.WallFrameX / 18, tile.WallFrameY / 18));
-        //WorldGen.TileFrame(coord.X, coord.Y, true);
-        //return;
-
         // 筛选png文件
         ExtensionFilter[] extensions = [
              new ExtensionFilter("png files", "png")
         ];
 
         // 打开文件选择窗口
-        string path = FileBrowser.OpenFilePanel("Select config image", extensions);
+        string path = FileBrowser.OpenFilePanel("Select Datamap", extensions);
 
         if (path == null) return;
 
         // 进行注册
-        HandleRegister(path);
+        BuildingRegisterSystem._loadQueue.Enqueue(BuildingLoadData.FromFilePath(path));
     }
 
-    private static void HandleRegister(string path)
+    public static void RegisterFromQotStructureFile(string path)
     {
-
-        using FileStream fileStream = new FileStream(path, FileMode.Open);
-        using Texture2D texture = Texture2D.FromStream(Main.graphics.GraphicsDevice, fileStream);
-
-        /*
-        int w = texture.Width * 16;
-        int h = texture.Height * 16;
-        Texture2D previewTexture = new Texture2D(Main.graphics.GraphicsDevice, w, h);
-        Color[] datas = new Color[texture.Width * texture.Height];
-        texture.GetData(datas);
-        Color[] colors = new Color[w * h];
-        for (int i = 0; i < w; i++)
-        {
-            int x = i / 16;
-            for (int j = 0; j < h; j++)
-            {
-                int y = j / 16;
-                colors[j * w + i] = datas[y * texture.Width + x];
-            }
-        }
-        previewTexture.SetData(colors);
-        AddNewPrisonStyle(texture, previewTexture, false);
-        */
-        var colors = GetColors(texture);
-        _prisons.Add(texture);
-        _colors.Add(colors);
-
-        _isWaitingPreview = true;
-
-        var tag = CreateStructureTagFromColors(colors, texture.Width, texture.Height);
-        var tagPath = Path.Combine(ModLoader.ModPath, nameof(ImproveGame), "tempStructure.qotstruct");
-        TagIO.ToFile(tag, tagPath);
-        WandSystem.ConstructFilePath = tagPath;
-        _tempFilePath = tagPath;
-        PreviewRenderer.ResetPreviewTarget = PreviewRenderer.ResetState.WaitReset;
-        int width = texture.Width;
-        int height = texture.Height;
-        PreviewRenderer.PreviewTarget =
-            new RenderTarget2D(
-                Main.graphics.GraphicsDevice,
-                width * 16 + 20,
-                height * 16 + 20,
-                false,
-                default,
-                default,
-                default,
-                RenderTargetUsage.PreserveContents);
-    }
-
-    private static void HandlePreviewRegister()
-    {
-        if (!_isWaitingPreview || PreviewRenderer.ResetPreviewTarget != PreviewRenderer.ResetState.Finished) return;
-
-        _isWaitingPreview = false;
-        if (!string.IsNullOrEmpty(_tempFilePath))
-            File.Delete(_tempFilePath);
-        FileOperator.CachedStructureDatas.Remove(_tempFilePath);
-        var pvRender = PreviewRenderer.PreviewTarget;
-        int width = pvRender.Width;
-        int height = pvRender.Height;
-        Texture2D previewTexture = new Texture2D(Main.graphics.GraphicsDevice, width, height);
-        previewTexture.SetData(GetColors(pvRender));
-        _prisonsPreView.Add(previewTexture);
+        BuildingRegisterSystem._loadQueue.Enqueue(BuildingLoadData.FromStrcutre(path));
     }
     #endregion
 
+    #region 建筑材料检索
+    private int _cacheRefreshTimer;
+    private readonly Dictionary<int, (List<Item>, List<Item>)> _cachedMaterialSources = [];
+    private void UpdateMaterialSource(Player player)
+    {
+        _cachedMaterialSources.Clear();
+        var checker = CreateWandHelper.CheckersForItem;
+        foreach (var item in BuildingMaterials)
+        {
+            if (item == null || item.IsAir) continue;
+            for (int i = 0; i < 24; i++)
+            {
+                if (checker[i].Invoke(item))
+                {
+                    if (!_cachedMaterialSources.TryGetValue(i, out var pair))
+                        pair = _cachedMaterialSources[i] = ([], []);
+                    pair.Item1.Add(item);
+                    break;
+                }
+            }
+        }
+        for (int n = 0; n < 50; n++)
+        {
+            var item = player.inventory[n];
+            if (item == null || item.IsAir) continue;
+            for (int i = 0; i < 24; i++)
+            {
+                if (checker[i].Invoke(item))
+                {
+                    if (!_cachedMaterialSources.TryGetValue(i, out var pair))
+                        pair = _cachedMaterialSources[i] = ([], []);
+                    pair.Item2.Add(item);
+                    break;
+                }
+            }
+        }
+    }
     #endregion
 
     #region 放置函数
@@ -394,35 +121,10 @@ public partial class CreateWand
     /// <param name="x">放置目标X坐标</param>
     /// <param name="y">放置目标Y坐标</param>
     /// <param name="tryMethod">进行放置尝试的方法，只有符合条件的才会放置</param>
-    private static void TryPlace(ref Item storedItem, Player player, int x, int y, Func<Item, bool> tryMethod)
+    private static bool TryPlace(Item item, Player player, int x, int y)
     {
-        // 没有存储物品，在物品栏里面找
-        if (storedItem.IsAir || storedItem.createTile < TileID.Dirt)
-        {
-            PickItemInInventory(player, item =>
-                    item is not null && tryMethod(item) &&
-                    BongBongPlace(x, y, item, player, true, true, !_playedSound),
-                true, out int index);
-            if (index != -1)
-            {
-                _playedSound = true;
-            }
-        }
-        // 进行存储物品的放置尝试
-        else if (storedItem is not null && tryMethod(storedItem) &&
-                 BongBongPlace(x, y, storedItem, player, true, true, !_playedSound))
-        {
-            TryConsumeItem(ref storedItem, player);
-            _playedSound = true;
-        }
+        return BongBongPlace(x, y, item, player, true, true, false);
     }
-
-    private static bool TryPlacePlatform(Item item) =>
-        item.createTile >= TileID.Dirt && TileID.Sets.Platforms[item.createTile];
-
-    private static bool TryPlaceTile(Item item) =>
-        item.createTile >= TileID.Dirt && Main.tileSolid[item.createTile] && !Main.tileSolidTop[item.createTile];
-
     private static bool TryPlaceWall(Item item, Player player, int x, int y)
     {
         if (item.createWall > -1)
@@ -434,7 +136,7 @@ public partial class CreateWand
             }
 
             WorldGen.KillWall(x, y);
-            if (Main.tile[x, y].WallType == 0)
+            if (Main.tile[x, y].WallType == WallID.None)
             {
                 WorldGen.PlaceWall(x, y, item.createWall, true);
                 return true;
@@ -443,190 +145,203 @@ public partial class CreateWand
 
         return false;
     }
+    private bool TryPlaceBuilding(Player player, BuildingData data)
+    {
+        for (int i = 0; i < 24; i++)
+        {
+            var consume = data.MaterialConsume[i];
+            int stack = 0;
+            if (_cachedMaterialSources.TryGetValue(i, out var pair))
+                stack = pair.Item1.Sum(item => item.stack) + pair.Item2.Sum(item => item.stack);
+            if (stack < consume)
+                return false;
+        }
+
+        static Item FindFirstItemInSource((List<Item>, List<Item>) source)
+        {
+            foreach (var item in source.Item1)
+                if (item.stack > 0)
+                    return item;
+            foreach (var item in source.Item2)
+                if (item.stack > 0)
+                    return item;
+            return null;
+        }
+
+
+        Point position = Main.MouseWorld.ToTileCoordinates() - new Point(data.Width / 2, data.Height / 2);
+
+        List<TileData> tileDatas = [];
+
+        for (int i = 0; i < data.TileInfos.Count; i++) // 不会放置椅子和工作台
+        {
+            int x = position.X + i % data.Width; // 物块在图片中的 X 坐标
+            int y = position.Y + i / data.Width; // Y 坐标
+
+            TileInfo tileSort = data.TileInfos[i];
+
+            // 墙体
+            if (tileSort.HasWall)
+            {
+                var wallSource = _cachedMaterialSources[23];
+
+                var item = FindFirstItemInSource(wallSource);
+                if (item == null) return false;
+
+                if (TryPlaceWall(item, player, x, y))
+                    TryConsumeItem(ref item, player);
+            }
+
+            switch (tileSort.Sort)
+            {
+                case TileSort.Block:
+                case TileSort.Platform:
+                    var itemSource = _cachedMaterialSources[(int)tileSort.Sort - 1];
+                    var item = FindFirstItemInSource(itemSource);
+                    if (item == null) return false;
+                    if (TryPlace(item, player, x, y))
+                        TryConsumeItem(ref item, player);
+                    break;
+                case TileSort.None:
+                    break;
+                default:
+                    tileDatas.Add(new(tileSort, x, y));
+                    break;
+            }
+        }
+
+        for (int i = 0; i < tileDatas.Count; i++)
+        {
+            int x = tileDatas[i].X;
+            int y = tileDatas[i].Y;
+            if (Main.tile[x, y].HasTile)
+                continue;
+            var info = tileDatas[i].Info;
+
+
+            var itemSource = _cachedMaterialSources[(int)info.Sort - 1];
+            var item = FindFirstItemInSource(itemSource);
+            if (item == null) return false;
+            if (TryPlace(item, player, x, y))
+                TryConsumeItem(ref item, player);
+
+            // 朝向特殊处理，后续看怎么加入对其它方向的支持吧
+            switch (info.Sort)
+            {
+                case TileSort.Chair:
+                case TileSort.Toilet:
+                    if (info.Flip)
+                    {
+                        Main.tile[tileDatas[i].X, tileDatas[i].Y].TileFrameX += 18;
+                        Main.tile[tileDatas[i].X, tileDatas[i].Y - 1].TileFrameX += 18;
+                    }
+
+                    break;
+                case TileSort.Bathtub:
+                case TileSort.Bed:
+                    if (!info.Flip)
+                    {
+                        for (int u = -1; u < 3; u++)
+                            for (int v = -1; v < 1; v++)
+                            {
+                                var tile = Main.tile[tileDatas[i].X + u, tileDatas[i].Y + v];
+                                tile.TileFrameX -= 72;
+                            }
+                    }
+                    break;
+            }
+        }
+
+        if (Main.netMode == NetmodeID.MultiplayerClient)
+            NetMessage.SendTileSquare(player.whoAmI, position.X, position.Y, data.Width, data.Height);
+
+        return true;
+    }
     #endregion
 
     #region 原版重写函数
-    /// <summary>
-    /// 就为了实现一个“如果不放东西就没爆炸声音”的功能
-    /// </summary>
-    private static bool _playedSound;
 
     public override bool? UseItem(Player player)
     {
-        if (!_colorsLoaded || _colors is null)
-        {
-            ImproveGame.Instance.Logger.Error("Create Wand Colors didn't load. Please report to mod developers.");
-            return base.UseItem(player);
-        }
-
         if (!Main.dedServ && Main.myPlayer == player.whoAmI && player.altFunctionUse == 0)
         {
-            Point position = Main.MouseWorld.ToTileCoordinates() - (Prison.Size() / 2f).ToPoint();
-
-            List<TileData> tileDatas = new();
-
-            for (int i = 0; i < Colors.Length; i++) // 不会放置椅子和工作台
+            // 强制刷新一次来检测材料是否足够
+            UpdateMaterialSource(player);
+            if (TryPlaceBuilding(player, CurrentBuildData))
             {
-                int x = position.X + i % Prison.Width; // 物块在图片中的 X 坐标
-                int y = position.Y + i / Prison.Width; // Y 坐标
-
-                TileInfo tileSort = Color2TileInfo(Colors[i]);
-
-                // 墙体
-                if (tileSort.HasWall)
-                {
-                    if (Wall.IsAir || Wall.createWall <= WallID.None)
-                    {
-                        PickItemInInventory(player, item => TryPlaceWall(item, player, x, y), true, out _);
-                    }
-                    else if (TryPlaceWall(Wall, player, x, y))
-                    {
-                        TryConsumeItem(ref Wall, player);
-                    }
-                }
-
-                switch (tileSort.Sort)
-                {
-                    case TileSort.Block:
-                        TryPlace(ref Block, player, x, y, TryPlaceTile);
-                        break;
-                    case TileSort.Platform:
-                        TryPlace(ref Platform, player, x, y, TryPlacePlatform);
-                        break;
-                    default:
-                        tileDatas.Add(new(tileSort, x, y));
-                        break;
-                }
+                // 重新刷新合成配方，这样如果一个物品没了就可以把它的合成配方刷新掉
+                // Recipe.FindRecipes();
+                // 刷新材料来源字典以显示消耗后的量
+                UpdateMaterialSource(player);
+                if (UIConfigs.Instance.ExplosionEffect)
+                    SoundEngine.PlaySound(SoundID.Item14, Main.MouseWorld);
             }
-
-            for (int i = 0; i < tileDatas.Count; i++) // 火把，椅子，工作台，桌子，床
+            else
             {
-                int x = tileDatas[i].X;
-                int y = tileDatas[i].Y;
-                if (Main.tile[x, y].HasTile)
-                {
-                    continue;
-                }
-
-                // 进行其他的放置尝试
-                switch (tileDatas[i].Info.Sort)
-                {
-                    case TileSort.Torch:
-                        TryPlace(ref Torch, player, x, y,
-                            item => item.createTile >= TileID.Dirt && TileID.Sets.Torch[item.createTile]);
-                        break;
-                    case TileSort.Workbench:
-                        TryPlace(ref Workbench, player, x, y, item => item.createTile == TileID.WorkBenches);
-                        break;
-                    case TileSort.Chair:
-                        TryPlace(ref Chair, player, x, y, item => item.createTile == TileID.Chairs && item.placeStyle is not 1 and not 20);
-                        Main.tile[tileDatas[i].X, tileDatas[i].Y].TileFrameX += 18;
-                        Main.tile[tileDatas[i].X, tileDatas[i].Y - 1].TileFrameX += 18;
-                        break;
-                    case TileSort.Table:
-                        TryPlace(ref Table, player, x, y, item => item.createTile is TileID.Tables or TileID.Tables2);
-                        break;
-                    case TileSort.Door:
-                        TryPlace(ref Door, player, x, y, item => item.createTile == TileID.ClosedDoor);
-                        break;
-                    case TileSort.Bed:
-                        TryPlace(ref Bed, player, x, y, item => item.createTile == TileID.Beds);
-                        break;
-                    case TileSort.Chest:
-                        TryPlace(ref Chest, player, x, y, item => item.createTile is TileID.Containers or TileID.Containers2);
-                        break;
-                    case TileSort.Bookcase:
-                        TryPlace(ref Bookcase, player, x, y, item => item.createTile == TileID.Bookcases);
-                        break;
-                    case TileSort.Bathtub:
-                        TryPlace(ref Bathtub, player, x, y, item => item.createTile == TileID.Bathtubs);
-                        break;
-                    case TileSort.Candelabra:
-                        TryPlace(ref Candelabra, player, x, y, item => item.createTile == TileID.Candelabras);
-                        break;
-                    case TileSort.Candle:
-                        TryPlace(ref Candle, player, x, y, item => item.createTile == TileID.Candles);
-                        break;
-                    case TileSort.Chandelier:
-                        TryPlace(ref Chandelier, player, x, y, item => item.createTile == TileID.Chandeliers);
-                        break;
-                    case TileSort.Clock:
-                        TryPlace(ref Clock, player, x, y, item => item.createTile == TileID.GrandfatherClocks);
-                        break;
-                    case TileSort.Dresser:
-                        TryPlace(ref Dresser, player, x, y, item => item.createTile == TileID.Dressers);
-                        break;
-                    case TileSort.Lamp:
-                        TryPlace(ref Lamp, player, x, y, item => item.createTile == TileID.Lamps);
-                        break;
-                    case TileSort.Lantern:
-                        TryPlace(ref Lantern, player, x, y, item => item.createTile == TileID.HangingLanterns);
-                        break;
-                    case TileSort.Piano:
-                        TryPlace(ref Piano, player, x, y, item => item.createTile == TileID.Pianos);
-                        break;
-                    case TileSort.Sink:
-                        TryPlace(ref Sink, player, x, y, item => item.createTile == TileID.Sinks);
-                        break;
-                    case TileSort.Sofa:
-                        TryPlace(ref Sofa, player, x, y, item => item.createTile == TileID.Benches);
-                        break;
-                    case TileSort.Toilet:
-                        TryPlace(ref Toilet, player, x, y, item => item.createTile == TileID.Toilets || (item.createTile == TileID.Chairs && item.placeStyle is 1 or 20));
-                        var tile = Main.tile[tileDatas[i].X, tileDatas[i].Y];
-                        tile.TileFrameX += 18;
-                        Main.tile[tileDatas[i].X, tileDatas[i].Y - 1].TileFrameX += 18;
-                        break;
-                    case TileSort.Campfire:
-                        TryPlace(ref Campfire, player, x, y, item => item.createTile == TileID.Campfire);
-                        break;
-                }
+                CombatText.NewText(
+                    player.getRect(),
+                    new Color(225, 0, 0),
+                    GetText("CombatText.Item.CreateWand_NotEnough"),
+                    true);
             }
-
-            if (Main.netMode == NetmodeID.MultiplayerClient)
-                NetMessage.SendTileSquare(player.whoAmI, position.X, position.Y, Prison.Width, Prison.Height);
-
-            // 重新刷新合成配方，这样如果一个物品没了就可以把它的合成配方刷新掉
-            // Recipe.FindRecipes();
-            // 同步UI物品
-            UISystem.Instance.ArchitectureGUI.RefreshSlots(this);
         }
-
-        if (!_playedSound && player.altFunctionUse == 0)
-            CombatText.NewText(player.getRect(), new Color(225, 0, 0), GetText("CombatText.Item.CreateWand_NotEnough"),
-                true);
-
-        _playedSound = false;
         return true;
     }
 
     public override void HoldItem(Player player)
     {
-        // if (player.itemAnimation == 0)
-        //     Item.mana = 40;
-        if (!Main.dedServ && Main.myPlayer == player.whoAmI)
+        if (Main.dedServ
+            || Main.myPlayer != player.whoAmI 
+            || CurrentBuildData is not { } buildingData) 
+            return;
+
+        Point point = Main.MouseWorld.ToTileCoordinates() - new Point(buildingData.Width / 2, buildingData.Height / 2); // 鼠标位置
+        int boxIndex = GameRectangle.Create(this, () => false,
+            new Rectangle(point.X, point.Y, buildingData.Width, buildingData.Height), Color.Yellow * 0f, Color.Yellow * 0f);
+        if (GameRectangleSystem.GameRectangles.IndexInRange(boxIndex))
         {
-            Point point = Main.MouseWorld.ToTileCoordinates() - (Prison.Size() / 2f).ToPoint(); // 鼠标位置
-            int boxIndex = GameRectangle.Create(this, () => false,
-                new Rectangle(point.X, point.Y, Prison.Width, Prison.Height), Color.Yellow * 0f, Color.Yellow * 0f);
-            if (GameRectangleSystem.GameRectangles.IndexInRange(boxIndex))
-            {
-                GameRectangle box = GameRectangleSystem.GameRectangles[boxIndex];
-                box.Texture2D = PrisonsPreView;
-            }
-
-            if (!_isWaitingPreview)
-            {
-                if (_customAutoLoadQueue.TryDequeue(out string path))
-                    HandleRegister(path);
-                else
-                    HandleMiddleClick(player);
-            }
-
-
-            HandlePreviewRegister();
+            GameRectangle box = GameRectangleSystem.GameRectangles[boxIndex];
+            box.Texture2D = CurrentBuildPreview;
         }
     }
+
+    private void ModifyTooltipLine_MaterialInfo(List<TooltipLine> tooltips)
+    {
+        if (CurrentBuildData is not { } data) return;
+        if (_cacheRefreshTimer % 60 == 0)
+        {
+            _cacheRefreshTimer = 0;
+            if (!Main.gameMenu)
+                UpdateMaterialSource(Main.LocalPlayer);
+        }
+        _cacheRefreshTimer++;
+        for (int n = 0; n < 24; n++)
+        {
+            int count = data.MaterialConsume[n];
+            if (count <= 0) continue;
+
+            string key = n == 23 ? "Wall" : ((TileSort)(n + 1)).ToString();
+
+            int stackInWand = 0;
+            int stackInInventory = 0;
+            if (_cachedMaterialSources.TryGetValue(n, out var pair))
+            {
+                stackInWand = pair.Item1.Sum(item => item.stack);
+                stackInInventory = pair.Item2.Sum(item => item.stack);
+            }
+
+            int total = stackInWand + stackInInventory;
+            string hex = count > total ? "ff0000" : "ffff00";
+            string hex2 = count > total ? "ff0000" : "00a7df";
+
+            string neededText = $"[c/{hex}:{GetText($"Architecture.{key}")}: {count}]";
+            string hasText =
+                $"[c/{hex2}:{GetTextWith("Architecture.StoredMaterials", new { MaterialCountTotal = total, MaterialCountWand = stackInWand, MaterialCountInventory = stackInInventory })}]";
+
+            tooltips.Add(new(Mod, $"MaterialConsume.{key}", $"{neededText}   {hasText}"));
+        }
+    }
+
     #endregion
 
 }
