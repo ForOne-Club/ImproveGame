@@ -188,7 +188,6 @@ public class ShiftClickSlotPlayer : ModPlayer
                         placeItem.stack -= stackAddition;
                         slotItem.stack += stackAddition;
                         SoundEngine.PlaySound(SoundID.Grab);
-                        Recipe.FindRecipes();
                         return true; // 阻止原版代码运行
                     }
                 }

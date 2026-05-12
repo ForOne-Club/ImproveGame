@@ -334,7 +334,7 @@ public class MagickWand : SelectorItem, IConditionItem
     public override void AddRecipes()
     {
         CreateRecipe()
-            .AddRecipeGroup(RecipeGroupID.Wood, 18)
+            .AddRecipeGroup(RecipeGroups.Wood, 18)
             .AddIngredient(ItemID.JungleSpores, 6)
             .AddIngredient(ItemID.Ruby, 1)
             .AddTile(TileID.WorkBenches)

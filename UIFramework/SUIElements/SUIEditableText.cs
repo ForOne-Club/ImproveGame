@@ -404,7 +404,7 @@ public class SUIEditableText : TimerView
 
         Vector2 position = InnerText.GetDimensions().ToRectangle().Bottom();
         position.Y += 32f;
-        Main.instance.DrawWindowsIMEPanel(position, 0.5f);
+        Main.instance.SetIMEPanelAnchor(position, 0.5f);
     }
 
     private void HandleShortcutOperation(out bool usingShortcut)

@@ -316,7 +316,7 @@ public class TerrariaVanillaUIResetter : ModSystem
         Vector2 mousePosition = UserInterface.ActiveInstance.MousePosition;
         bool isHoveringOverHandle = self._isHoveringOverHandle;
         self._isHoveringOverHandle = handleRectangle.Contains(new Point((int)mousePosition.X, (int)mousePosition.Y));
-        if (!isHoveringOverHandle && self._isHoveringOverHandle && Main.hasFocus)
+        if (!isHoveringOverHandle && self._isHoveringOverHandle && FocusHelper.AllowUIInputs)
         {
             SoundEngine.PlaySound(SoundID.MenuTick);
         }

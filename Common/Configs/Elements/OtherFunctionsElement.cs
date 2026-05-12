@@ -130,7 +130,7 @@ public class OtherFunctionsElement : ConfigElement
         for (var i = 0; i < entries.Length; i++)
         {
             string entry = entries[i];
-            string visibleText = font.CreateWrappedText(entry, width / textScale);
+            string visibleText = font.CreateWrappedText(entry, width / textScale, System.Globalization.CultureInfo.CurrentCulture);
             float x = 40f + dimensions.X;
             ChatManager.DrawColorCodedStringWithShadow(spriteBatch, font, visibleText, new Vector2(x, currentY),
                 Color.White, 0f, Vector2.Zero, new Vector2(textScale), spread: 1.2f);

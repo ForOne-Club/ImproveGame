@@ -57,7 +57,7 @@ public class ImproveItem : GlobalItem, IItemOverrideHover, IItemMiddleClickable
         }
 
         // 任务鱼可堆叠
-        if (ImproveConfigs.Instance.QuestFishStack && Main.anglerQuestItemNetIDs.Contains(item.netID))
+        if (ImproveConfigs.Instance.QuestFishStack && Main.anglerQuestItemNetIDs.Contains(item.type))
         {
             item.uniqueStack = false;
             item.maxStack = ImproveConfigs.Instance.ItemMaxStack;
@@ -202,7 +202,7 @@ public class ImproveItem : GlobalItem, IItemOverrideHover, IItemMiddleClickable
             player.dead || player.noItems)
             return false;
         return item.mountType != -1 && player.mount.CanMount(item.mountType, player) &&
-               player.ItemCheck_CheckCanUse(item) && !MountID.Sets.Cart[item.mountType];
+               player.ItemCheck_CheckCanUse_Inner(item) && !MountID.Sets.Cart[item.mountType];
     }
 
     public void ManageHoverTooltips(Item item, List<TooltipLine> tooltips)
@@ -255,7 +255,7 @@ public class ImproveItem : GlobalItem, IItemOverrideHover, IItemMiddleClickable
             text.Append("[i");
             if (result.stack != 1)
                 text.Append($"/s{result.stack}");
-            text.Append($":{result.netID}]");
+            text.Append($":{result.type}]");
         }
 
         tooltips.Add(new TooltipLine(Mod, "ShimmerResult", text.ToString()) { OverrideColor = new Color(241, 175, 233) });

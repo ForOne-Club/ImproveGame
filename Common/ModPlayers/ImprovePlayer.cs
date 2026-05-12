@@ -57,7 +57,7 @@ public class ImprovePlayer : ModPlayer
 
         if (Main.myPlayer == Player.whoAmI && _oldItemSelected is not -1 && !Player.ItemAnimationActive)
         {
-            Player.selectedItem = _oldItemSelected;
+            Player.selectedItemState = Player.selectedItemState with { selected = _oldItemSelected };
             _oldItemSelected = -1;
         }
 
@@ -75,7 +75,8 @@ public class ImprovePlayer : ModPlayer
                         Main.LocalPlayerCreativeTracker.ItemSacrifices.GetSacrificeCount(item.type);
                     if (amountNeeded - sacrificeCount > 0 && item.stack >= amountNeeded - sacrificeCount)
                     {
-                        CreativeUI.SacrificeItem(item.Clone(), out _);
+                        Item itemClone = item.Clone();
+                        Main.CreativeMenu.SacrificeItem(ref itemClone, out _);
                         SoundEngine.PlaySound(SoundID.Research);
                         SoundEngine.PlaySound(SoundID.ResearchComplete);
                     }
@@ -140,7 +141,7 @@ public class ImprovePlayer : ModPlayer
             if (ShouldUpdateTeam)
             {
                 Player.team = 1;
-                NetMessage.SendData(MessageID.PlayerTeam, -1, -1, null, Player.whoAmI);
+                NetMessage.SendData(MessageID.TeamChange, -1, -1, null, Player.whoAmI);
                 ShouldUpdateTeam = false;
             }
         }
@@ -214,7 +215,7 @@ public class ImprovePlayer : ModPlayer
             PressExtremeStorageSearchKeybind();
 
         // 下面是操作类快捷键
-        if (Player.DeadOrGhost) return;
+        if (Player.dead) return;
         if (KeybindSystem.DiscordRodKeybind.JustPressed)
             PressDiscordKeybind();
     }

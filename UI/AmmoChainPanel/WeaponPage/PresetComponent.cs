@@ -66,7 +66,7 @@ public class PresetComponent : TimerView
         AmmoChainUI.Instance.GenerateParticleAtMouse();
 
         var item = AmmoChainItem.GetItemWithChainData(Chain, Text.TextOrKey, Main.LocalPlayer);
-        Main.LocalPlayer.QuickSpawnItemDirect(Main.LocalPlayer.GetSource_Misc("AmmoChainGift"), item);
+        Main.LocalPlayer.QuickSpawnItem(Main.LocalPlayer.GetSource_Misc("AmmoChainGift"), item);
     }
 
     public override void RightMouseDown(UIMouseEvent evt)

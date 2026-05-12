@@ -72,7 +72,7 @@ namespace ImproveGame.Content.Items
                     if (ItemLoader.ConsumeItem(item, player))
                         item.stack--;
                     if (item.stack <= 0)
-                        item.SetDefaults();
+                        item.TurnToAir();
                     return true;
                 }
 
@@ -146,8 +146,8 @@ namespace ImproveGame.Content.Items
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddRecipeGroup(RecipeGroupID.Wood, 18)
-                .AddRecipeGroup(RecipeGroupID.IronBar, 6)
+                .AddRecipeGroup(RecipeGroups.Wood, 18)
+                .AddRecipeGroup(RecipeGroups.IronBar, 6)
                 .AddIngredient(ItemID.Paintbrush, 1)
                 .AddIngredient(ItemID.PaintRoller, 1)
                 .AddIngredient(ItemID.PaintScraper, 1)

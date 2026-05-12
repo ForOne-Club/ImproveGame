@@ -241,7 +241,7 @@ public class OpenBagGUI : BaseBody
             if (Main.LocalPlayer is null || !Main.LocalPlayer.TryGetModPlayer(out LootKeeper keeper))
                 return;
 
-            keeper.Loots.ForEach(l => Main.LocalPlayer.QuickSpawnItem(Main.LocalPlayer.GetSource_Loot(), l, l.stack));
+            keeper.Loots.ForEach(l => Main.LocalPlayer.QuickSpawnItem(Main.LocalPlayer.GetSource_Loot(), l));
             keeper.Loots.Clear();
             RefreshGrid();
 
@@ -260,7 +260,7 @@ public class OpenBagGUI : BaseBody
                (Main.ItemDropsDB.GetRulesForItemID(keeper.Bag.type).Count != 0))
         {
             LootListener._listening = keeper.Bag.type;
-            ItemSlot.TryOpenContainer(keeper.Bag, Main.LocalPlayer);
+            ItemSlot.TryOpenContainer([keeper.Bag], 0, 0, Main.LocalPlayer);
             LootListener._listening = -1;
 
             RefreshGrid();
@@ -293,7 +293,7 @@ public class OpenBagGUI : BaseBody
         var coins = CoinUtils.ConvertCopperValueToCoins(totalValue);
         coins.ForEach(item =>
         {
-            Main.LocalPlayer.QuickSpawnItem(Main.LocalPlayer.GetSource_Loot(), item, item.stack);
+            Main.LocalPlayer.QuickSpawnItem(Main.LocalPlayer.GetSource_Loot(), item);
         });
 
         keeper.Loots.Clear();

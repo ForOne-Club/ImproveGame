@@ -28,7 +28,7 @@ public class ShellShipInBottle : ModItem, IConditionItem
         CreateRecipe()
             .AddIngredient(ItemID.Bottle)
             .AddIngredient(ItemID.Seashell, 5)
-            .AddRecipeGroup(RecipeGroupID.Wood, 10)
+            .AddRecipeGroup(RecipeGroups.Wood, 10)
             .AddIngredient(ItemID.FallenStar, 1)
             .AddTile(TileID.WorkBenches)
             .Register();

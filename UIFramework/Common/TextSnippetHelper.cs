@@ -248,7 +248,7 @@ public static class TextSnippetHelper
             }
             else
             {
-                float length = snippet.GetStringLength(font);
+                float length = snippet.UniqueDraw(true, out var size, null) ? size.X : 0;
                 workingLineLength += length;
                 // 超了 - 换行再添加，注意起始长度
                 if (workingLineLength > maxWidth)

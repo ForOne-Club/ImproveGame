@@ -221,7 +221,7 @@ public abstract class GlobeProjBase(Color mainColor) : ModProjectile
     public override bool PreDraw(Player player, ref Color lightColor)
     {
         if (!UIConfigs.Instance.GlobeEffect)
-            return base.PreDraw(ref lightColor);
+            return base.PreDraw(player, ref lightColor);
 
         var projTex = TextureAssets.Projectile[Type].Value;
         var cross = ModAsset.CrazyGlowCross.Value;

@@ -126,7 +126,7 @@ public class StorageGrids : ModItemGrid
 
         Vector2 position = SearchBar.GetDimensions().ToRectangle().BottomLeft();
         position.Y += 32f;
-        Main.instance.DrawWindowsIMEPanel(position, 0f);
+        Main.instance.SetIMEPanelAnchor(position, 0f);
     }
 
     public override void DrawSelf(SpriteBatch spriteBatch)

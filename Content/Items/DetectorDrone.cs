@@ -72,7 +72,7 @@ public class DetectorDrone : ModItem, IConditionItem
     public override void AddRecipes()
     {
         CreateRecipe()
-            .AddRecipeGroup(RecipeGroupID.IronBar, 6)
+            .AddRecipeGroup(RecipeGroups.IronBar, 6)
             .AddRecipeGroup(RecipeSystem.AnyGoldBar, 2)
             .AddTile(TileID.Anvils)
             .Register();

@@ -39,7 +39,7 @@ public class ShimmerBucket : ModItem, IConditionItem
             WorldGen.SquareTileFrame(Player.tileTargetX, Player.tileTargetY);
 
             item.stack--;
-            player.PutItemInInventoryFromItemUsage(ItemID.EmptyBucket, player.selectedItem);
+            player.PutItemInInventoryFromItemUsage(ItemID.EmptyBucket);
 
             player.ApplyItemTime(item);
             if (Main.netMode == NetmodeID.MultiplayerClient)

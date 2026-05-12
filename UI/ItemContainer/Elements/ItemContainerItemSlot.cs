@@ -101,7 +101,7 @@ public class ItemContainerItemSlot : GenericItemSlot
     /// </summary>
     protected void TakeSlotItemToMouseItem(int stack)
     {
-        if ((!Main.mouseItem.IsTheSameAs(Item) || !ItemLoader.CanStack(Main.mouseItem, Item)) &&
+        if ((Main.mouseItem.type != Item.type || !ItemLoader.CanStack(Main.mouseItem, Item)) &&
              Main.mouseItem.type is not ItemID.None || Main.mouseItem.stack >= Main.mouseItem.maxStack &&
                                                          Main.mouseItem.type is not ItemID.None)
         {
@@ -118,7 +118,7 @@ public class ItemContainerItemSlot : GenericItemSlot
         {
             ItemLoader.StackItems(Main.mouseItem, Item, out _, numToTransfer: stack);
             if (Item.stack <= 0)
-                Item.SetDefaults();
+                Item.TurnToAir();
             SoundEngine.PlaySound(SoundID.MenuTick);
         }
     }
@@ -158,8 +158,8 @@ public class ItemContainerItemSlot : GenericItemSlot
             }
             // 放回物背包图标
             case CursorOverrideID.ChestToInventory:
-                Item = Main.player[Main.myPlayer].GetItem(Main.myPlayer, Item,
-                    GetItemSettings.InventoryEntityToPlayerInventorySettings);
+                Item = Main.player[Main.myPlayer].GetItem(Item,
+                    GetItemSettings.QuickTransferFromSlot);
                 SoundEngine.PlaySound(SoundID.Grab);
                 return;
         }

@@ -85,6 +85,6 @@ public class PyramidGlobe : OnceForAllGlobe
         }
     }
     protected override Recipe AddCraftingMaterials(Recipe recipe) =>
-        recipe.AddRecipeGroup(RecipeGroupID.Sand, 50)
+        recipe.AddRecipeGroup(RecipeGroups.Sand, 50)
             .AddTile(TileID.WorkBenches);
 }

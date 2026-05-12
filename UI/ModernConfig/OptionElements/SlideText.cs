@@ -64,13 +64,13 @@ public class SlideText : View
         bool favorited = TextColor == Color.Gold;
 
         // 为啥不用ChatManager.DrawColorCodedStringWithShadow？因为要对Tag文字处理，对于已收藏的，覆盖一切颜色Tag特效到金色
-        TextSnippet[] snippets = [.. ChatManager.ParseMessage(text, TextColor)];
+        var snippets = ChatManager.ParseMessage(text, TextColor);
         ChatManager.ConvertNormalSnippets(snippets);
         ChatManager.DrawColorCodedStringShadow(sb, font, snippets, textCenter, TextBorderColor, 0f, textOrigin, scale, -1, 1.3f);
         // 金色高亮覆盖一切tag文字
         if (favorited)
         {
-            snippets.ToList().ForEach(snippet =>
+            snippets.ForEach(snippet =>
             {
                 if (snippet is TextSnippet textSnippet)
                     textSnippet.Color = TextColor;

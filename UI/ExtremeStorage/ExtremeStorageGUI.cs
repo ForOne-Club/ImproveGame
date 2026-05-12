@@ -32,7 +32,7 @@ public class ExtremeStorageGUI : BaseBody, ISidedView
         }
     }
 
-    public override bool Enabled { get => !Main.recBigList; set { } }
+    public override bool Enabled { get => Player.Settings.CraftingGridControl != Player.Settings.CraftingGridMode.Classic || !Main.PipsUseGrid; set { } }
 
     public static bool Visible => SidedEventTrigger.IsOpened(UISystem.Instance.ExtremeStorageGUI);
 
@@ -153,7 +153,7 @@ public class ExtremeStorageGUI : BaseBody, ISidedView
         _findChestCountdown++;
 
         // 如果打开了制作大面板，强制将DisplayCrafting设为true
-        if (!DisplayCrafting && Main.recBigList)
+        if (!DisplayCrafting && Player.Settings.CraftingGridControl == Player.Settings.CraftingGridMode.Classic && Main.PipsUseGrid)
         {
             DisplayCrafting = true;
             _foldTimer.Timer = 0;

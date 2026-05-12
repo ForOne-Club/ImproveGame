@@ -191,7 +191,7 @@ public class StorageCommunicator : ModItem, IItemOverrideHover, IItemMiddleClick
     {
         CreateRecipe()
             .AddIngredient(ItemID.Sapphire, 3)
-            .AddRecipeGroup(RecipeGroupID.IronBar, 8)
+            .AddRecipeGroup(RecipeGroups.IronBar, 8)
             .AddRecipeGroup(RecipeSystem.AnyGoldBar, 4)
             .AddTile(TileID.MythrilAnvil)
             .Register();

@@ -166,7 +166,7 @@ public class DetectorDroneProj : ModProjectile
     {
         Main.DrawTrail(Projectile, new Vector2(10f, 2f), new Color(59, 217, 180, 100));
         Main.DrawTrail(Projectile, new Vector2(-10f, 2f), new Color(59, 217, 180, 100));
-        return base.PreDraw(ref lightColor);
+        return base.PreDraw(player, ref lightColor);
     }
 
     // 改了DrawOffset和DrawOriginOffset就是这么麻烦

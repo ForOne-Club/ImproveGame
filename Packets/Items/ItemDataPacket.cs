@@ -78,7 +78,7 @@ public class InventoryItemDataPacket : NetModule
 
         if (spawnItemIfWasFilled && !player.inventory[_slot].IsAir && !_item.IsAir)
         {
-            player.QuickSpawnItem(new EntitySource_Sync("SyncFromServer"), _item, _item.stack);
+            player.QuickSpawnItem(new EntitySource_Sync("SyncFromServer"), _item);
         }
 
         if (setFavorite)
@@ -92,9 +92,11 @@ public class InventoryItemDataPacket : NetModule
             player.inventory[_slot].favorited = oldFavorited;
         }
 
+        /*
         if (Main.netMode is NetmodeID.MultiplayerClient)
         {
-            // Recipe.FindRecipes();
+            Recipe.FindRecipes();
         }
+        */
     }
 }

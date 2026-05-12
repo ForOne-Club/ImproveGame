@@ -68,8 +68,7 @@ public class AutoMoneyPlayerListener : ModPlayer, IHookPostSetup
     {
         if (Player is null || !HasCoin())
             return;
-        ContainerTransferContext containerTransferContext = ContainerTransferContext.FromUnknown(Player);
-        ChestUI.MoveCoins(Player.inventory, Player.bank.item, containerTransferContext);
+        ChestUI.MoveCoins(Player.inventory, Player.bank);
     }
 
     public bool HasCoin()
@@ -84,7 +83,6 @@ public class AutoMoneyPlayerListener : ModPlayer, IHookPostSetup
 
     private void DetectCustomCurrency()
     {
-        bool isDepositSucceed = false;
         for (var i = 0; i <= 49; i++)
         {
             var item = Player.inventory[i];
@@ -92,13 +90,10 @@ public class AutoMoneyPlayerListener : ModPlayer, IHookPostSetup
             if (!item.IsAir && CustomCurrencyManager.IsCustomCurrency(item) && !disabled &&
                 AutoMoneyItemListener.TryDepositCustomCurrency(item, Player))
             {
-                isDepositSucceed = true;
                 item.TurnToAir();
             }
         }
 
-        if (isDepositSucceed)
-            // Recipe.FindRecipes();
     }
 
     // 返回的是物品禁用状态，true就是没禁用，false就是禁用了

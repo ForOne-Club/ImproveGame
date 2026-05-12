@@ -264,7 +264,7 @@ namespace ImproveGame.Content.Items
         public override void AddRecipes()
         {
             CreateRecipe()
-                .AddRecipeGroup(RecipeGroupID.Wood, 24)
+                .AddRecipeGroup(RecipeGroups.Wood, 24)
                 .AddRecipeGroup(RecipeSystem.AnyShadowScale, 8)
                 .AddRecipeGroup(RecipeSystem.AnyGoldBar, 6)
                 .AddTile(TileID.Anvils)

@@ -21,7 +21,7 @@ public static class PlayerHelper
             // 同队检测
             if (teammate.team == 0 || teammate.team != player.team) continue;
             // 死亡检测
-            if (requireAlive && teammate.DeadOrGhost) continue;
+            if (requireAlive && teammate.dead) continue;
             // 距离检测
             var distance = teammate.Distance(player.Center);
             if (ImproveConfigs.Instance.ShareRange != -1 && distance > ImproveConfigs.Instance.ShareRange * 16f) continue;

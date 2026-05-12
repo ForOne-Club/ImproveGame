@@ -93,14 +93,14 @@ namespace ImproveGame.Content.Functions.Construction
                     #region 平台斜坡绘制信息 由于懒得在绘制时获取周围信息，就这么搞
                     if (TileID.Sets.Platforms[tile.TileType])
                     {
-                        if (tile.Slope == SlopeType.SlopeDownLeft && Main.tile[x + 1, y + 1].HasTile && Main.tileSolid[Main.tile[x + 1, y + 1].TileType] && Main.tile[x + 1, y + 1].Slope is not SlopeType.SlopeDownRight && Main.tile[x + 1, y + 1].BlockType is not BlockType.HalfBlock && (!Main.tile[x, y + 1].HasTile || (Main.tile[x, y + 1].BlockType != BlockType.Solid && Main.tile[x, y + 1].BlockType != BlockType.SlopeUpRight) || (!TileID.Sets.BlocksStairs[Main.tile[x, y + 1].TileType] && !TileID.Sets.BlocksStairsAbove[Main.tile[x, y + 1].TileType])))
+                        if (tile.Slope == SlopeType.SlopeDownLeft && Main.tile[x + 1, y + 1].HasTile && Main.tileSolid[Main.tile[x + 1, y + 1].TileType] && Main.tile[x + 1, y + 1].Slope is not SlopeType.SlopeDownRight && Main.tile[x + 1, y + 1].BlockType is not BlockType.HalfBlock && (!Main.tile[x, y + 1].HasTile || (Main.tile[x, y + 1].BlockType != BlockType.Solid && Main.tile[x, y + 1].BlockType != BlockType.SlopeUpRight) || (!TileID.Sets.BlocksStairs[Main.tile[x, y + 1].TileType])))
                         {
                             if (TileID.Sets.Platforms[Main.tile[x + 1, y + 1].TileType] && Main.tile[x + 1, y + 1].Slope == SlopeType.Solid)
                                 platformDrawSlopeType = 1;
                             else
                                 platformDrawSlopeType = 0;
                         }
-                        else if (tile.Slope == SlopeType.SlopeDownRight && Main.tile[x - 1, y + 1].HasTile && Main.tileSolid[Main.tile[x - 1, y + 1].TileType] && Main.tile[x - 1, y + 1].Slope is not SlopeType.SlopeDownLeft && Main.tile[x - 1, y + 1].BlockType is not BlockType.HalfBlock && (!Main.tile[x, y + 1].HasTile || (Main.tile[x, y + 1].BlockType != BlockType.Solid && Main.tile[x, y + 1].BlockType != BlockType.SlopeUpLeft) || (!TileID.Sets.BlocksStairs[Main.tile[x, y + 1].TileType] && !TileID.Sets.BlocksStairsAbove[Main.tile[x, y + 1].TileType])))
+                        else if (tile.Slope == SlopeType.SlopeDownRight && Main.tile[x - 1, y + 1].HasTile && Main.tileSolid[Main.tile[x - 1, y + 1].TileType] && Main.tile[x - 1, y + 1].Slope is not SlopeType.SlopeDownLeft && Main.tile[x - 1, y + 1].BlockType is not BlockType.HalfBlock && (!Main.tile[x, y + 1].HasTile || (Main.tile[x, y + 1].BlockType != BlockType.Solid && Main.tile[x, y + 1].BlockType != BlockType.SlopeUpLeft) || (!TileID.Sets.BlocksStairs[Main.tile[x, y + 1].TileType])))
                         {
                             if (TileID.Sets.Platforms[Main.tile[x - 1, y + 1].TileType] && Main.tile[x - 1, y + 1].Slope == SlopeType.Solid)
                                 platformDrawSlopeType = 3;

@@ -269,7 +269,7 @@ public class QuickShimmerGUI : BaseBody
             if (Main.LocalPlayer is null || !Main.LocalPlayer.TryGetModPlayer(out ShimmerLootKeeper keeper))
                 return;
 
-            keeper.Loots.ForEach(l => Main.LocalPlayer.QuickSpawnItem(Main.LocalPlayer.GetSource_Loot(), l, l.stack));
+            keeper.Loots.ForEach(l => Main.LocalPlayer.QuickSpawnItem(Main.LocalPlayer.GetSource_Loot(), l));
             keeper.Loots.Clear();
             RefreshGrid();
 

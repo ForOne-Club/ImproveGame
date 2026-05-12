@@ -227,9 +227,6 @@ public sealed class ModernConfigUI : UIState
 
     public override void Draw(SpriteBatch spriteBatch)
     {
-        // 修复鼠标移到标牌上会导致标牌文字一直显示的问题
-        Main._MouseOversCanClear = true;
-
         // SubPage目录缓动
         PathPanelTimer.UpdateHighFps();
         PathPanel.Top.Percent = PathPanelTimer.Lerp(0f, 0.5f - 0.82f * 0.5f);

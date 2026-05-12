@@ -76,7 +76,7 @@ partial class MyUtils
 
     public static void QuickUseItem(Player player, int index)
     {
-        player.selectedItem = index;
+        player.selectedItemState = player.selectedItemState with { selected = index };
         player.controlUseItem = true;
         if (CombinedHooks.CanUseItem(player, player.inventory[player.selectedItem]))
         {
@@ -575,7 +575,7 @@ partial class MyUtils
             {
                 if (hint)
                 {
-                    PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, item, item.stack);
+                    PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, item, Main.LocalPlayer.Center, item.stack);
                     SoundEngine.PlaySound(SoundID.Grab);
                 }
 
@@ -650,7 +650,7 @@ partial class MyUtils
         if (!hint)
             return item;
 
-        PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, item, numTransferred, noStack: false);
+        PopupText.NewText(PopupTextContext.ItemPickupToVoidContainer, item, Main.LocalPlayer.Center, numTransferred, noStack: false);
         SoundEngine.PlaySound(SoundID.Grab);
 
         return item;
@@ -1151,7 +1151,7 @@ partial class MyUtils
     public static void OperateInventory(bool openInventory, bool canDelayCheckRecipes = false)
     {
         Main.playerInventory = openInventory;
-        Recipe.FindRecipes(canDelayCheckRecipes);
+        // Recipe.FindRecipes(canDelayCheckRecipes);
     }
 
     private static bool TryAcceptChanges(int whoAmI, ref NetworkText message)

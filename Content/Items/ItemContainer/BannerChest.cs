@@ -251,7 +251,7 @@ public class BannerChest : ModItem, IItemOverrideLeftClick, IItemOverrideHover, 
     public override void AddRecipes()
     {
         CreateRecipe()
-            .AddRecipeGroup(RecipeGroupID.IronBar, 12)
+            .AddRecipeGroup(RecipeGroups.IronBar, 12)
             .AddTile(TileID.Anvils)
             .Register();
     }

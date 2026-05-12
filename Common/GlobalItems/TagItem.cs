@@ -25,7 +25,7 @@ public class TagItem : GlobalItem
             var font = FontAssets.MouseText.Value;
             var position = new Vector2(line.X, line.Y);
             var color = line.OverrideColor ?? line.Color;
-            TextSnippet[] snippets = ChatManager.ParseMessage(line.Text, color).ToArray();
+            var snippets = ChatManager.ParseMessage(line.Text, color);
             ChatManager.ConvertNormalSnippets(snippets);
             ChatManager.DrawColorCodedString(Main.spriteBatch, font, snippets, position, Color.White, 0f, Vector2.Zero, Vector2.One, out _, -1);
             return false;

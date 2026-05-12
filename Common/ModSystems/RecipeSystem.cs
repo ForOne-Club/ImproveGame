@@ -6,34 +6,34 @@ namespace ImproveGame.Common.ModSystems;
 public class RecipeSystem : ModSystem
 {
     /// <summary>任意铜锭（铜/锡）</summary>
-    internal static RecipeGroup AnyCopperBar;
+    public static RecipeGroup AnyCopperBar { get; private set; }
 
     /// <summary>任意铁锭（铁/铅）</summary>
-    internal static RecipeGroup AnyIronBar;
+    public static RecipeGroup AnyIronBar { get; private set; }
 
     /// <summary>任意银锭（银/钨）</summary>
-    internal static RecipeGroup AnySilverBar;
+    public static RecipeGroup AnySilverBar { get; private set; }
 
     /// <summary>任意金锭（金/铂）</summary>
-    internal static RecipeGroup AnyGoldBar;
+    public static RecipeGroup AnyGoldBar { get; private set; }
 
     /// <summary>任意魔金锭（魔金/猩红）</summary>
-    internal static RecipeGroup AnyDemoniteBar;
+    public static RecipeGroup AnyDemoniteBar { get; private set; }
 
     /// <summary>任意暗影鳞片（暗影鳞片/组织样本）</summary>
-    internal static RecipeGroup AnyShadowScale;
+    public static RecipeGroup AnyShadowScale { get; private set; }
 
     /// <summary>任意钴锭（钴/钯金）</summary>
-    internal static RecipeGroup AnyCobaltBar;
+    public static RecipeGroup AnyCobaltBar { get; private set; }
 
     /// <summary>任意秘银锭（秘银/山铜）</summary>
-    internal static RecipeGroup AnyMythrilBar;
+    public static RecipeGroup AnyMythrilBar { get; private set; }
 
     /// <summary>任意精金锭（精金/钛金）</summary>
-    internal static RecipeGroup AnyAdamantiteBar;
+    public static RecipeGroup AnyAdamantiteBar { get; private set; }
 
     /// <summary>任意宝石</summary>
-    internal static RecipeGroup AnyGem;
+    internal static RecipeGroup AnyGem { get; private set; }
 
     public override void Unload()
     {
@@ -50,29 +50,29 @@ public class RecipeSystem : ModSystem
 
     public override void AddRecipeGroups()
     {
-        AnyCopperBar = new RecipeGroup(() => GetText($"RecipeGroup.{nameof(AnyCopperBar)}"), 20, 703);
-        AnyIronBar = new RecipeGroup(() => GetText($"RecipeGroup.{nameof(AnyIronBar)}"), 22, 704);
-        AnySilverBar = new RecipeGroup(() => GetText($"RecipeGroup.{nameof(AnySilverBar)}"), 21, 705);
-        AnyGoldBar = new RecipeGroup(() => GetText($"RecipeGroup.{nameof(AnyGoldBar)}"), 19, 706);
-        AnyDemoniteBar = new RecipeGroup(() => GetText($"RecipeGroup.{nameof(AnyDemoniteBar)}"), 57, 1257);
-        AnyShadowScale = new RecipeGroup(() => GetText($"RecipeGroup.{nameof(AnyShadowScale)}"), 86, 1329);
-        AnyCobaltBar = new RecipeGroup(() => GetText($"RecipeGroup.{nameof(AnyCobaltBar)}"), 381, 1184);
-        AnyMythrilBar = new RecipeGroup(() => GetText($"RecipeGroup.{nameof(AnyMythrilBar)}"), 382, 1191);
-        AnyAdamantiteBar = new RecipeGroup(() => GetText($"RecipeGroup.{nameof(AnyAdamantiteBar)}"), 391, 1198);
+        AnyCopperBar = new RecipeGroup(() => GetText($"RecipeGroup.{nameof(AnyCopperBar)}"), ItemID.CopperBar, ItemID.TinBar);
+        AnyIronBar = new RecipeGroup(() => GetText($"RecipeGroup.{nameof(AnyIronBar)}"), ItemID.IronBar, ItemID.LeadBar);
+        AnySilverBar = new RecipeGroup(() => GetText($"RecipeGroup.{nameof(AnySilverBar)}"), ItemID.SilverBar, ItemID.TungstenBar);
+        AnyGoldBar = new RecipeGroup(() => GetText($"RecipeGroup.{nameof(AnyGoldBar)}"), ItemID.GoldBar, ItemID.PlatinumBar);
+        AnyDemoniteBar = new RecipeGroup(() => GetText($"RecipeGroup.{nameof(AnyDemoniteBar)}"), ItemID.DemoniteBar, ItemID.CrimtaneBar);
+        AnyShadowScale = new RecipeGroup(() => GetText($"RecipeGroup.{nameof(AnyShadowScale)}"), ItemID.ShadowScale, ItemID.TissueSample);
+        AnyCobaltBar = new RecipeGroup(() => GetText($"RecipeGroup.{nameof(AnyCobaltBar)}"), ItemID.CobaltBar, ItemID.PalladiumBar);
+        AnyMythrilBar = new RecipeGroup(() => GetText($"RecipeGroup.{nameof(AnyMythrilBar)}"), ItemID.MythrilBar, ItemID.OrichalcumBar);
+        AnyAdamantiteBar = new RecipeGroup(() => GetText($"RecipeGroup.{nameof(AnyAdamantiteBar)}"), ItemID.AdamantiteBar, ItemID.TitaniumBar);
         AnyGem = new RecipeGroup(() => GetText($"RecipeGroup.{nameof(AnyGem)}"), ItemID.Sapphire, ItemID.Ruby,
             ItemID.Emerald, ItemID.Topaz, ItemID.Amethyst, ItemID.Diamond, ItemID.Amber);
 
-        // 注册完成后用返回的int值来获取实际的RecipeGroup，处理跨Mod的问题
-        AnyGoldBar = RecipeGroup.recipeGroups[RecipeGroup.RegisterGroup("GoldBar", AnyGoldBar)];
-        AnySilverBar = RecipeGroup.recipeGroups[RecipeGroup.RegisterGroup("SilverBar", AnySilverBar)];
-        AnyCopperBar = RecipeGroup.recipeGroups[RecipeGroup.RegisterGroup("CopperBar", AnyCopperBar)];
-        AnyIronBar = RecipeGroup.recipeGroups[RecipeGroup.RegisterGroup("IronBar", AnyIronBar)];
-        AnyShadowScale = RecipeGroup.recipeGroups[RecipeGroup.RegisterGroup("ShadowScale", AnyShadowScale)];
-        AnyDemoniteBar = RecipeGroup.recipeGroups[RecipeGroup.RegisterGroup("DemoniteBar", AnyDemoniteBar)];
-        AnyCobaltBar = RecipeGroup.recipeGroups[RecipeGroup.RegisterGroup("CobaltBar", AnyCobaltBar)];
-        AnyMythrilBar = RecipeGroup.recipeGroups[RecipeGroup.RegisterGroup("MythrilBar", AnyMythrilBar)];
-        AnyAdamantiteBar = RecipeGroup.recipeGroups[RecipeGroup.RegisterGroup("AdamantiteBar", AnyAdamantiteBar)];
-        AnyGem = RecipeGroup.recipeGroups[RecipeGroup.RegisterGroup("Gem", AnyGem)];
+
+        AnyCopperBar.Register();
+        AnyIronBar.Register();
+        AnySilverBar.Register();
+        AnyGoldBar.Register();
+        AnyDemoniteBar.Register();
+        AnyShadowScale.Register();
+        AnyCobaltBar.Register();
+        AnyMythrilBar.Register();
+        AnyAdamantiteBar.Register();
+        AnyGem.Register();
     }
 
     public override void AddRecipes()

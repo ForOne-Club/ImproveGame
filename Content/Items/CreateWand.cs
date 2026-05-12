@@ -27,7 +27,7 @@ public partial class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClicka
     public override void AddRecipes()
     {
         CreateRecipe()
-            .AddRecipeGroup(RecipeGroupID.Wood, 24)
+            .AddRecipeGroup(RecipeGroups.Wood, 24)
             .AddRecipeGroup(RecipeSystem.AnyIronBar, 8)
             .AddIngredient(ItemID.FallenStar, 6)
             .Register();

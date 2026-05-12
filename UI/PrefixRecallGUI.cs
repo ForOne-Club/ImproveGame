@@ -201,7 +201,7 @@ public class PrefixTab : SUIPanel
     public ref Item Item => ref Main.reforgeItem; // 向原物品的链接
     public ModItemSlot DummyItem; // 当前物品展示
     internal int PrefixId;
-    internal int Price;
+    internal long Price;
 
     public PrefixTab(int prefixId, int value) : base(UIStyle.PanelBorderLight, UIStyle.PanelBg)
     {
@@ -287,9 +287,8 @@ public class PrefixTab : SUIPanel
         ItemLoader.PreReforge(Item);
         Item.ResetPrefix();
         Item.Prefix(PrefixId);
-        Item.position = Main.LocalPlayer.Center;
         ItemLoader.PostReforge(Item);
-        PopupText.NewText(PopupTextContext.ItemReforge, Item, Item.stack, noStack: true);
+        PopupText.NewText(PopupTextContext.ItemReforge, Item, Main.LocalPlayer.Center, Item.stack, noStack: true);
         SoundEngine.PlaySound(SoundID.Item37);
         ui.SetImage(TextureAssets.Reforge[0]);
     }

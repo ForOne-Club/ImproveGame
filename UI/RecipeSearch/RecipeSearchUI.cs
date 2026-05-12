@@ -13,7 +13,7 @@ public class RecipeSearchUI : BaseBody
 {
     public override bool Enabled
     {
-        get => Main.recBigList && Main.screenWidth >= 1180 && UIConfigs.Instance.RecipeSearch &&
+        get => Player.Settings.CraftingGridControl == Player.Settings.CraftingGridMode.Classic && Main.PipsUseGrid && Main.screenWidth >= 1180 && UIConfigs.Instance.RecipeSearch &&
                !RecipeSearchSystem.UsingGuide;
         set { }
     }
@@ -49,7 +49,7 @@ public class RecipeSearchUI : BaseBody
             RelativeMode = RelativeMode.Vertical
         };
         // _searchBar.OnDraw += SearchBarOnDraw;
-        _searchBar.OnSearchContentsChanged += _ => // Recipe.FindRecipes();
+        // _searchBar.OnSearchContentsChanged += _ => Recipe.FindRecipes();
         _searchBar.JoinParent(_mainPanel);
 
         _rightSidePanel = new View()
@@ -78,7 +78,7 @@ public class RecipeSearchUI : BaseBody
         {
             Vector2 position = _searchBar.GetDimensions().Position();
             position.Y -= 30f;
-            Main.instance.DrawWindowsIMEPanel(position, 0f);
+            Main.instance.SetIMEPanelAnchor(position, 0f);
         }
 
         if (_searchBar.IsSearchButtonMouseHovering)

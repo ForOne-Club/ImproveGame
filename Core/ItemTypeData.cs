@@ -19,7 +19,7 @@ public class ItemTypeData(Item item) : TagSerializable
         if (Item.ModItem is null)
         {
             tag.Set("mod", "Terraria");
-            tag.Set("id", Item.netID);
+            tag.Set("id", Item.type);
         }
         else
         {

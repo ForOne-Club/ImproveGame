@@ -75,7 +75,7 @@ public class Expelliarmus : ModItem
                 return;
 
             var player = Main.player[Projectile.owner];
-            if (player is null || !player.active || player.DeadOrGhost)
+            if (player is null || !player.active || player.dead)
                 return;
 
             for (int i = 0; i < Main.maxNPCs; i++)

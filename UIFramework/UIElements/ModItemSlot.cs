@@ -2,7 +2,7 @@
 using ImproveGame.UIFramework.Graphics2D;
 using Terraria.GameContent.UI.Chat;
 using Terraria.UI.Chat;
-
+using Terraria.UI;
 namespace ImproveGame.UIFramework.UIElements
 {
     /// <summary>
@@ -48,7 +48,7 @@ namespace ImproveGame.UIFramework.UIElements
         {
             this.SetSize(new(52f, 52f));
             Item = new Item();
-            Item.SetDefaults();
+            Item.SetDefaults(0);
             Scale = scale;
             AllowSwapEquip = false;
             AllowFavorite = true;
@@ -131,7 +131,7 @@ namespace ImproveGame.UIFramework.UIElements
                     // 千万不要伪装成箱子，因为那样多人会传同步信息，然后理所当然得出Bug
                     if (Item is not null && !Item.IsAir)
                     {
-                        ItemSlot.RightClick(ref Item, AllowSwapEquip ? ItemSlot.Context.InventoryItem : ItemSlot.Context.CreativeSacrifice);
+                        ItemSlot.RightClick([Item], AllowSwapEquip ? ItemSlot.Context.InventoryItem : ItemSlot.Context.CreativeSacrifice);
                     }
                 }
                 DrawText();
@@ -193,6 +193,58 @@ namespace ImproveGame.UIFramework.UIElements
             }
         }
 
+        public static void SellOrTrash(Item[] inv, int context, int slot)
+        {
+            Player player = Main.player[Main.myPlayer];
+            if (inv[slot].type <= ItemID.None)
+                return;
+
+            if (Main.npcShop > 0 && !inv[slot].favorited)
+            {
+                Chest chest = Main.instance.shop[Main.npcShop];
+                if (inv[slot].type < ItemID.CopperCoin || inv[slot].type > ItemID.PlatinumCoin)
+                {
+                    if (!PlayerLoader.CanSellItem(player, player.TalkNPC, chest.item, inv[slot])) { }
+                    else
+                        if (player.SellItem(inv[slot]))
+                        {
+                            // Moved below AnnounceTransfer
+                            /*
+                            chest.AddItemToShop(inv[slot]);
+                            */
+                            ItemSlot.AnnounceTransfer(new ItemSlot.ItemTransferInfo(inv[slot], context, 15));
+                            int soldItemIndex = chest.AddItemToShop(inv[slot]);
+                            inv[slot].TurnToAir();
+                            SoundEngine.PlaySound(18);
+
+                            PlayerLoader.PostSellItem(player, player.TalkNPC, chest.item, chest.item[soldItemIndex]);
+                        }
+                        else if (inv[slot].value == 0)
+                        {
+                            // Moved below AnnounceTransfer
+                            /*
+                            chest.AddItemToShop(inv[slot]);
+                            */
+                            ItemSlot.AnnounceTransfer(new ItemSlot.ItemTransferInfo(inv[slot], context, 15));
+                            int soldItemIndex = chest.AddItemToShop(inv[slot]);
+                            inv[slot].TurnToAir();
+                            SoundEngine.PlaySound(7);
+
+                            PlayerLoader.PostSellItem(player, player.TalkNPC, chest.item, chest.item[soldItemIndex]);
+                        }
+                }
+            }
+            else if (!inv[slot].favorited)
+            {
+                SoundEngine.PlaySound(7);
+                player.trashItem = inv[slot].Clone();
+                ItemSlot.AnnounceTransfer(new ItemSlot.ItemTransferInfo(player.trashItem, context, 6));
+                inv[slot].TurnToAir();
+                if (context == 3 && Main.netMode == NetmodeID.MultiplayerClient)
+                    NetMessage.SendData(MessageID.SyncChestItem, -1, -1, null, player.chest, slot);
+            }
+        }
+
         public void LeftClickItem(ref Item placeItem)
         {
             // 放大镜图标 - 输入到聊天框
@@ -217,7 +269,7 @@ namespace ImproveGame.UIFramework.UIElements
                 // 假装自己是一个物品栏物品
                 var temp = new Item[1];
                 temp[0] = Item;
-                ItemSlot.SellOrTrash(temp, ItemSlot.Context.InventoryItem, 0);
+                SellOrTrash(temp, ItemSlot.Context.InventoryItem, 0);
                 return;
             }
 
@@ -225,11 +277,11 @@ namespace ImproveGame.UIFramework.UIElements
             if (Main.cursorOverride == CursorOverrideID.ChestToInventory)
             {
                 int oldStack = Item.stack;
-                Item = Main.player[Main.myPlayer].GetItem(Main.myPlayer, Item, GetItemSettings.InventoryEntityToPlayerInventorySettings);
+                Item = Main.player[Main.myPlayer].GetItem(Item, GetItemSettings.QuickTransferFromSlot);
                 if (Item.stack != oldStack) // 成功了
                 {
                     if (Item.stack <= 0)
-                        Item.SetDefaults();
+                        Item.SetDefaults(0);
                     SoundEngine.PlaySound(SoundID.Grab);
                 }
                 return;
@@ -271,7 +323,7 @@ namespace ImproveGame.UIFramework.UIElements
             if (Item is null)
             {
                 Item = new Item();
-                Item.SetDefaults();
+                Item.SetDefaults(0);
                 ItemChange();
             }
 
@@ -299,7 +351,7 @@ namespace ImproveGame.UIFramework.UIElements
             if (Item is null)
             {
                 Item = new Item();
-                Item.SetDefaults();
+                Item.SetDefaults(0);
             }
 
             if (OnCanPlaceItem is not null)
@@ -319,7 +371,7 @@ namespace ImproveGame.UIFramework.UIElements
             if (Item is null)
             {
                 Item = new Item();
-                Item.SetDefaults();
+                Item.SetDefaults(0);
             }
 
             if (OnItemChange is not null)
@@ -337,7 +389,7 @@ namespace ImproveGame.UIFramework.UIElements
             if (Item is null)
             {
                 Item = new Item();
-                Item.SetDefaults();
+                Item.SetDefaults(0);
             }
 
             if (OnRightClickItemChange is not null)

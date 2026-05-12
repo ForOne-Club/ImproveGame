@@ -353,8 +353,8 @@ public class MoveChest : ModItem, IConditionItem
     public override void AddRecipes()
     {
         CreateRecipe()
-            .AddRecipeGroup(RecipeGroupID.IronBar, 6)
-            .AddRecipeGroup(RecipeGroupID.Wood, 18)
+            .AddRecipeGroup(RecipeGroups.IronBar, 6)
+            .AddRecipeGroup(RecipeGroups.Wood, 18)
             .AddIngredient(ItemID.Diamond)
             .AddTile(TileID.Anvils)
             .Register();

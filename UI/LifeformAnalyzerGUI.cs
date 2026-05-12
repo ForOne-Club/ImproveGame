@@ -128,7 +128,7 @@ namespace ImproveGame.UI
             uIPanel.Append(uISearchBar);
             uISearchBar.OnStartTakingInput += OnStartTakingInput;
             uISearchBar.OnEndTakingInput += OnEndTakingInput;
-            uISearchBar.OnCanceledTakingInput += OnCanceledInput;
+            // uISearchBar.OnCanceledTakingInput += OnCanceledInput;
             UIImageButton uIImageButton2 = new(Main.Assets.Request<Texture2D>("Images/UI/SearchCancel"))
             {
                 HAlign = 1f,
@@ -159,10 +159,10 @@ namespace ImproveGame.UI
             SoundEngine.PlaySound(SoundID.MenuTick);
         }
 
-        private void OnCanceledInput()
-        {
-            Main.LocalPlayer.ToggleInv();
-        }
+        //private void OnCanceledInput()
+        //{
+        //    Main.LocalPlayer.ToggleInv();
+        //}
 
         private void Click_SearchArea(UIMouseEvent evt, UIElement listeningElement)
         {

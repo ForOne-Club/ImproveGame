@@ -15,7 +15,7 @@ public class AutoMoneyItemListener : GlobalItem
             return base.OnPickup(item, player);
 
         // 没存成就执行原来的Pickup
-        return !TryDepositCustomCurrency(item, player);
+        return !TryDepositCustomCurrency(item.inner, player);
     }
 
     /// <summary>
@@ -24,9 +24,9 @@ public class AutoMoneyItemListener : GlobalItem
     /// <param name="item">物品</param>
     /// <param name="player">玩家</param>
     /// <returns>是否成功</returns>
-    public static bool TryDepositCustomCurrency(WorldItem item, Player player)
+    public static bool TryDepositCustomCurrency(Item item, Player player)
     {
-        if (!CustomCurrencyManager.IsCustomCurrency(item.inner))
+        if (!CustomCurrencyManager.IsCustomCurrency(item))
             return false;
 
         // 无空位
@@ -41,9 +41,9 @@ public class AutoMoneyItemListener : GlobalItem
 
         int type = item.type;
 
-        PopupText.NewText(PopupTextContext.RegularItemPickup, item.inner, item.position, item.stack);
+        PopupText.NewText(PopupTextContext.RegularItemPickup, item, player.position, item.stack);
         SoundEngine.PlaySound(SoundID.Grab, player.position);
-        item.inner.StackToArray(player.bank.item);
+        item.StackToArray(player.bank.item);
         return item.IsAir;
     }
 }

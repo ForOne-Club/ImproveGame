@@ -146,7 +146,7 @@ namespace ImproveGame.UI.ExtremeStorage
                         break;
                     // 本地先保证可以拿出物品，然后再发送给服务器
                     case NetmodeID.MultiplayerClient
-                        when ((Main.mouseItem.IsTheSameAs(Item) && ItemLoader.CanStack(Main.mouseItem, Item)) ||
+                        when ((Main.mouseItem.type == Item.type && ItemLoader.CanStack(Main.mouseItem, Item)) ||
                               Main.mouseItem.type is ItemID.None) && (Main.mouseItem.stack < Main.mouseItem.maxStack ||
                                                                       Main.mouseItem.type is ItemID.None):
                     {
