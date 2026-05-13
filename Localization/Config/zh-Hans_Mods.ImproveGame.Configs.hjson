@@ -1109,6 +1109,11 @@ UIConfigs: {
 		Tooltip: 显示某个物品的微光转化结果
 	}
 
+	ShowAmmoInfo: {
+		Label: "[centeritem:1302] 显示使用弹药类型"
+		Tooltip: 显示某个物品的所使用或所属弹药类型（如果有）
+	}
+
 	ResetUIPositionsButton: {
 		Label: 重设UI位置
 		Tooltip: 重设所有UI的位置，在你找不到大背包UI时尤其有用
