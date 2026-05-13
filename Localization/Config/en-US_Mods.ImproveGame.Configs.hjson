@@ -1121,7 +1121,7 @@ UIConfigs: {
 
 	SingleBlur: {
 		Label: "[centeritem:MulticoloredStainedGlass] Individual UI Blur (performance-heavy)"
-		Tooltip: Individually blurs each UI window, which is prettier, but might pose compatibility issues
+		Tooltip: Individually blurs each UI window, which is prettier, but might pose compatibility issues（如：滤镜消失、发送消息头顶文本偏移等）
 	}
 
 	BlurZoomMultiplierDenominator: {

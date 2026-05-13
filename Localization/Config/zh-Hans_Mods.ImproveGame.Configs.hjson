@@ -1126,7 +1126,7 @@ UIConfigs: {
 
 	SingleBlur: {
 		Label: "[centeritem:MulticoloredStainedGlass] 窗口独立模糊（有一定性能损失）"
-		Tooltip: 每个 UI 都单独模糊，效果更好，可能有兼容性问题
+		Tooltip: 每个 UI 都单独模糊，效果更好，可能有兼容性问题（如：屏幕滤镜消失、发送消息头顶文本偏移等）
 	}
 
 	BlurZoomMultiplierDenominator: {
