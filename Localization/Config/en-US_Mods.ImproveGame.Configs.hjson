@@ -804,7 +804,7 @@ ImproveConfigs: {
 	}
 
 	PylonTeleNoDanger: {
-		Label: "[centeritem:TeleportationPylonJungle] Danger-indendent Pylon Teleportation"
+		Label: "[centeritem:TeleportationPylonJungle] Danger-independent Pylon Teleportation"
 		Tooltip: Teleport to pylons even when a boss is alive
 	}
 
