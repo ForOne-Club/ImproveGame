@@ -337,7 +337,7 @@ ConstructGUI: {
 SuperVault: {
 	Name: Big Backpack
 	Sort: Sort
-	Synthesis: Use in crafting
+	Synthesis: Use In Crafting
 	SmartPickup: Smart Pickup
 	OverflowPickup: Auto Pickup
 }
@@ -419,7 +419,7 @@ SpaceWandGUI: {
 PackageGUI: {
 	AutoStorage: Auto Collection
 	AutoSort: Auto Sortation
-	Synthesis: 参与合成
+	Synthesis: Use In Crafting
 	Incompatible: The item cannot be contained in this inventory.
 }
 

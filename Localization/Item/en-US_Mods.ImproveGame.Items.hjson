@@ -252,7 +252,7 @@ DevMark: {
 		[c/ff0000:Developer's item]
 		When in the inventory, Wand of Construction will not consume materials (Only works in single player)
 		Opening the Fishing Machine will automatically fill it with fishing equipment
-		可放入钓鱼机的饰品位，来大幅度提升钓鱼速度
+		Can be placed in the Fishing Machine's accessory slot to significantly increase its fishing speed
 		'''
 }
 

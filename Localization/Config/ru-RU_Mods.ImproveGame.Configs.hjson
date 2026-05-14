@@ -255,7 +255,7 @@ ImproveConfigs: {
 		Label: "[centeritem:2990] Количество убийств для знамени"
 		Tooltip:
 			'''
-			Меняет кол-во убийств, нужных для получения знамени. Чем меньше число, тем меньше понадобится убийств.
+			Изменяет кол-во убийств, нужных для получения знамени. Чем меньше число, тем меньше понадобится убийств.
 			Например, когда выставлен мультипликатор 0,1(10%), понадобится убить 5 Синих слизней, чтобы получить знамя.
 			Наоборот, когда выставлен мультипликатор 10(1000%), понадобится убить 500 Синих слизней.
 			'''
@@ -277,17 +277,17 @@ ImproveConfigs: {
 	}
 
 	LifeFruitGrowsFaster: {
-		Label: "[centeritem:1291] 生命果迅速生长"
-		Tooltip: 使生命果生长得更快
+		Label: "[centeritem:1291] Ускоренный рост фруктов жизни"
+		Tooltip: Ускоряет рост фруктов жизни.
 	}
 
 	LifeFruitLimit: {
-		Label: "[centeritem:1291] 生命果限制调整"
+		Label: "[centeritem:1291] Лимит фруктов жизни"
 		Tooltip:
 			'''
-			可以调整生命果对于周围生命果的判断范围，数值越小生命果长得越密集
-			当为-1时，则为原版限制（每隔 60（普通）/ 50（专家）图格生成一个）
-			调整时，需注意在专家及以上难度下，实际数值为该数值-10
+			Изменяет радиус обнаружения фруктами жизни других фруктов поблизости
+			Выставьте значение на -1, чтобы использовать стандартные значения（один каждые 60（классика）/ 50（эксперт）блоков）
+			Учтите, что в режиме эксперта и выше будет использоваться заданное значение минус 10
 			'''
 	}
 
@@ -441,15 +441,15 @@ ImproveConfigs: {
 	}
 
 	SpawnRateMinValue: {
-		// Label: "[centeritem:2649] Min Enemy Spawn Rate Multiplier"
-		/* Tooltip:
+		Label: "[centeritem:2649] Мультипликатор минимальной скорости появления врагов"
+		Tooltip:
 			'''
-			Allows players to adjust the minimum spawn rate of enemies
-			Notification:
-			This panel only appears when you have the infinite buff stations/potions combination of
-			[Sun Flower][Peace Candle][Calm Potion][Water Candle] and [Battle Potion]
-			If you don't want players in a server to raise the enemy spawn rate too low, you may use this function
-			''' */
+			Позволяет игрокам изменять минимальную скорость появления врагов.
+			Внимание:
+			Данная панель появляется только при условии, если у вас есть бесконечные баффы:
+			[Подсолнух][Свеча спокойствия][Успокаивающее зелье][Водяная свеча] и [Зелье битвы].
+			Если вы не хотите, чтобы игроки на сервере занижали спавнрейт врагов ниже плинтуса, эта настройка поможет поставить лимит.
+			'''
 	}
 
 	ExStorageSearchDistance: {
@@ -820,16 +820,16 @@ ImproveConfigs: {
 }
 
 AvailableModItemConfigs: {
-	/* AvailablityHint:
+	AvailablityHint:
 		'''
-		It is unsable currently. 
-		Please modify the option in Mod Item Config
-		''' */
-	/* AvailablityDetailedHint:
+		Данный предмет недоступен. 
+		Пожалуйста, измените его настройку в конфигурации предметов мода.
 		'''
-		It is unsable currently. 
-		Please modify the option {0} in Main Config
-		''' */
+	AvailablityDetailedHint:
+		'''
+		Данный предмет недоступен. 
+		Пожалуйста, измените настройку {0} в главной конфигурации.
+		'''
 	DisplayName: 3. Конфигурация предметов мода
 	Available: ": используем(а)"
 	Unavailable: ": неиспользуем(а)"
