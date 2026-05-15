@@ -234,10 +234,10 @@ public class ImproveItem : GlobalItem, IItemOverrideHover, IItemMiddleClickable
         if (!UIConfigs.Instance.ShowAmmoInfo) return;
 
         if (item.useAmmo > 0)
-            tooltips.Add(new TooltipLine(Mod, "UseAmmo", GetText("Tips.UseAmmoInfo", item.useAmmo, Lang.GetItemNameValue(item.useAmmo))) { OverrideColor = new Color(60, 160, 90) });
+            tooltips.Add(new TooltipLine(Mod, "UseAmmo", GetText("Tips.UseAmmoInfo", item.useAmmo, Lang.GetItemNameValue(item.useAmmo))) { Color = new Color(60, 160, 90) });
 
         if (item.ammo > 0)
-            tooltips.Add(new TooltipLine(Mod, "Ammo", GetText("Tips.AmmoInfo", item.ammo, Lang.GetItemNameValue(item.ammo))) { OverrideColor = new Color(60, 160, 90) });
+            tooltips.Add(new TooltipLine(Mod, "Ammo", GetText("Tips.AmmoInfo", item.ammo, Lang.GetItemNameValue(item.ammo))) { Color = new Color(60, 160, 90) });
     }
 
     private void TooltipShimmer(Item item, List<TooltipLine> tooltips)
