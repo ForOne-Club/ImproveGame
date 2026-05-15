@@ -1245,6 +1245,11 @@ UIConfigs: {
 		Tooltip: Убирает музыку кладбища.
 	}
 
+	SpelunkerColor: {
+		Label: "[centeritem:296] 调整洞穴探险药水高亮"
+		Tooltip: 可以随意调节被高亮矿物的颜色
+	}
+
 	GlobeEffect: {
 		Label: "[centeritem:WorldGlobe] Эффекты обнаружителя"
 		Tooltip: Убирает с карты отметки различных локаций.
