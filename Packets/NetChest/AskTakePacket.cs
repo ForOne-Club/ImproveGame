@@ -14,7 +14,7 @@ public class AskTakePacket : NetModule
 
     public static AskTakePacket Get(ItemPosition itemID, Point coord)
     {
-        var packet = ModContent.GetInstance<AskTakePacket>();
+        var packet = NetModuleLoader.Get<AskTakePacket>();
         packet.itemID = itemID;
         packet.coord = coord;
         return packet;

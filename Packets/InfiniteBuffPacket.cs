@@ -19,7 +19,7 @@ public class InfiniteBuffPacket : NetModule
 
     private static InfiniteBuffPacket GetInstance(int whoAmI, List<Item> buffItems, List<short> flags)
     {
-        var module = ModContent.GetInstance<InfiniteBuffPacket>();
+        var module = NetModuleLoader.Get<InfiniteBuffPacket>();
         module._whoAmI = whoAmI;
 
         module._items.Clear();

@@ -77,7 +77,7 @@ public static class ChestItemOperation
 
         public static ChestOperationWithResend Get(int chestIndex, int slotIndex)
         {
-            var packet = ModContent.GetInstance<ChestOperationWithResend>();
+            var packet = NetModuleLoader.Get<ChestOperationWithResend>();
             packet._chestIndex = (short)chestIndex;
             packet._slotIndex = (byte)slotIndex;
             return packet;
@@ -97,7 +97,7 @@ public static class ChestItemOperation
 
         public static RequestForChestItem Get(int chestIndex, int slotIndex)
         {
-            var packet = ModContent.GetInstance<RequestForChestItem>();
+            var packet = NetModuleLoader.Get<RequestForChestItem>();
             packet._chestIndex = (short)chestIndex;
             packet._slotIndex = (sbyte)slotIndex;
             return packet;

@@ -4,7 +4,7 @@
         <AssemblyName>ImproveGame</AssemblyName>
         <LangVersion>preview</LangVersion>
         <TargetFramework>net10.0</TargetFramework>
-        <DebugMod> ; </DebugMod>
+        <DebugMod>DragonLens</DebugMod>
     </PropertyGroup>
 
     <ItemGroup>

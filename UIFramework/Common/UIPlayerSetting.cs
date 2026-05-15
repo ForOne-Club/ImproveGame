@@ -14,7 +14,7 @@ public class PlayerBigBagSettingPacket : NetModule
     {
         if (Main.LocalPlayer.TryGetModPlayer<UIPlayerSetting>(out var setting))
         {
-            PlayerBigBagSettingPacket settingPacket = ModContent.GetInstance<PlayerBigBagSettingPacket>();
+            PlayerBigBagSettingPacket settingPacket = NetModuleLoader.Get<PlayerBigBagSettingPacket>();
             settingPacket.WhoAmI = Main.myPlayer;
             settingPacket.SuperVault_PrioritizeGrabbing = setting.SuperVault_PrioritizeGrabbing;
             settingPacket.SuperVault_GrabItemsWhenOverflowing = setting.SuperVault_GrabItemsWhenOverflowing;

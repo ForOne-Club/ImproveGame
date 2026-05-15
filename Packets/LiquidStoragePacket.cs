@@ -15,7 +15,7 @@ public class LiquidStoragePacket : NetModule
 
     public static LiquidStoragePacket Get(DataPlayer player)
     {
-        var packet = ModContent.GetInstance<LiquidStoragePacket>();
+        var packet = NetModuleLoader.Get<LiquidStoragePacket>();
         packet._whoAmI = (byte)player.Player.whoAmI;
         packet._water = player.LiquidWandWater;
         packet._lava = player.LiquidWandLava;

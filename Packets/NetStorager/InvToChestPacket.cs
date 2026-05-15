@@ -14,7 +14,7 @@ public class InvToChestPacket : NetModule
 
     public static void Send(int tileEntityID, int inventoryIndex, ItemGroup group)
     {
-        var packet = ModContent.GetInstance<InvToChestPacket>();
+        var packet = NetModuleLoader.Get<InvToChestPacket>();
         packet._tileEntityID = (ushort)tileEntityID;
         packet._inventoryIndex = (byte)inventoryIndex;
         packet._group = (byte)group;

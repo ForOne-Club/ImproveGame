@@ -19,7 +19,7 @@ public class InventoryFavoritedPacket : NetModule
             flags[i] = inventory[i].favorited;
         }
 
-        var packet = ModContent.GetInstance<InventoryFavoritedPacket>();
+        var packet = NetModuleLoader.Get<InventoryFavoritedPacket>();
         packet._favoritedStates = new BitArray(flags);
         packet.Send(-1);
     }

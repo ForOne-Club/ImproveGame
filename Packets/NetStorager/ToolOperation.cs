@@ -31,7 +31,7 @@ public class ToolOperation : NetModule
     {
         Debug.Assert(Main.netMode is not NetmodeID.Server, "Packet cannot be sent by server");
 
-        var packet = ModContent.GetInstance<ToolOperation>();
+        var packet = NetModuleLoader.Get<ToolOperation>();
 
         packet._tileEntityID = (ushort)ExtremeStorageGUI.Storage.ID;
         packet._group = (byte)ExtremeStorageGUI.RealGroup;

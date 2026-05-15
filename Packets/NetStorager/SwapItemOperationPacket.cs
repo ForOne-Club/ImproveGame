@@ -18,7 +18,7 @@ public class SwapItemOperationPacket : NetModule
     {
         Debug.Assert(!Main.mouseItem.IsAir && chestIndex != -1 && slotIndex >= 0 && slotIndex < Main.chest[chestIndex].maxItems,
             "Invalid data, Check your code");
-        var packet = ModContent.GetInstance<SwapItemOperationPacket>();
+        var packet = NetModuleLoader.Get<SwapItemOperationPacket>();
         packet._item = Main.mouseItem;
         packet._chestIndex = (short)chestIndex;
         packet._slotIndex = (byte)slotIndex;

@@ -9,7 +9,7 @@ namespace ImproveGame.Packets.NetStorager
 
         public static SyncDataPacket Get(int tileEntityID)
         {
-            var packet = ModContent.GetInstance<SyncDataPacket>();
+            var packet = NetModuleLoader.Get<SyncDataPacket>();
             packet._tileEntityID = (ushort)tileEntityID;
             return packet;
         }

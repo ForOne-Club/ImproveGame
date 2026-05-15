@@ -18,7 +18,7 @@ public class AskPlacementPacket : NetModule
     public static AskPlacementPacket Get(Point coord, ushort chestType, int style, Item[] items, string chestName,
         ItemPosition itemID)
     {
-        var packet = ModContent.GetInstance<AskPlacementPacket>();
+        var packet = NetModuleLoader.Get<AskPlacementPacket>();
         packet.chestCoord = coord;
         packet.chestType = chestType;
         packet.style = style;
