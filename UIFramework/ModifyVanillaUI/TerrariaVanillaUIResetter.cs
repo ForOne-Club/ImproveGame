@@ -229,42 +229,36 @@ public class TerrariaVanillaUIResetter : ModSystem
 
     private void UIText_DrawSelf(On_UIText.orig_DrawSelf orig, UIText self, SpriteBatch sb)
     {
-        Vector2 pos = self.GetDimensions().Position();
-        Vector2 size = self.GetDimensions().Size();
-
-        //SDFRectangle.HasBorder(pos, size, new(10), Color.Transparent, 2f, Color.White);
-
         self.VerifyTextState();
-        Vector2 innerSize = self.GetInnerDimensions().Size();
-
-        Vector2 textPos = self.GetInnerDimensions().Position();
-
-        textPos += (innerSize - self._textSize) * new Vector2(self.TextOriginX, self.TextOriginY);
-
-        if (self.TextOriginY > 0f)
-            textPos.Y += self._isLarge ? UIConfigs.Instance.BigFontOffsetY :
-                UIConfigs.Instance.GeneralFontOffsetY;
+        CalculatedStyle innerDimensions = self.GetInnerDimensions();
+        Vector2 position = innerDimensions.Position();
+        if (self._isLarge)
+            position.Y -= 10f * self._textScale;
         else
-            textPos.Y -= self._isLarge ? 10 : 2;
+            position.Y -= 2f * self._textScale;
 
-        float textScale = self._textScale;
-        if (self.DynamicallyScaleDownToWidth && self._textSize.X > innerSize.X)
+        List<PositionedSnippet> textLayout = self._textLayout;
+        Vector2 scale = new Vector2(self._textScale);
+        Vector2 textSize = self._textSize;
+        if (self.DynamicallyScaleDownToWidth && textSize.X > innerDimensions.Width)
         {
-            textScale *= innerSize.X / self._textSize.X;
+            float num = innerDimensions.Width / textSize.X;
+            textLayout = [];
+            for (int i = 0; i < textLayout.Count; i++)
+            {
+                textLayout[i].Scale(num);
+            }
+
+            scale *= num;
+            textSize *= num;
         }
 
-        DynamicSpriteFont font = (self._isLarge ? FontAssets.DeathText : FontAssets.MouseText).Value;
-
-        Vector2 vector = font.MeasureString(self._visibleText);
-        Color baseColor = self._shadowColor * (self._color.A / 255f);
-        Vector2 origin = new Vector2(0f, 0f) * vector;
-        Vector2 baseScale = new Vector2(textScale);
-
-        TextSnippet[] snippets = ChatManager.ParseMessage(self._visibleText, self._color).ToArray();
-
-        ChatManager.ConvertNormalSnippets(snippets);
-        ChatManager.DrawColorCodedStringShadow(sb, font, snippets, textPos, baseColor, 0f, origin, baseScale, -1f, 1.5f);
-        ChatManager.DrawColorCodedString(sb, font, snippets, textPos, Color.White, 0f, origin, baseScale, out var _, -1f);
+        position.X += (innerDimensions.Width - textSize.X) * self.TextOriginX;
+        position.Y += (innerDimensions.Height - textSize.Y) * self.TextOriginY;
+        Color shadowColor = self._shadowColor * ((float)(int)self._color.A / 255f);
+        DynamicSpriteFont font = (self._isLarge ? FontAssets.DeathText.Value : FontAssets.MouseText.Value);
+        ChatManager.DrawColorCodedStringShadow(sb, font, self._textLayout, position, shadowColor, 0f, Vector2.Zero, scale, 1.5f);
+        ChatManager.DrawColorCodedString(sb, font, self._textLayout, position, 0f, Vector2.Zero, scale, out var _);
     }
     private void Utils_DrawInvBG(
         On_Utils.orig_DrawInvBG_SpriteBatch_int_int_int_int_Color orig, SpriteBatch sb, int x, int y,

@@ -16,7 +16,7 @@ namespace ImproveGame.Common.GlobalItems
                     string text = GetTextWith("Tips.FromMod", new { item.ModItem.Mod.DisplayName });
                     TooltipLine line = new(Mod, "FromModTip", text)
                     {
-                        OverrideColor = Colors.RarityBlue
+                        Color = Colors.RarityBlue
                     };
                     tooltips.Add(line);
                 }

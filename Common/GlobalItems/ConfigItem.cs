@@ -23,7 +23,7 @@ namespace ImproveGame.Common.GlobalItems
 
             var newLine = new TooltipLine("AvailableHint", text)
             {
-                OverrideColor = Main.DiscoColor
+                Color = Main.DiscoColor
             };
             tooltips.Insert(index + 1, newLine);
             base.ModifyTooltips(item, tooltips);

@@ -24,7 +24,7 @@ public class TagItem : GlobalItem
             // 这样绘制，没有黑框，就有一种特殊的效果，挺好看的
             var font = FontAssets.MouseText.Value;
             var position = new Vector2(line.X, line.Y);
-            var color = line.OverrideColor ?? line.Color;
+            var color = line.Color;
             var snippets = ChatManager.ParseMessage(line.Text, color);
             ChatManager.ConvertNormalSnippets(snippets);
             ChatManager.DrawColorCodedString(Main.spriteBatch, font, snippets, position, Color.White, 0f, Vector2.Zero, Vector2.One, out _, -1);
@@ -44,7 +44,7 @@ public class TagItem : GlobalItem
         {
             tooltips.Add(new(mod, "TagDetailed.GardenGnome", GetText("Tips.TagDetailed.GardenGnome"))
             {
-                OverrideColor = Color.SkyBlue
+                Color = Color.SkyBlue
             });
             AddShiftForMoreTooltip(tooltips);
             return;
@@ -55,14 +55,14 @@ public class TagItem : GlobalItem
         {
             tooltips.Add(new(mod, "TagDetailed.Disabled", GetText("Tips.TagDetailed.Disabled"))
             {
-                OverrideColor = Color.SkyBlue
+                Color = Color.SkyBlue
             });
         }
         else
         {
             tooltips.Add(new(mod, "TagDetailed.Enabled", GetText("Tips.TagDetailed.Enabled"))
             {
-                OverrideColor = Color.SkyBlue
+                Color = Color.SkyBlue
             });
 
             AddIconHiddenTooltips(mod, tooltips);
@@ -75,7 +75,7 @@ public class TagItem : GlobalItem
             {
                 tooltips.Add(new(mod, $"CombinedBuff.{name}", GetText("Tips.TagDetailed.CombinedBuff"))
                 {
-                    OverrideColor = Color.Turquoise
+                    Color = Color.Turquoise
                 });
             }
         }
@@ -90,14 +90,14 @@ public class TagItem : GlobalItem
         {
             tooltips.Add(new TooltipLine(mod, "TagDetailed.Hided", GetText("Tips.TagDetailed.Hided"))
             {
-                OverrideColor = Color.LightGreen
+                Color = Color.LightGreen
             });
         }
         else
         {
             tooltips.Add(new TooltipLine(mod, "TagDetailed.NonHided", GetText("Tips.TagDetailed.NonHided"))
             {
-                OverrideColor = Color.LightGreen
+                Color = Color.LightGreen
             });
         }
     }
@@ -108,7 +108,7 @@ public class TagItem : GlobalItem
         if (!ItemSlot.ShiftInUse)
             tooltips.Add(new(ImproveGame.Instance, "Tag.ShiftEnable", GetText("Tips.Tag.ShiftEnable"))
             {
-                OverrideColor = Color.Orange
+                Color = Color.Orange
             });
     }
 
@@ -149,7 +149,7 @@ public class TagItem : GlobalItem
                     // Tag名称
                     list.Add(new(Mod, line.Name, line.Text)
                     {
-                        OverrideColor = line.OverrideColor
+                        Color = line.Color
                     });
                 }
 
@@ -221,7 +221,7 @@ public class TagItem : GlobalItem
             {
                 drawX += 8;
             }
-            Color color = line.OverrideColor ?? new(0.7f, 0.7f, 0.7f);
+            Color color = line.Color; // ?? new(0.7f, 0.7f, 0.7f);
             ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, font, line.Text, new(drawX, y), color, 0f, Vector2.Zero, Vector2.One, spread: 1.6f);
             y += (int)ChatManager.GetStringSize(font, line.Text, Vector2.One).Y;
         }
@@ -278,7 +278,7 @@ public class TagItem : GlobalItem
                 y += 24;
                 continue;
             }
-            Color color = line.OverrideColor ?? new(0.7f, 0.7f, 0.7f);
+            Color color = line.Color;// ?? new(0.7f, 0.7f, 0.7f);
             ChatManager.DrawColorCodedStringWithShadow(Main.spriteBatch, font, line.Text, new(x, y), color, 0f, Vector2.Zero, Vector2.One, spread: 1.6f);
             y += (int)ChatManager.GetStringSize(font, line.Text, Vector2.One).Y;
         }

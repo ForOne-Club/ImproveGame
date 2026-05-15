@@ -15,13 +15,13 @@ public class ItemLootDisplay : GlobalItem
         bool hasKeybind = TryGetKeybindString(KeybindSystem.GrabBagKeybind, out var keybind);
         tooltips.Add(new TooltipLine(Mod, "LootDisplay", GetTextWith("Tips.LootDisplay", new { KeybindName = keybind }))
         {
-            OverrideColor = Color.SkyBlue
+            Color = Color.SkyBlue
         });
         if (!hasKeybind)
         {
             tooltips.Add(new TooltipLine(Mod, "LootDisplay", GetText("Tips.LootDisplayBindless"))
             {
-                OverrideColor = Color.SkyBlue
+                Color = Color.SkyBlue
             });
         }
     }

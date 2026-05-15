@@ -374,10 +374,11 @@ public static class ItemExtensions
         Item hoverItem = item;
         int yoyoLogo = -1;
         int researchLine = -1;
-        int rare = hoverItem.rare;
+        int rare = ItemRarityID.White;
+
         float knockBack = hoverItem.knockBack;
         float num = 1f;
-        if (hoverItem.CountsAsClass(DamageClass.Melee) && Main.LocalPlayer.kbGlove)
+        if (hoverItem.melee && Main.LocalPlayer.kbGlove)
             num += 1f;
 
         if (Main.LocalPlayer.kbBuff)
@@ -386,115 +387,40 @@ public static class ItemExtensions
         if (num != 1f)
             hoverItem.knockBack *= num;
 
-        if (hoverItem.CountsAsClass(DamageClass.Ranged) && Main.LocalPlayer.shroomiteStealth)
+        if (hoverItem.ranged && Main.LocalPlayer.shroomiteStealth)
             hoverItem.knockBack *= 1f + (1f - Main.LocalPlayer.stealth) * 0.5f;
 
-        long num2 = 30;
         int numLines = 1;
-        string[] array = new string[num2];
-        bool[] array2 = new bool[num2];
-        bool[] array3 = new bool[num2];
-        for (int i = 0; i < num2; i++)
+        string[] mouseTextTooltipLine_Text = Main._mouseTextTooltipLine_Text;
+        Color[] mouseTextTooltipLine_Color = Main._mouseTextTooltipLine_Color;
+
+        int expectedLineCount = Main._mouseTextTooltip_MaxLines + hoverItem.ToolTip?.Lines ?? 0; // Easy fix to #4772. A full fix would require rewrites of hooks.
+        if (mouseTextTooltipLine_Text.Length < expectedLineCount)
         {
-            array2[i] = false;
-            array3[i] = false;
+            Array.Resize(ref mouseTextTooltipLine_Text, expectedLineCount);
+            Array.Resize(ref mouseTextTooltipLine_Color, expectedLineCount);
         }
 
-        string[] tooltipNames = new string[num2];
-
-        Main.MouseText_DrawItemTooltip_GetLinesInfo(item, ref yoyoLogo, ref researchLine, knockBack, ref numLines,
-            array, array2, array3, tooltipNames, out _);
-
-        // Fix a bug where item knockback grows to infinity
-        hoverItem.knockBack = knockBack;
-
-        if (Main.npcShop > 0 && hoverItem.value >= 0 &&
-            (hoverItem.type < ItemID.CopperCoin || hoverItem.type > ItemID.PlatinumCoin))
+        float num2 = Main.mouseTextColor / 255f;
+        for (int i = 0; i < mouseTextTooltipLine_Text.Length; i++)
         {
-            Main.LocalPlayer.GetItemExpectedPrice(hoverItem, out long calcForSelling, out long calcForBuying);
-
-            long num5 = (hoverItem.isAShopItem || hoverItem.buyOnce) ? calcForBuying : calcForSelling;
-            if (hoverItem.shopSpecialCurrency != -1)
-            {
-                tooltipNames[numLines] = "SpecialPrice";
-                CustomCurrencyManager.GetPriceText(hoverItem.shopSpecialCurrency, array, ref numLines, num5);
-            }
-            else if (num5 > 0)
-            {
-                string text = "";
-                long num6 = 0;
-                long num7 = 0;
-                long num8 = 0;
-                long num9 = 0;
-                long num10 = num5 * hoverItem.stack;
-                if (!hoverItem.buy)
-                {
-                    num10 = num5 / 5;
-                    if (num10 < 1)
-                        num10 = 1;
-
-                    long num11 = num10;
-                    num10 *= hoverItem.stack;
-                    int amount = Main.shopSellbackHelper.GetAmount(hoverItem);
-                    if (amount > 0)
-                        num10 += (-num11 + calcForBuying) * Math.Min(amount, hoverItem.stack);
-                }
-
-                if (num10 < 1)
-                    num10 = 1;
-
-                if (num10 >= 1000000)
-                {
-                    num6 = num10 / 1000000;
-                    num10 -= num6 * 1000000;
-                }
-
-                if (num10 >= 10000)
-                {
-                    num7 = num10 / 10000;
-                    num10 -= num7 * 10000;
-                }
-
-                if (num10 >= 100)
-                {
-                    num8 = num10 / 100;
-                    num10 -= num8 * 100;
-                }
-
-                if (num10 >= 1)
-                    num9 = num10;
-
-                if (num6 > 0)
-                    text = text + num6 + " " + Lang.inter[15].Value + " ";
-
-                if (num7 > 0)
-                    text = text + num7 + " " + Lang.inter[16].Value + " ";
-
-                if (num8 > 0)
-                    text = text + num8 + " " + Lang.inter[17].Value + " ";
-
-                if (num9 > 0)
-                    text = text + num9 + " " + Lang.inter[18].Value + " ";
-
-                if (!hoverItem.buy)
-                    array[numLines] = Lang.tip[49].Value + " " + text;
-                else
-                    array[numLines] = Lang.tip[50].Value + " " + text;
-
-                tooltipNames[numLines] = "Price";
-                numLines++;
-            }
-            else if (hoverItem.type != ItemID.DefenderMedal)
-            {
-                array[numLines] = Lang.tip[51].Value;
-                tooltipNames[numLines] = "Price";
-                numLines++;
-            }
+            mouseTextTooltipLine_Color[i] = new Color(255, 255, 255);
         }
 
-        List<TooltipLine> lines = ItemLoader.ModifyTooltips(item, ref numLines, tooltipNames, ref array, ref array2,
-            ref array3, ref yoyoLogo, out _, 0);
+        mouseTextTooltipLine_Color[0] = Main.MouseText_DrawItemTooltip_GetItemNameColor(rare, 0);
 
+        // This array will be filled with internal names assigned to vanilla tooltips.
+        string[] tooltipNames = new string[mouseTextTooltipLine_Text.Length];
+
+        Main.MouseText_DrawItemTooltip_GetLinesInfo(hoverItem, ref yoyoLogo, ref researchLine, knockBack, ref numLines, mouseTextTooltipLine_Text, mouseTextTooltipLine_Color, tooltipNames, out int prefixlineIndex);
+        Main.MouseText_DrawItemTooltip_AddShopLines(hoverItem, ref numLines, mouseTextTooltipLine_Text, mouseTextTooltipLine_Color, tooltipNames);
+        if (NewCraftingUI.Visible)
+            NewCraftingUI.AddTooltipLines(hoverItem, ref numLines, mouseTextTooltipLine_Text, mouseTextTooltipLine_Color);
+
+        Vector2 zero = Vector2.Zero;
+
+        // TML's abstractions over tooltip arrays.
+        List<TooltipLine> lines = ItemLoader.ModifyTooltips(item, ref numLines, tooltipNames, ref mouseTextTooltipLine_Text, ref mouseTextTooltipLine_Color, ref yoyoLogo, prefixlineIndex);
         return lines.Select(line => line.Text);
     }
 

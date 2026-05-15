@@ -58,7 +58,7 @@ public class DetectorDroneProj : ModProjectile
             }
             else
             {
-                Player.DirectionalInputSyncCache localInputCache = player.LocalInputCache;
+                Player.PlayerInputSyncCache localInputCache = player.LocalInputCache;
                 direction.X -= (localInputCache.controlLeft ^ gravityFlipped).ToInt();
                 direction.X += (localInputCache.controlRight ^ gravityFlipped).ToInt();
                 direction.Y -= localInputCache.controlUp.ToInt();

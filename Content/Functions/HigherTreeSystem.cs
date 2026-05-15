@@ -63,8 +63,8 @@ namespace ImproveGame.Content.Functions
             WorldGen.GrowTreeSettings.Profiles.GemTree_Topaz.TreeHeightMax = gemMax;
             WorldGen.GrowTreeSettings.Profiles.GemTree_Amethyst.TreeHeightMin = gemMin;
             WorldGen.GrowTreeSettings.Profiles.GemTree_Amethyst.TreeHeightMax = gemMax;
-            WorldGen.GrowTreeSettings.Profiles.GemTree_Sappphire.TreeHeightMin = gemMin;
-            WorldGen.GrowTreeSettings.Profiles.GemTree_Sappphire.TreeHeightMax = gemMax;
+            WorldGen.GrowTreeSettings.Profiles.GemTree_Sapphire.TreeHeightMin = gemMin;
+            WorldGen.GrowTreeSettings.Profiles.GemTree_Sapphire.TreeHeightMax = gemMax;
             WorldGen.GrowTreeSettings.Profiles.GemTree_Emerald.TreeHeightMin = gemMin;
             WorldGen.GrowTreeSettings.Profiles.GemTree_Emerald.TreeHeightMax = gemMax;
             WorldGen.GrowTreeSettings.Profiles.GemTree_Amber.TreeHeightMin = gemMin;

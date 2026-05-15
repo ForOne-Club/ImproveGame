@@ -83,7 +83,7 @@ public class ShimmerBucketGlobalItem : GlobalItem
         if (pointedTile.shimmer())
         {
             sItem.stack--;
-            player.PutItemInInventoryFromItemUsage(ModContent.ItemType<ShimmerBucket>(), player.selectedItem);
+            player.PutItemInInventoryFromItemUsage(ModContent.ItemType<ShimmerBucket>());
         }
         else return;
 

@@ -1,6 +1,7 @@
 using ImproveGame.Common;
 using ImproveGame.Common.Configs;
 using ImproveGame.Common.ModSystems;
+using System.Reflection;
 using Terraria.UI.Chat;
 
 namespace ImproveGame;
@@ -19,7 +20,10 @@ public class ImproveGame : Mod
 
     public override void Load()
     {
-        AddContent<NetModuleLoader>();
+        NetModuleLoader.CurrentMod = this;
+        NetModuleLoader.LoadAutoSyncsFrom(typeof(NetModuleLoader).Assembly);
+        NetModuleLoader.LoadAutoSyncsFrom(Assembly.GetExecutingAssembly());
+        NetModuleLoader.LoadNetModules();
         ChatManager.Register<BgItemTagHandler>("bgitem");
         ChatManager.Register<CenteredItemTagHandler>("centeritem");
         ChatManager.Register<QotGlyphTagHandler>("qotglyph");

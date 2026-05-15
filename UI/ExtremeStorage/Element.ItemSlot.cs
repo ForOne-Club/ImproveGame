@@ -204,7 +204,7 @@ namespace ImproveGame.UI.ExtremeStorage
 
             if (IsMouseHovering && Interactable)
             {
-                PlayerLoader.HoverSlot(Main.player[Main.myPlayer], Items, Terraria.UI.ItemSlot.Context.InventoryItem, Index);
+                PlayerLoader.HoverSlot(Main.LocalPlayer, Items, Terraria.UI.ItemSlot.Context.InventoryItem, Index);
                 Main.hoverItemName = Item.Name;
                 Main.HoverItem = Item.Clone();
                 SetCursorOverride();

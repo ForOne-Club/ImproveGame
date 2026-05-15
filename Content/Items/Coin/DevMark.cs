@@ -188,50 +188,50 @@ public class ShimmerTech : ModItem
 
             if (tip.Text == Language.GetTextValue("ItemName.AegisCrystal"))
             {
-                if (player.usedAegisCrystal) tip.OverrideColor = Color.Green;
-                else tip.OverrideColor = Color.Red;
+                if (player.usedAegisCrystal) tip.Color = Color.Green;
+                else tip.Color = Color.Red;
             }
 
             if (tip.Text == Language.GetTextValue("ItemName.ArcaneCrystal"))
             {
-                if (player.usedArcaneCrystal) tip.OverrideColor = Color.Green;
-                else tip.OverrideColor = Color.Red;
+                if (player.usedArcaneCrystal) tip.Color = Color.Green;
+                else tip.Color = Color.Red;
             }
 
             if (tip.Text == Language.GetTextValue("ItemName.AegisFruit"))
             {
-                if (player.usedAegisFruit) tip.OverrideColor = Color.Green;
-                else tip.OverrideColor = Color.Red;
+                if (player.usedAegisFruit) tip.Color = Color.Green;
+                else tip.Color = Color.Red;
             }
 
             if (tip.Text == Language.GetTextValue("ItemName.Ambrosia"))
             {
-                if (player.usedAmbrosia) tip.OverrideColor = Color.Green;
-                else tip.OverrideColor = Color.Red;
+                if (player.usedAmbrosia) tip.Color = Color.Green;
+                else tip.Color = Color.Red;
             }
 
             if (tip.Text == Language.GetTextValue("ItemName.GummyWorm"))
             {
-                if (player.usedGummyWorm) tip.OverrideColor = Color.Green;
-                else tip.OverrideColor = Color.Red;
+                if (player.usedGummyWorm) tip.Color = Color.Green;
+                else tip.Color = Color.Red;
             }
 
             if (tip.Text == Language.GetTextValue("ItemName.GalaxyPearl"))
             {
-                if (player.usedGalaxyPearl) tip.OverrideColor = Color.Green;
-                else tip.OverrideColor = Color.Red;
+                if (player.usedGalaxyPearl) tip.Color = Color.Green;
+                else tip.Color = Color.Red;
             }
 
             if (tip.Text == Language.GetTextValue("ItemName.CombatBookVolumeTwo"))
             {
-                if (NPC.combatBookVolumeTwoWasUsed) tip.OverrideColor = Color.Green;
-                else tip.OverrideColor = Color.Red;
+                if (NPC.combatBookVolumeTwoWasUsed) tip.Color = Color.Green;
+                else tip.Color = Color.Red;
             }
 
             if (tip.Text == Language.GetTextValue("ItemName.PeddlersSatchel"))
             {
-                if (NPC.peddlersSatchelWasUsed) tip.OverrideColor = Color.Green;
-                else tip.OverrideColor = Color.Red;
+                if (NPC.peddlersSatchelWasUsed) tip.Color = Color.Green;
+                else tip.Color = Color.Red;
             }
         }
     }

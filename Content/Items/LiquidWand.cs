@@ -258,7 +258,7 @@ namespace ImproveGame.Content.Items
             if (LiquidWandUI.Instance.Enabled)
                 tooltip = GetTextWith("Tips.LiquidWandOff", new { KeybindName = keybind });
 
-            tooltips.Add(new TooltipLine(Mod, "LiquidWand", tooltip) { OverrideColor = Color.LightGreen });
+            tooltips.Add(new TooltipLine(Mod, "LiquidWand", tooltip) { Color = Color.LightGreen });
         }
 
         public override void AddRecipes()

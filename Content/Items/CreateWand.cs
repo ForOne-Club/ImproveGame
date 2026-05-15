@@ -63,7 +63,7 @@ public partial class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClicka
         string text = CreateWandController.Instance?.Enabled is false or null ? "Off" : "On";
         TryGetKeybindString(KeybindSystem.ItemInteractKeybind, out string keybind);
         tooltips.Add(new TooltipLine(Mod, "CreateWand", GetTextWith($"Tips.CreateWand{text}", new { KeybindName = keybind }))
-        { OverrideColor = Color.LightGreen });
+        { Color = Color.LightGreen });
     }
 
     public override bool PreDrawTooltip(ReadOnlyCollection<TooltipLine> lines, ref int x, ref int y)
@@ -81,7 +81,7 @@ public partial class CreateWand : ModItem, IItemOverrideHover, IItemMiddleClicka
         ModifyTooltipLine_MaterialInfo(tooltips);
 
 
-        tooltips.Add(new TooltipLine(Mod, "TagDetailed.CreateWand", GetText("Tips.TagDetailed.CreateWand")) { OverrideColor = Color.SkyBlue });
+        tooltips.Add(new TooltipLine(Mod, "TagDetailed.CreateWand", GetText("Tips.TagDetailed.CreateWand")) { Color = Color.SkyBlue });
         TagItem.AddShiftForMoreTooltip(tooltips);
     }
 

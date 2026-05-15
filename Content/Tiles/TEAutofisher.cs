@@ -388,7 +388,10 @@ public class TEAutofisher : ModTileEntity
 
             // 单人模式和客户端里这还作为视效的判定，因此得强制更新
             if (Main.netMode is NetmodeID.SinglePlayer or NetmodeID.MultiplayerClient)
-                Main.LocalPlayer.ForceUpdateBiomes();
+            {
+                Main.LocalPlayer.UpdateSceneMetrics();
+                Main.LocalPlayer.UpdateBiomes();
+            }
         }
         catch { throw; } finally
         {
@@ -660,8 +663,8 @@ public class TEAutofisher : ModTileEntity
         if (item.stack != oldStack)
         {
             // 用dummyItem，因为填充后item可能是Air
-            Chest.VisualizeChestTransfer(locatePoint.ToWorldCoordinates(), Position.ToWorldCoordinates(16, 16),
-                dummyItem, dummyItem.stack);
+            Chest.VisualizeChestTransfer(locatePoint.ToWorldCoordinates(), Position.ToWorldCoordinates(16, 16), 
+                dummyItem.type, Chest.ItemTransferVisualizationSettings.PlayerToChest);
 
             if (TryConsumeBait(player) && Main.netMode is NetmodeID.Server)
             {
@@ -1006,7 +1009,7 @@ public class TEAutofisher : ModTileEntity
 
                     // 用dummyItem，因为填充后item可能是Air
                     Chest.VisualizeChestTransfer(Position.ToWorldCoordinates(16, 16),
-                        new Vector2(chest.x * 16 + 16, chest.y * 16 + 16), dummyItem, dummyItem.stack);
+                        new Vector2(chest.x * 16 + 16, chest.y * 16 + 16), dummyItem.type, Chest.ItemTransferVisualizationSettings.PlayerToChest);
                 }
 
                 if (Main.netMode is NetmodeID.SinglePlayer)

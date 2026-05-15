@@ -16,7 +16,7 @@ public class SwapItemOperationPacket : NetModule
     /// <param name="slotIndex"></param>
     public static void Send(int chestIndex, int slotIndex)
     {
-        Debug.Assert(!Main.mouseItem.IsAir && chestIndex != -1 && slotIndex is >= 0 and < Chest.maxItems,
+        Debug.Assert(!Main.mouseItem.IsAir && chestIndex != -1 && slotIndex >= 0 && slotIndex < Main.chest[chestIndex].maxItems,
             "Invalid data, Check your code");
         var packet = ModContent.GetInstance<SwapItemOperationPacket>();
         packet._item = Main.mouseItem;
@@ -28,7 +28,7 @@ public class SwapItemOperationPacket : NetModule
 
     public override void Receive()
     {
-        Debug.Assert(Main.chest.IndexInRange(_chestIndex) && _slotIndex is >= 0 and < Chest.maxItems,
+        Debug.Assert(Main.chest.IndexInRange(_chestIndex) && _slotIndex >= 0 && _slotIndex < Main.chest[_chestIndex].maxItems,
             "Invalid data, Check your code");
         ref var slotItem = ref Main.chest[_chestIndex].item[_slotIndex];
         switch (Main.netMode)

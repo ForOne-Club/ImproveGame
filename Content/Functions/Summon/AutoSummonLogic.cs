@@ -17,12 +17,12 @@ public class AutoSummonLogic : ModPlayer
         int type, int damage, float knockback)
     {
         // 有人报索引超出数组界限了，非常抽象，加个判定
-        if (!ProjectileID.Sets.MinionTargettingFeature.IndexInRange(type) ||
+        if (!ProjectileID.Sets.MinionTargetingFeature.IndexInRange(type) ||
             !ContentSamples.ProjectilesByType.ContainsKey(type))
             return base.Shoot(item, source, position, velocity, type, damage, knockback);
 
         // 至少我们能适配灾厄
-        if (Enabled && Player.altFunctionUse != 2 && ProjectileID.Sets.MinionTargettingFeature[type] &&
+        if (Enabled && Player.altFunctionUse != 2 && ProjectileID.Sets.MinionTargetingFeature[type] &&
             ContentSamples.ProjectilesByType[type].minion && _lastUsedStaffType != item.type)
         {
             _lastUsedStaffType = item.type;

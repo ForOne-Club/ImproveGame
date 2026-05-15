@@ -88,8 +88,7 @@ public class RemoveItemOperationPacket : NetModule
 
                         break;
                     case RemovedItemDestination.Inventory:
-                        Main.LocalPlayer.GetItem(Sender, item,
-                            GetItemSettings.InventoryEntityToPlayerInventorySettings);
+                        Main.LocalPlayer.GetItem(item, GetItemSettings.QuickTransferFromSlot);
                         break;
                     case RemovedItemDestination.Trash:
                         Main.LocalPlayer.trashItem = item;

@@ -82,7 +82,7 @@ namespace ImproveGame.Common.GlobalItems
                 tooltip = GetTextWith("Tips.BankEnableOff", new { KeybindName = keybind });
             }
 
-            tooltips.Add(new TooltipLine(Mod, "BankEnable", tooltip) { OverrideColor = Color.LightGreen });
+            tooltips.Add(new TooltipLine(Mod, "BankEnable", tooltip) { Color = Color.LightGreen });
         }
 
         // 中键功能
@@ -99,7 +99,7 @@ namespace ImproveGame.Common.GlobalItems
             if (Lookups.Bank2Items.Contains(item.type))
             {
                 tooltips.Add(new TooltipLine(Mod, "TagDetailed.AutoCollect", GetText("Tips.TagDetailed.AutoCollect"))
-                { OverrideColor = Color.SkyBlue });
+                { Color = Color.SkyBlue });
                 TagItem.AddShiftForMoreTooltip(tooltips);
             }
         }

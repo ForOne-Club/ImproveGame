@@ -81,7 +81,7 @@ public class MoveChest : ModItem, IConditionItem
         }
         else
         {
-            _items ??= new Item[Chest.maxItems];
+            _items ??= new Item[Chest.DefaultMaxItems];
             _chestName ??= string.Empty;
             AskPlacementPacket.Get(coord, _chestType, _style, _items, _chestName,
                 new ItemPosition((byte)player.whoAmI, Array.IndexOf(player.inventory, Item))).Send();

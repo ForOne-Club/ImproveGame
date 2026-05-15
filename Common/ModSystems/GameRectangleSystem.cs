@@ -140,7 +140,7 @@ public class GameRectangleSystem : ModSystem
 
         int extraRangeX = 12;
         int extraRangeY = 10;
-        Point screenOverdrawOffset = Main.GetScreenOverdrawOffset();
+        Point screenOverdrawOffset = Main.GameViewMatrix.Translation.ToTileCoordinates();
         Rectangle drawRange = new(((int)Main.screenPosition.X >> 4) - extraRangeX + screenOverdrawOffset.X,
             ((int)Main.screenPosition.Y >> 4) - extraRangeY + screenOverdrawOffset.Y,
             (Main.screenWidth >> 4) + (extraRangeX - screenOverdrawOffset.X << 1),

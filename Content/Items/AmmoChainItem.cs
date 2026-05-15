@@ -97,7 +97,7 @@ public class AmmoChainItem : ModItem
         {
             tooltipLines.Add(new TooltipLine(mod, "AmmoChainDisabled", GetText("Tips.AmmoChainDisabled"))
             {
-                OverrideColor = Color.Yellow
+                Color = Color.Yellow
             });
             AddToTooltip();
             return;
@@ -117,7 +117,7 @@ public class AmmoChainItem : ModItem
             ammoChainLineText += theText;
             tooltipLines.Add(new TooltipLine(mod, "AmmoChain", ammoChainLineText)
             {
-                OverrideColor = Color.Yellow
+                Color = Color.Yellow
             });
 
             // 这里return，强调一下
@@ -127,7 +127,7 @@ public class AmmoChainItem : ModItem
 
         tooltipLines.Add(new TooltipLine(mod, "AmmoChain", ammoChainLineText)
         {
-            OverrideColor = Color.Yellow
+            Color = Color.Yellow
         });
 
         string cachedText = "";

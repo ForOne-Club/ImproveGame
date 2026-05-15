@@ -127,8 +127,7 @@ public class ModNotificationPopup : IInGameNotification
     {
         if (PlayerInput.IgnoreMouseInterface)
             return;
-
-        Main.player[Main.myPlayer].mouseInterface = true;
+        Main.LocalPlayer.mouseInterface = true;
         if (Main.mouseLeft && Main.mouseLeftRelease)
         {
             Main.mouseLeftRelease = false;

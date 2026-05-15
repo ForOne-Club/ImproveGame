@@ -209,7 +209,7 @@ public class ImproveItem : GlobalItem, IItemOverrideHover, IItemMiddleClickable
     {
         TryGetKeybindString(KeybindSystem.ItemInteractKeybind, out string keybind);
         string text = (GetTextWith("Tips.MouseMiddleUse", new { ItemName = item.Name, KeybindName = keybind }));
-        tooltips.Add(new TooltipLine(Mod, "MountQuickUse", text) { OverrideColor = Color.LightGreen });
+        tooltips.Add(new TooltipLine(Mod, "MountQuickUse", text) { Color = Color.LightGreen });
     }
 
     // 中键功能
@@ -237,7 +237,7 @@ public class ImproveItem : GlobalItem, IItemOverrideHover, IItemMiddleClickable
             tooltips.Add(
                 new TooltipLine(Mod, "ShimmerResult",
                         GetText("Tips.ShimmerIntoWithCoinLuck", ItemID.Sets.CoinLuckValue[item.type]))
-                { OverrideColor = new Color(241, 175, 233) });
+                { Color = new Color(241, 175, 233) });
             return;
         }
 
@@ -258,7 +258,7 @@ public class ImproveItem : GlobalItem, IItemOverrideHover, IItemMiddleClickable
             text.Append($":{result.type}]");
         }
 
-        tooltips.Add(new TooltipLine(Mod, "ShimmerResult", text.ToString()) { OverrideColor = new Color(241, 175, 233) });
+        tooltips.Add(new TooltipLine(Mod, "ShimmerResult", text.ToString()) { Color = new Color(241, 175, 233) });
     }
 
     private void TooltipMoreData(Item item, List<TooltipLine> tooltips)

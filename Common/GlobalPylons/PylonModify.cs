@@ -39,15 +39,12 @@ public class PylonModify : GlobalPylon
         return orig(player);
     }
 
-    public override bool? ValidTeleportCheck_PreAnyDanger(TeleportPylonInfo pylonInfo)
+    public override void PostValidTeleportCheck(TeleportPylonInfo destinationPylonInfo, TeleportPylonInfo nearbyPylonInfo, ref bool destinationPylonValid, ref bool validNearbyPylonFound, ref string errorKey)
     {
         if (ImproveConfigs.Instance.PylonTeleNoDanger)
-        {
-            return true;
-        }
-
-        return base.ValidTeleportCheck_PreAnyDanger(pylonInfo);
+            destinationPylonValid = true;
     }
+
 
     public override bool? ValidTeleportCheck_PreBiomeRequirements(TeleportPylonInfo pylonInfo, SceneMetrics sceneData)
     {

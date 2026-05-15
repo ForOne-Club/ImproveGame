@@ -158,7 +158,7 @@ public class ItemContainerItemSlot : GenericItemSlot
             }
             // 放回物背包图标
             case CursorOverrideID.ChestToInventory:
-                Item = Main.player[Main.myPlayer].GetItem(Item,
+                Item = Main.LocalPlayer.GetItem(Item,
                     GetItemSettings.QuickTransferFromSlot);
                 SoundEngine.PlaySound(SoundID.Grab);
                 return;

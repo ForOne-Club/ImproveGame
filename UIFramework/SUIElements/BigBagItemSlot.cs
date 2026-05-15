@@ -241,7 +241,7 @@ namespace ImproveGame.UIFramework.SUIElements
                     return;
                 // 放回物品栏图标
                 case CursorOverrideID.ChestToInventory:
-                    Item = Main.player[Main.myPlayer].GetItem(Item,
+                    Item = Main.LocalPlayer.GetItem(Item,
                         GetItemSettings.QuickTransferFromSlot);
                     SoundEngine.PlaySound(SoundID.Grab);
                     return;
@@ -370,7 +370,7 @@ namespace ImproveGame.UIFramework.SUIElements
 
             if (IsMouseHovering && Interactable)
             {
-                PlayerLoader.HoverSlot(Main.player[Main.myPlayer], Items, ItemSlot.Context.InventoryItem, Index);
+                PlayerLoader.HoverSlot(Main.LocalPlayer, Items, ItemSlot.Context.InventoryItem, Index);
                 Main.hoverItemName = Item.Name;
                 Main.HoverItem = Item.Clone();
                 SetCursorOverride();

@@ -48,9 +48,10 @@ public class ToolOperation : NetModule
         var items = new List<(int, int, (int, int, int))>();
         foreach ((int chestIndex, _) in itemsWithChestIndex)
         {
-            for (int i = 0; i < Chest.maxItems; i++)
+            var chest = Main.chest[chestIndex];
+            for (int i = 0; i < chest.maxItems; i++)
             {
-                var item = Main.chest[chestIndex].item[i];
+                var item = chest.item[i];
                 items.Add((chestIndex, i, (item.type, item.stack, item.prefix)));
             }
         }
@@ -84,7 +85,7 @@ public class ToolOperation : NetModule
             // 排列物品
             case OperationType.SortStorage:
                 _customRunning = true;
-                ItemSorting.Sort(items);
+                ItemSorting.Sort(true, items);
                 _customRunning = false;
                 break;
             // 向物品栏堆叠 - 补货
@@ -111,9 +112,10 @@ public class ToolOperation : NetModule
         for (int i = 0; i < itemsWithChestIndex.Count; i++)
         {
             (int chestIndex, _) = itemsWithChestIndex[i];
-            for (int j = 0; j < Chest.maxItems; j++)
+            var chest = Main.chest[chestIndex];
+            for (int j = 0; j < chest.maxItems; j++)
             {
-                Main.chest[chestIndex].item[j] = items[i * Chest.maxItems + j];
+                chest.item[j] = items[i * chest.maxItems + j];
             }
         }
 
@@ -264,7 +266,7 @@ public class ToolOperation : NetModule
                 if (!ItemLoader.TryStackItems(storageItem, item, out int numTransferred)) return;
 
                 if (numTransferred > 0)
-                    Chest.VisualizeChestTransfer(player.Center, storagePosition, item, numTransferred);
+                    Chest.VisualizeChestTransfer(player.Center, storagePosition, item.type, Chest.ItemTransferVisualizationSettings.PlayerToChest);
 
                 if (item.stack <= 0)
                     item.TurnToAir();
@@ -316,7 +318,7 @@ public class ToolOperation : NetModule
                 if (item.IsAir || item.favorited) continue;
                 if (emptySlots.Count <= 0) break;
 
-                Chest.VisualizeChestTransfer(player.Center, storagePosition, item, item.stack);
+                Chest.VisualizeChestTransfer(player.Center, storagePosition, item.type, Chest.ItemTransferVisualizationSettings.PlayerToChest);
 
                 int slot = emptySlots[0];
                 emptySlots.RemoveAt(0);
@@ -391,68 +393,76 @@ public class ToolOperation : NetModule
         }
     }
 
-    public override void Load()
+    public class ToolOperationHook : ILoadable
     {
-        // 让可见物品传输播放声音
-        On_Chest.AskForChestToEatItem += (orig, worldPosition, duration) =>
+        void ILoadable.Load(Mod mod)
         {
-            orig.Invoke(worldPosition, duration);
-
-            var tilePosition = (worldPosition - new Vector2(16f)).ToTileCoordinates();
-            if (!TryGetTileEntityAs<TEExtremeStorage>(tilePosition, out _)) return;
-
-            CoroutineSystem.MiscRunner.Run(duration - 10, DoRandomGrabSoundInner());
-            return;
-
-            IEnumerator DoRandomGrabSoundInner()
+            // 让可见物品传输播放声音
+            On_Chest.AskForChestToEatItem += (orig, worldPosition, duration) =>
             {
-                SoundEngine.PlaySound(SoundID.Grab, worldPosition);
-                yield break;
-            }
-        };
+                orig.Invoke(worldPosition, duration);
 
-        // 排序设置物品栏颜色
-        On_ItemSlot.SetGlow += (orig, index, hue, isChest) =>
+                var tilePosition = (worldPosition - new Vector2(16f)).ToTileCoordinates();
+                if (!TryGetTileEntityAs<TEExtremeStorage>(tilePosition, out _)) return;
+
+                CoroutineSystem.MiscRunner.Run(duration - 10, DoRandomGrabSoundInner());
+                return;
+
+                IEnumerator DoRandomGrabSoundInner()
+                {
+                    SoundEngine.PlaySound(SoundID.Grab, worldPosition);
+                    yield break;
+                }
+            };
+
+            // 排序设置物品栏颜色
+            On_ItemSlot.SetGlow += (orig, index, hue, isChest) =>
+            {
+                if (!_customRunning)
+                {
+                    orig.Invoke(index, hue, isChest);
+                    return;
+                }
+
+                // 一般来说不可能出现负数，但是如果出现了，那么就直接返回
+                if (index < 0 || Main.netMode is NetmodeID.Server) return;
+
+                int indexInChestsList = index / 40;
+                int indexInChestSlots = index % 40;
+
+                if (!_chests.IndexInRange(indexInChestsList) || !Main.chest.IndexInRange(_chests[indexInChestsList]))
+                    return;
+                int chestIndex = _chests[indexInChestsList];
+                var chest = Main.chest[chestIndex];
+
+                if (!ExtremeStorageGUI.ChestSlotsGlowHue.ContainsKey(chestIndex))
+                {
+                    var hues = new float[40];
+                    Array.Fill(hues, -1f);
+                    ExtremeStorageGUI.ChestSlotsGlowHue.Add(chestIndex, hues);
+                }
+
+                var hueArray = ExtremeStorageGUI.ChestSlotsGlowHue[chestIndex];
+
+                if (chest is null || !hueArray.IndexInRange(indexInChestSlots))
+                    return;
+
+                if (hue < 0f)
+                {
+                    ExtremeStorageGUI.ChestSlotsGlowTimer = 0;
+                    hueArray[indexInChestSlots] = 0f;
+                }
+                else
+                {
+                    ExtremeStorageGUI.ChestSlotsGlowTimer = 300;
+                    hueArray[indexInChestSlots] = hue;
+                }
+            };
+        }
+        void ILoadable.Unload()
         {
-            if (!_customRunning)
-            {
-                orig.Invoke(index, hue, isChest);
-                return;
-            }
 
-            // 一般来说不可能出现负数，但是如果出现了，那么就直接返回
-            if (index < 0 || Main.netMode is NetmodeID.Server) return;
-
-            int indexInChestsList = index / 40;
-            int indexInChestSlots = index % 40;
-
-            if (!_chests.IndexInRange(indexInChestsList) || !Main.chest.IndexInRange(_chests[indexInChestsList]))
-                return;
-            int chestIndex = _chests[indexInChestsList];
-            var chest = Main.chest[chestIndex];
-
-            if (!ExtremeStorageGUI.ChestSlotsGlowHue.ContainsKey(chestIndex))
-            {
-                var hues = new float[40];
-                Array.Fill(hues, -1f);
-                ExtremeStorageGUI.ChestSlotsGlowHue.Add(chestIndex, hues);
-            }
-
-            var hueArray = ExtremeStorageGUI.ChestSlotsGlowHue[chestIndex];
-
-            if (chest is null || !hueArray.IndexInRange(indexInChestSlots))
-                return;
-
-            if (hue < 0f)
-            {
-                ExtremeStorageGUI.ChestSlotsGlowTimer = 0;
-                hueArray[indexInChestSlots] = 0f;
-            }
-            else
-            {
-                ExtremeStorageGUI.ChestSlotsGlowTimer = 300;
-                hueArray[indexInChestSlots] = hue;
-            }
-        };
+        }
     }
 }
+

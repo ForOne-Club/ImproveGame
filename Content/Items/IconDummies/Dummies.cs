@@ -39,7 +39,7 @@ public class SearchIcon : ModItem, IHideExtraTooltips
     public override void OnCreated(ItemCreationContext context)
     {
         if (context is not InitializationItemCreationContext)
-            Item.SetDefaults();
+            Item.TurnToAir();
     }
 
     public override void ModifyTooltips(List<TooltipLine> tooltips)

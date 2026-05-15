@@ -195,7 +195,7 @@ namespace ImproveGame.UIFramework.UIElements
 
         public static void SellOrTrash(Item[] inv, int context, int slot)
         {
-            Player player = Main.player[Main.myPlayer];
+            Player player = Main.LocalPlayer;
             if (inv[slot].type <= ItemID.None)
                 return;
 
@@ -277,7 +277,7 @@ namespace ImproveGame.UIFramework.UIElements
             if (Main.cursorOverride == CursorOverrideID.ChestToInventory)
             {
                 int oldStack = Item.stack;
-                Item = Main.player[Main.myPlayer].GetItem(Item, GetItemSettings.QuickTransferFromSlot);
+                Item = Main.LocalPlayer.GetItem(Item, GetItemSettings.QuickTransferFromSlot);
                 if (Item.stack != oldStack) // 成功了
                 {
                     if (Item.stack <= 0)
