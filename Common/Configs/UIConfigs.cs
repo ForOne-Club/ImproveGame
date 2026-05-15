@@ -108,6 +108,9 @@ public class UIConfigs : ModConfig
     public bool ShowShimmerInfo;
 
     [DefaultValue(true)]
+    public bool ShowAmmoInfo;
+
+    [DefaultValue(true)]
     public bool ShowModName;
 
     public enum PAPDisplayMode

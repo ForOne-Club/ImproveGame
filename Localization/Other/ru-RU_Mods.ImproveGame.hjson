@@ -69,6 +69,8 @@ QuickHome: {
 Tips: {
 	AmmoChainDisabled: Цепочка боеприпасов отключена
 	AmmoChain: "[centeritem:ImproveGame/AmmoChainItem]Цепочка боеприпасов: "
+	AmmoInfo: "弹药类型为 [i:{0}] {1}"
+	UseAmmoInfo: "使用弹药类型为 [i:{0}] {1}"
 	ShimmerInto: "Можно превратить с помощью мерцания в "
 	ShimmerIntoWithStack: "Каждые {0} можно превратить с помощью мерцания в "
 	ShimmerIntoWithCoinLuck: Можно превратить с помощью мерцания в {0} 'удачи монет'
@@ -418,7 +420,7 @@ SpaceWandGUI: {
 PackageGUI: {
 	AutoStorage: Авто-сбор
 	AutoSort: Авто-сортировка
-	// Synthesis: 参与合成
+	Synthesis: Использовать в создании
 	Incompatible: Данный предмет не может храниться в данном хранилище.
 }
 
