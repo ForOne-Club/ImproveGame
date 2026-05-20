@@ -24,6 +24,7 @@ public class ImproveGame : Mod
         NetModuleLoader.LoadAutoSyncsFrom(typeof(NetModuleLoader).Assembly);
         NetModuleLoader.LoadAutoSyncsFrom(Assembly.GetExecutingAssembly());
         NetModuleLoader.LoadNetModules();
+        AddContent<NetModuleLoader>();
         ChatManager.Register<BgItemTagHandler>("bgitem");
         ChatManager.Register<CenteredItemTagHandler>("centeritem");
         ChatManager.Register<QotGlyphTagHandler>("qotglyph");
