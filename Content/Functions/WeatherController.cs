@@ -1,5 +1,6 @@
 ﻿using ImproveGame.Common.Configs;
 using Terraria.GameContent.Creative;
+using Terraria.GameContent.Events;
 using Terraria.ModLoader.IO;
 
 namespace ImproveGame.Content.Functions;
@@ -18,12 +19,16 @@ public sealed class WeatherController : ModSystem
     // 在这俩方法调用期间的值改也没用，而在这期间之外的值改了就有用
     // 这样可以适配其他Mod的UI的作弊功能，但也可能锁不住其他Mod伪造的“自然改变”
     public static bool RainLocked;
+    public static bool SandstormLocked;
     public static bool MoonPhaseLocked;
     public static bool WindLocked;
 
     private double _rainTime;
     private float _maxRaining;
     private bool _raining;
+
+    private bool _happening;
+    private double _timeLeft;
 
     private int _moonPhase;
 
@@ -49,9 +54,14 @@ public sealed class WeatherController : ModSystem
 
     public override void PreUpdateEntities()
     {
+
+
         _rainTime = Main.rainTime;
         _maxRaining = Main.maxRaining;
         _raining = Main.raining;
+
+        _happening = Sandstorm.Happening;
+        _timeLeft = Sandstorm.TimeLeft;
 
         _moonPhase = Main.moonPhase;
 
@@ -70,6 +80,12 @@ public sealed class WeatherController : ModSystem
             Main.raining = _raining;
         }
 
+        if (SandstormLocked)
+        {
+            Sandstorm.Happening = _happening;
+            Sandstorm.TimeLeft = _timeLeft;
+        }
+
         if (MoonPhaseLocked)
         {
             Main.moonPhase = _moonPhase;
@@ -86,7 +102,7 @@ public sealed class WeatherController : ModSystem
 
     public override void NetSend(BinaryWriter writer)
     {
-        var states = new BitsByte(RainLocked, MoonPhaseLocked, WindLocked, Unlocked);
+        var states = new BitsByte(RainLocked, SandstormLocked, MoonPhaseLocked, WindLocked, Unlocked);
         writer.Write(states);
     }
 
@@ -94,14 +110,16 @@ public sealed class WeatherController : ModSystem
     {
         var states = (BitsByte)reader.ReadByte();
         RainLocked = states[0];
-        MoonPhaseLocked = states[1];
-        WindLocked = states[2];
-        Unlocked = states[3];
+        SandstormLocked = states[1];
+        MoonPhaseLocked = states[2];
+        WindLocked = states[3];
+        Unlocked = states[4];
     }
 
     public override void ClearWorld()
     {
         RainLocked = false;
+        SandstormLocked = false;
         MoonPhaseLocked = false;
         WindLocked = false;
         Unlocked = false;
@@ -111,6 +129,7 @@ public sealed class WeatherController : ModSystem
     {
         if (Unlocked) tag.Add("unlocked", true);
         if (RainLocked) tag.Add("rainLocked", true);
+        if (SandstormLocked) tag.Add("sandstorm", true);
         if (MoonPhaseLocked) tag.Add("moonPhaseLocked", true);
         if (WindLocked) tag.Add("windLocked", true);
     }
@@ -119,6 +138,7 @@ public sealed class WeatherController : ModSystem
     {
         if (tag.ContainsKey("unlocked")) Unlocked = tag.GetBool("unlocked");
         if (tag.ContainsKey("rainLocked")) RainLocked = tag.GetBool("rainLocked");
+        if (tag.ContainsKey("sandstormLocked")) SandstormLocked = tag.GetBool("sandstormLocked");
         if (tag.ContainsKey("moonPhaseLocked")) MoonPhaseLocked = tag.GetBool("moonPhaseLocked");
         if (tag.ContainsKey("windLocked")) WindLocked = tag.GetBool("windLocked");
     }

@@ -48,7 +48,7 @@ public partial class WeatherAmbientElement
 
         var dimensions = GetDimensions();
         var boundary = new Rectangle((int)dimensions.X, (int)dimensions.Y, 400, 208);
-        var mushroomHitbox = new Rectangle(boundary.X + 384, boundary.Y + 112, 16, 16);
+        var mushroomHitbox = new Rectangle(boundary.X + 386, boundary.Y + 112, 16, 16);
         if (_easterEggActivated || !mushroomHitbox.Contains(Main.MouseScreen.ToPoint()))
             return;
 
