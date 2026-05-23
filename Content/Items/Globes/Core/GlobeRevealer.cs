@@ -215,6 +215,29 @@ public static class GlobeRevealer
         RevealBroadcast(dummyItem, playerName, projectile.owner);
         return true;
     }
+    public static bool RevealHive(Projectile projectile, Globe dummyItem, bool onlyJudging)
+    {
+        if (StructureDatas.AllHivePositions.Count <= StructureDatas.HivePositions.Count)//没有判定0的必要，因为如果是0一定满足这个
+        {
+            if (!onlyJudging)
+            {
+                if (!StructureDatas.QotEanbledInWorldGeneration)
+                    NoDataNotification(dummyItem, projectile.owner);
+                else
+                    NotFoundNotification(dummyItem, projectile.owner);
+            }
+            return false;
+        }
+        if (onlyJudging)
+            return true;
+
+        StructureDatas.HivePositions.Add(StructureDatas.AllHivePositions
+            .Except(StructureDatas.HivePositions)
+            .MinBy(position => projectile.Center.Distance(position.ToVector2() * 16)));
+        var playerName = Main.player[projectile.owner].name;
+        RevealBroadcast(dummyItem, playerName, projectile.owner);
+        return true;
+    }
 
     //这里都是生成时查找，一次解锁完毕，有对于生成时数据未记录的额外查找处理
     public static bool RevealOnceForAll(Projectile projectile, Globe dummyItem, bool onlyJudging)

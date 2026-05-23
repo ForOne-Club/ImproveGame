@@ -212,7 +212,7 @@ EnchantedSwordGlobe: {
 	Reveal: "{0} marked up {$ItemName.EnchantedSword} on the map."
 }
 
-# NotFound在大理石洞全部标记完了的情况下显示，花岗岩洞的文本亦是如此
+# NotFound在大理石洞全部标记完了的情况下显示，花岗岩洞和蜂巢的文本亦是如此
 MarbleCaveGlobe: {
 	BiomeName: Marble Cave
 	NotFound: Couldn't find more Marble Cave
@@ -221,6 +221,11 @@ MarbleCaveGlobe: {
 GraniteCaveGlobe: {
 	BiomeName: Granite Cave
 	NotFound: Couldn't find more Granite Cave
+}
+
+HiveGlobe: {
+	BiomeName: 蜂巢
+	NotFound: 未能找到更多的蜂巢
 }
 
 # NotFound在世界上没有足够的微光液体的情况下显示
@@ -247,7 +252,7 @@ DevMark: {
 		[c/ff0000:Developer's item]
 		When in the inventory, Wand of Construction will not consume materials (Only works in single player)
 		Opening the Fishing Machine will automatically fill it with fishing equipment
-		可放入钓鱼机的饰品位，来大幅度提升钓鱼速度
+		Can be placed in the Fishing Machine's accessory slot to significantly increase its fishing speed
 		'''
 }
 

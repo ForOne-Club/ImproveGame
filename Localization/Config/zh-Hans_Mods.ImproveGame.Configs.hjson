@@ -1060,6 +1060,11 @@ UIConfigs: {
 		Tooltip: 在地图上显示的已标记的花岗岩洞的图标的大小，设为0以隐藏图标
 	}
 
+	MarkHive: {
+		Label: "[centeritem:ImproveGame/GraniteCaveGlobe] 蜂巢图标大小"
+		Tooltip: 在地图上显示的已标记的蜂巢的图标的大小，设为0以隐藏图标
+	}
+
 	MarkEmptyAutofisher: {
 		Label: "[centeritem:ImproveGame/Autofisher] 缺少鱼饵的钓鱼机图标大小"
 		Tooltip: 在地图上显示的所有缺少鱼饵的钓鱼机的图标的大小，设为0以隐藏图标
@@ -1104,6 +1109,11 @@ UIConfigs: {
 		Tooltip: 显示某个物品的微光转化结果
 	}
 
+	ShowAmmoInfo: {
+		Label: "[centeritem:1302] 显示使用弹药类型"
+		Tooltip: 显示某个物品的所使用或所属弹药类型（如果有）
+	}
+
 	ResetUIPositionsButton: {
 		Label: 重设UI位置
 		Tooltip: 重设所有UI的位置，在你找不到大背包UI时尤其有用
@@ -1121,7 +1131,7 @@ UIConfigs: {
 
 	SingleBlur: {
 		Label: "[centeritem:MulticoloredStainedGlass] 窗口独立模糊（有一定性能损失）"
-		Tooltip: 每个 UI 都单独模糊，效果更好，可能有兼容性问题
+		Tooltip: 每个 UI 都单独模糊，效果更好，可能有兼容性问题（如：屏幕滤镜消失、发送消息头顶文本偏移等）
 	}
 
 	BlurZoomMultiplierDenominator: {
@@ -1182,6 +1192,11 @@ UIConfigs: {
 	RemoveGraveyardMusic: {
 		Label: "[centeritem:RichGravestone2] 移除墓地背景音乐"
 		Tooltip: 开启后，移除墓地环境的背景音乐
+	}
+
+	SpelunkerColor: {
+		Label: "[centeritem:296] 调整洞穴探险药水高亮"
+		Tooltip: 可以随意调节被高亮矿物的颜色
 	}
 
 	GlobeEffect: {

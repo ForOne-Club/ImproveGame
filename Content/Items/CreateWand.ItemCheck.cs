@@ -15,7 +15,7 @@ public partial class CreateWand
 
         public static bool IsPlatform(Item item) => IsTilePlatform(item.createTile);
 
-        public static bool IsBlock(Item item) => IsTileBlock(item.createTile);
+        public static bool IsBlock(Item item) => !ItemID.Sets.GrassSeeds[item.type] && item.type is not ItemID.StaffofRegrowth and not ItemID.AcornAxe && IsTileBlock(item.createTile);
 
         public static bool IsTorch(Item item) => IsTileTorch(item.createTile);
 

@@ -108,6 +108,9 @@ public class UIConfigs : ModConfig
     public bool ShowShimmerInfo;
 
     [DefaultValue(true)]
+    public bool ShowAmmoInfo;
+
+    [DefaultValue(true)]
     public bool ShowModName;
 
     public enum PAPDisplayMode
@@ -177,6 +180,9 @@ public class UIConfigs : ModConfig
     [DefaultValue(false)]
     [DisplayCondition(nameof(UIConfigs), nameof(RemoveGraveyardVisual))]
     public bool RemoveGraveyardMusic;
+
+    [DefaultValue(typeof(Color), "0, 0, 0, 0")]
+    public Color SpelunkerColor;
 
     [DefaultValue(false)]
     public bool FckKeybindPopup;
@@ -253,6 +259,14 @@ public class UIConfigs : ModConfig
     [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
     [CustomModConfigItem(typeof(Round4FloatElement))]
     public float MarkGraniteCave;
+
+    [DefaultValue(0.8f)]
+    [Increment(0.1f)]
+    [Range(0f, 1.5f)]
+    [Slider]
+    [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
+    [CustomModConfigItem(typeof(Round4FloatElement))]
+    public float MarkHive;
 
     [DefaultValue(0.8f)]
     [Increment(0.1f)]

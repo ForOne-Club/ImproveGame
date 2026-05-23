@@ -129,10 +129,6 @@ public partial class CreateWand
                     }
                     else
                     {
-                        if (tile is TileID.Chairs or TileID.Toilets)
-                        {
-
-                        }
                         TileSort tempsort = TileSort.None;
                         var objData = TileObjectData.GetTileData(tile, 0);
                         if (objData != null)

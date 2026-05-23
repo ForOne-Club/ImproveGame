@@ -13,6 +13,7 @@ public sealed class ItemSettings : Category
         panel.AddValueSlider(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.ItemMaxStack));
         panel.AddToggle(uiConfig, nameof(uiConfig.ShowModName));
         panel.AddToggle(uiConfig, nameof(uiConfig.ShowShimmerInfo));
+        panel.AddToggle(uiConfig, nameof(uiConfig.ShowAmmoInfo));
         panel.AddToggle(uiConfig, nameof(uiConfig.AutoSummon));
         panel.AddToggle(uiConfig, nameof(uiConfig.MagicMirrorInstantTp));
         panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.QuestFishStack));

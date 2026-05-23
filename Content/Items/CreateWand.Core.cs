@@ -89,10 +89,6 @@ public partial class CreateWand
                 {
                     if (!_cachedMaterialSources.TryGetValue(i, out var pair))
                         pair = _cachedMaterialSources[i] = ([], []);
-                    if (i == 0)
-                    {
-
-                    }
                     pair.Item1.Add(item);
                     break;
                 }

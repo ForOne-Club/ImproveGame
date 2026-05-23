@@ -414,6 +414,8 @@ public partial class CreateWand
             case TileSort.Bathtub:
             {
                 MultiTileFraming(datas, sort, i, j, 4, 2, out tileFrameX, out tileFrameY);
+                if (datas[i, j].Flip)
+                    tileFrameX += 72;
                 break;
             }
 

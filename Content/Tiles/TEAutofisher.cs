@@ -119,13 +119,47 @@ public class TEAutofisher : ModTileEntity
         return placedEntity;
     }
 
-    public static int GetClosestPlayerIndex(Point16 Position) =>
-        Player.FindClosest(new Vector2(Position.X * 16, Position.Y * 16), 2, 2);
 
-    public static Player GetClosestPlayer(Point16 Position)
+    private static byte? FindClosestAvailable(Vector2 Position, int Width, int Height)
     {
-        int index = GetClosestPlayerIndex(Position);
-        return Main.player.IndexInRange(index) ? Main.player[index] : Main.player[0];
+        byte? result = null;
+        for (int i = 0; i < 255; i++)
+        {
+            var plr = Main.player[i];
+            if (plr.active && plr.TryGetModPlayer<AutofishAvailabliltyCheckPlayer>(out var mplr) && mplr.Available)
+            {
+                result = (byte)i;
+                break;
+            }
+        }
+
+        float num = -1f;
+        for (int j = 0; j < 255; j++)
+        {
+            var plr = Main.player[j];
+            if (plr.active && !plr.dead && plr.TryGetModPlayer<AutofishAvailabliltyCheckPlayer>(out var mplr) && mplr.Available)
+            {
+                float num2 = Math.Abs(plr.position.X + (float)(plr.width / 2) - (Position.X + (float)(Width / 2))) + Math.Abs(plr.position.Y + (float)(plr.height / 2) - (Position.Y + (float)(Height / 2)));
+                if (num == -1f || num2 < num)
+                {
+                    num = num2;
+                    result = (byte)j;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    public static byte? GetClosestPlayerIndex(Point16 Position) =>
+        FindClosestAvailable(new Vector2(Position.X * 16, Position.Y * 16), 2, 2);
+
+    public static Player? GetClosestPlayer(Point16 Position)
+    {
+        byte? index = GetClosestPlayerIndex(Position);
+        if (index is { } whoAmI && Main.player.IndexInRange(whoAmI))
+            return Main.player[whoAmI];
+        return null;
     }
 
     #region 钓鱼
@@ -222,7 +256,7 @@ public class TEAutofisher : ModTileEntity
     public void FishingCheck()
     {
         var player = GetClosestPlayer(Position);
-
+        if (player == null) return;
         FishingAttempt fisher = GetFisher(out bool inShimmer);
         if (fisher.waterTilesCount < 75)
         {
@@ -365,7 +399,11 @@ public class TEAutofisher : ModTileEntity
     public FishingAttempt GetFisher(out bool inShimmer)
     {
         var player = GetClosestPlayer(Position);
-
+        if (player == null) 
+        {
+            inShimmer = false;
+            return default;
+        }
         FishingAttempt fisher = default;
         fisher.X = locatePoint.X;
         fisher.Y = locatePoint.Y;
@@ -852,6 +890,8 @@ public class TEAutofisher : ModTileEntity
             return result;
 
         var player = GetClosestPlayer(Position);
+        if (player == null)
+            return result;
         int num = result.BaitPower + result.PolePower + FishingSkill;
         result.LevelMultipliers = Fishing_GetPowerMultiplier(result.Pole, result.Bait, player);
         result.FinalFishingLevel = (int)(num * result.LevelMultipliers);

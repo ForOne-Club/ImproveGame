@@ -14,35 +14,22 @@ public partial class CreateWand
         private static BuildingData _currentWaitingData;
         private static void CreateShowcase(string directory)
         {
-            var building = ModAsset.PrisonComplex.Value;
-            var prison1 = ModAsset.Prison1.Value;
-            var prison2 = ModAsset.Prison2.Value;
-            var prison3 = ModAsset.Prison3.Value;
-            using FileStream fsShowcase = new FileStream(Path.Combine(directory, "buildingShowcase.png"), FileMode.CreateNew);
-            using FileStream fs1 = new FileStream(Path.Combine(directory, "Prison1.png"), FileMode.CreateNew);
-            using FileStream fs2 = new FileStream(Path.Combine(directory, "Prison2.png"), FileMode.CreateNew);
-            using FileStream fs3 = new FileStream(Path.Combine(directory, "Prison3.png"), FileMode.CreateNew);
+            using FileStream fsShowcase = new FileStream(Path.Combine(directory, "buildingShowcase.png"), FileMode.Create);
+            using FileStream fs1 = new FileStream(Path.Combine(directory, "Building1.png"), FileMode.Create);
+            using FileStream fs2 = new FileStream(Path.Combine(directory, "Building2.png"), FileMode.Create);
+            using FileStream fs3 = new FileStream(Path.Combine(directory, "Building3.png"), FileMode.Create);
 
-            building.SaveAsPng(
-                fsShowcase,
-                building.Width,
-                building.Height
-                );
-            prison1.SaveAsPng(
-                fs1,
-                prison1.Width,
-                prison1.Height
-                );
-            prison2.SaveAsPng(
-                fs2,
-                prison2.Width,
-                prison2.Height
-                );
-            prison3.SaveAsPng(
-                fs3,
-                prison3.Width,
-                prison3.Height
-                );
+            var prisonShowcasebytes = ImproveGame.Instance.GetFileBytes(ModAsset.PrisonComplex_Path + ".png");
+            fsShowcase.Write(prisonShowcasebytes);
+
+            var prison1bytes = ImproveGame.Instance.GetFileBytes(ModAsset.Prison1_Path + ".png");
+            fs1.Write(prison1bytes);
+
+            var prison2bytes = ImproveGame.Instance.GetFileBytes(ModAsset.Prison2_Path + ".png");
+            fs2.Write(prison2bytes);
+
+            var prison3bytes = ImproveGame.Instance.GetFileBytes(ModAsset.Prison3_Path + ".png");
+            fs3.Write(prison3bytes);
         }
         public override void Load()
         {
@@ -54,7 +41,9 @@ public partial class CreateWand
             Main.QueueMainThreadAction(() =>
             {
                 string directory = Path.Combine(Main.SavePath, "Mods", "ImproveGame", "CreateWand");
-                if (!Directory.Exists(directory))
+                if (!Directory.Exists(directory)
+                    || (Directory.GetFiles(directory) is { Length: 1 } files 
+                        && Path.GetFileNameWithoutExtension(files[0]) is "buildingShowcase"))
                 {
                     Directory.CreateDirectory(directory);
                     CreateShowcase(directory);

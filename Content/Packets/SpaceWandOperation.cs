@@ -67,7 +67,8 @@ public class SpaceWandOperation : NetModule
             case ShapeType.CircleEmpty:
                 ForeachTile(tilesHashSet, (x, y) =>
                 {
-                    NetMessage.SendTileSquare(-1, x, y);
+                    // NetMessage.SendTileSquare(-1, x, y);
+                    NetMessage.SendTileSquare(-1, x - 1, y - 1, 3, 3);
                 });
                 break;
             case ShapeType.SquareFilled:

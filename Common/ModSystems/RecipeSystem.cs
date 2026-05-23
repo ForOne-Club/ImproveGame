@@ -123,6 +123,7 @@ public class RecipeSystem : ModSystem
             .AddIngredient(ItemID.Obsidifish, 2)
             .AddIngredient(ItemID.Hemopiranha)
             .AddIngredient(ItemID.Ebonkoi)
+            .DisableDecraft()
             .Register();
     }
 

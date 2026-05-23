@@ -51,7 +51,9 @@ public partial class CreateWandController : BaseBody
         MaterialButton.Text = GetText("UI.CreateWandController.BuildingMaterial");
         BuildingDataListButton.Text = GetText("UI.CreateWandController.StructureSelection");
 
-        SetHeaderButtonHoverAnim(X);
+        Folder.Texture2D = ModAsset.Folder;
+
+        SetHeaderButtonHoverAnim(Folder, X);
 
         SetNavButtonHoverAnim(MaterialButton, BuildingDataListButton);
 
