@@ -1,4 +1,5 @@
-﻿using Terraria.GameContent.Bestiary;
+﻿using ImproveGame.Common.Configs;
+using Terraria.GameContent.Bestiary;
 
 namespace ImproveGame.Content.Functions
 {
@@ -18,7 +19,7 @@ namespace ImproveGame.Content.Functions
                 TrySpawnNPCsThatNeedsToUntie();
 
                 // 2023.3.25: 调用次数从指数级改为乘数，发现实际速度并无差异，减少开销的操作也可有可无了，不过还是保留吧
-                int times = Config.TownNPCSpawnSpeed - 1;
+                int times = ImproveConfigs.Instance.TownNPCSpawnSpeed - 1;
                 // 仅获取一次，避免重复调用增加开销
                 double worldUpdateRate = WorldGen.GetWorldUpdateRate();
                 _cachedReport = Main.GetBestiaryProgressReport();
@@ -70,7 +71,7 @@ namespace ImproveGame.Content.Functions
         private static void TrySpawnNPCsThatNeedsToUntie()
         {
             // 更好的生成机制
-            if (!Config.TownNPCGetTFIntoHouse)
+            if (!ImproveConfigs.Instance.TownNPCGetTFIntoHouse)
                 return;
 
             if (NPC.downedSlimeKing || NPC.downedBoss1 || NPC.downedBoss2 || NPC.downedBoss3 || NPC.downedQueenBee ||
@@ -127,7 +128,7 @@ namespace ImproveGame.Content.Functions
 
         public override void PostUpdateTime()
         {
-            if (!Main.dayTime && Config.TownNPCGetTFIntoHouse)
+            if (!Main.dayTime && ImproveConfigs.Instance.TownNPCGetTFIntoHouse)
                 Main.UpdateTime_SpawnTownNPCs();
         }
 

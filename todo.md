@@ -7,6 +7,12 @@
 - [SilkyUI Framework](https://github.com/487666123/SilkyUIFramework)
 - [SilkyUI Analyzer](https://github.com/487666123/SilkyUIAnalyzer)
 
+### 高优先级任务
+
+1. 虚空魔杖能力增强，可以吸收多个宝箱，添加图形用户界面来选择下一个放置的宝箱
+1. 建造魔杖重置图形用户界面
+1. 修复 SilkyUI 重置切换无效化属性时无效问题（无需在意这条）
+
 ### 现存 BUG:
 
 - [ ] 自动垃圾桶什么声音bug？@for one群 浪心羽生

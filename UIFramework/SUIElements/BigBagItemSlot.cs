@@ -219,12 +219,12 @@ namespace ImproveGame.UIFramework.SUIElements
             {
                 // 放大镜图标 - 输入到聊天框
                 case CursorOverrideID.Magnifiers:
-                    {
-                        if (ChatManager.AddChatText(FontAssets.MouseText.Value, ItemTagHandler.GenerateTag(Item),
-                                Vector2.One))
-                            SoundEngine.PlaySound(SoundID.MenuTick);
-                        return;
-                    }
+                {
+                    if (ChatManager.AddChatText(FontAssets.MouseText.Value, ItemTagHandler.GenerateTag(Item),
+                            Vector2.One))
+                        SoundEngine.PlaySound(SoundID.MenuTick);
+                    return;
+                }
                 // 收藏图标
                 case CursorOverrideID.FavoriteStar:
                     Item.favorited = !Item.favorited;
@@ -420,8 +420,7 @@ namespace ImproveGame.UIFramework.SUIElements
             effect.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly * 0.2f);
             effect.CurrentTechnique.Passes["EnchantedPass"].Apply();
             Main.instance.GraphicsDevice.Textures[1] = GetTexture("Enchanted").Value; // 传入调色板
-
-            sb.ReBegin(effect, Main.UIScaleMatrix);
+            sb.ReBegin(effect, Main.spriteBatch.transformMatrix);
         }
 
         /// <summary>

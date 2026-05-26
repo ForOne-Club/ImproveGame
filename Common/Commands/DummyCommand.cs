@@ -20,63 +20,63 @@ public class DummyCommand : ModCommand
             // args[0] equals "info" or "help" ignoring case
             case 1 when args[0].Equals("info", StringComparison.OrdinalIgnoreCase) ||
                         args[0].Equals("help", StringComparison.OrdinalIgnoreCase):
+            {
+                FieldInfo[] fields = type.GetFields();
+
+                caller.Reply(GetText("NPC.DummyCommand_DummyAttributes"), MyColor.Normal);
+
+                foreach (var field in fields)
                 {
-                    FieldInfo[] fields = type.GetFields();
-
-                    caller.Reply(GetText("NPC.DummyCommand_DummyAttributes"), MyColor.Normal);
-
-                    foreach (var field in fields)
+                    if (field.GetCustomAttribute<AnnotateAttribute>() is AnnotateAttribute annotateAttribute)
                     {
-                        if (field.GetCustomAttribute<AnnotateAttribute>() is AnnotateAttribute annotateAttribute)
+                        ref string annotate = ref annotateAttribute.Annotate;
+
+                        if (annotate.Equals(string.Empty))
                         {
-                            ref string annotate = ref annotateAttribute.Annotate;
-
-                            if (annotate.Equals(string.Empty))
-                            {
-                                annotate = GetText($"NPC.{field.Name}");
-                            }
-                            else if (annotate.Length > 1 && annotate.StartsWith('$'))
-                            {
-                                annotate = GetText($"NPC.{annotate.TrimStart('$')}");
-                            }
-
-                            caller.Reply(
-                                $"[{field.FieldType.Name}] {field.Name}: {field.GetValue(DummyNPC.LocalConfig)} ({annotate})",
-                                MyColor.Normal);
+                            annotate = GetText($"NPC.{field.Name}");
                         }
-                    }
+                        else if (annotate.Length > 1 && annotate.StartsWith('$'))
+                        {
+                            annotate = GetText($"NPC.{annotate.TrimStart('$')}");
+                        }
 
-                    return;
+                        caller.Reply(
+                            $"[{field.FieldType.Name}] {field.Name}: {field.GetValue(DummyNPC.LocalConfig)} ({annotate})",
+                            MyColor.Normal);
+                    }
                 }
+
+                return;
+            }
             case 2:
+            {
+                string name = args[0];
+                FieldInfo[] fields = type.GetFields();
+
+                foreach (var field in fields)
                 {
-                    string name = args[0];
-                    FieldInfo[] fields = type.GetFields();
-
-                    foreach (var field in fields)
+                    if (field.FieldType.IsPrimitive && field.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
                     {
-                        if (field.FieldType.IsPrimitive && field.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
+                        try
                         {
-                            try
-                            {
-                                field.SetValueDirect(__makeref(DummyNPC.LocalConfig),
-                                    Convert.ChangeType(args[1], field.FieldType));
-                                caller.Reply(GetTextWith("NPC.DummyCommand_Success", new { name, args = args[1] }),
-                                    MyColor.Success);
+                            field.SetValueDirect(__makeref(DummyNPC.LocalConfig),
+                                Convert.ChangeType(args[1], field.FieldType));
+                            caller.Reply(GetTextWith("NPC.DummyCommand_Success", new { name, args = args[1] }),
+                                MyColor.Success);
 
-                                SyncDummyModule.Get(null, Main.myPlayer, DummyNPC.LocalConfig).Send(runLocally: true);
-                                return;
-                            }
-                            catch
-                            {
-                                caller.Reply(GetTextWith("NPC.DummyCommand_Fail", new { input }), MyColor.Fail);
-                                return;
-                            }
+                            SyncDummyModule.Get(null, Main.myPlayer, DummyNPC.LocalConfig).Send(runLocally: true);
+                            return;
+                        }
+                        catch
+                        {
+                            caller.Reply(GetTextWith("NPC.DummyCommand_Fail", new { input }), MyColor.Fail);
+                            return;
                         }
                     }
-
-                    break;
                 }
+
+                break;
+            }
         }
 
         caller.Reply(GetTextWith("NPC.DummyCommand_Invalid", new { input }), MyColor.Fail);

@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.ModSystems;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Common.ModSystems;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
 using ImproveGame.UIFramework.Graphics2D;
@@ -74,11 +75,11 @@ public class BasePresetElement : TimerView
 
     private bool CantOperateDueToHostVerification =>
         Main.netMode is NetmodeID.MultiplayerClient &&
-        Config.OnlyHost && !Main.countsAsHostForGameplay[Main.myPlayer];
+ImproveConfigs.Instance.OnlyHost && !Main.countsAsHostForGameplay[Main.myPlayer];
 
     private bool CantOperateDueToPasswordVerification =>
         Main.netMode is NetmodeID.MultiplayerClient &&
-        Config.OnlyHostByPassword && !NetPasswordSystem.LocalPlayerRegistered;
+ImproveConfigs.Instance.OnlyHostByPassword && !NetPasswordSystem.LocalPlayerRegistered;
 
     internal bool CanShowInteractTip = true;
 }

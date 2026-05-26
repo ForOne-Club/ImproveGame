@@ -1,6 +1,4 @@
-﻿using ImproveGame.Common.ModPlayers;
-
-namespace ImproveGame.Packets;
+﻿namespace ImproveGame.Packets;
 
 [AutoSync]
 public class AutomaticPlantingPacket : NetModule

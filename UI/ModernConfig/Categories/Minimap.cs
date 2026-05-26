@@ -10,7 +10,7 @@ public sealed class Minimap : Category
     {
         var uiConfig = UIConfigs.Instance;
         panel.AddToggle(uiConfig, nameof(uiConfig.GlobeEffect));
-        panel.AddToggle(Config, nameof(Config.MinimapMark));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.MinimapMark));
         panel.AddValueSlider(uiConfig, nameof(uiConfig.MarkDungeon));
         panel.AddValueSlider(uiConfig, nameof(uiConfig.MarkTemple));
         panel.AddValueSlider(uiConfig, nameof(uiConfig.MarkAether));
@@ -20,6 +20,7 @@ public sealed class Minimap : Category
         panel.AddValueSlider(uiConfig, nameof(uiConfig.MarkEnchantedSword));
         panel.AddValueSlider(uiConfig, nameof(uiConfig.MarkMarbleCave));
         panel.AddValueSlider(uiConfig, nameof(uiConfig.MarkGraniteCave));
+        panel.AddValueSlider(uiConfig, nameof(uiConfig.MarkHive));
         panel.AddValueSlider(uiConfig, nameof(uiConfig.MarkEmptyAutofisher));
     }
 }

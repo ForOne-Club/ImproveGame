@@ -68,7 +68,7 @@ public class Dummy : ModItem
     public override void HoldStyle(Player player, Rectangle heldItemFrame)
     {
         if (Main.myPlayer != player.whoAmI) return;
-        if (KeybindSystem.ItemInteractKeybind.JustPressed && player.itemAnimation == 0)
+        if (KeybindSystem.ItemInteractKeybind.JustPressed && player.itemAnimation == 0 && !player.mouseInterface)
         {
             // 检测StartTimer.AnyClose而不是Enabled是为了不卡手
             if (DummyConfigurationUI.Instance.StartTimer.AnyClose)

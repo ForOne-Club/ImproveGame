@@ -1,4 +1,5 @@
-﻿using ImproveGame.Content.NPCs.Dummy;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Content.NPCs.Dummy;
 using ImproveGame.UI.ModernConfig;
 using ImproveGame.UIFramework;
 using ImproveGame.UIFramework.BaseViews;
@@ -312,7 +313,7 @@ namespace ImproveGame.UI
                         () => (DummyConfig.AIType)fInfo.GetValue(DummyNPC.LocalConfig), obj =>
                         {
                             if ((DummyConfig.AIType)obj == DummyConfig.AIType.SelfDefine &&
-                                !(MyUtils.Config.DummyCustomAIStyleAllowed || Main.netMode == NetmodeID.SinglePlayer))
+                                !(ImproveConfigs.Instance.DummyCustomAIStyleAllowed || Main.netMode == NetmodeID.SinglePlayer))
                             {
                                 DummyNPC.LocalConfig.AIStyle = DummyConfig.AIType.Default;
                                 AddNotificationFromKey("UI.DummyConfiguration.CustomDisabled", Color.Yellow, -1, () =>
@@ -364,7 +365,7 @@ namespace ImproveGame.UI
                     list.OnUpdate += elem =>
                     {
                         if (DummyNPC.LocalConfig.AIStyle == DummyConfig.AIType.SelfDefine &&
-                            !(MyUtils.Config.DummyCustomAIStyleAllowed || Main.netMode == NetmodeID.SinglePlayer))
+                            !(ImproveConfigs.Instance.DummyCustomAIStyleAllowed || Main.netMode == NetmodeID.SinglePlayer))
                         {
                             if (customAIStyleBox.Parent != null)
                             {

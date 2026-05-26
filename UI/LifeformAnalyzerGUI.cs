@@ -270,7 +270,7 @@ namespace ImproveGame.UI
             Visible = false;
             Main.blockInput = false;
             SoundEngine.PlaySound(SoundID.MenuClose);
-            AdditionalConfig.Save();
+            ClientConfigCore.SaveConfig();
         }
     }
 }

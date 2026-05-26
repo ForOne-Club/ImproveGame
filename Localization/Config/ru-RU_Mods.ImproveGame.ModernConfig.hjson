@@ -34,7 +34,7 @@ AboutPage: {
 
 		[c/0099ff:Нажатие правой клавиши мыши] по конфигурации [c/0099ff:сбрасывает её до значений по умолчанию].
 		'''
-	LinkGitHub: GitHub: https://github.com/ForOne-Club/ImproveGame (можно нажать!)
+	LinkGitHub: GitHub: https://github.com/487666123/ImproveGame (можно нажать!)
 	LinkDiscord: Discord: https://discord.gg/rEmGMQv5z7 (можно нажать!)
 	LinkQQ: Hidden, only relavent for Chinese
 }
@@ -70,25 +70,25 @@ Presets: {
 	ExplorerPreset: {
 		Label: "[centeritem:GravityGlobe] Исследователь"
 		Tooltip: Лучше всего для прохождений, близких к ванилле. Исследуйте мир, который теперь исследовать чуть легче. Подходит лучше всего для таких модов, как Thorium или Spirit.
-		Link: https://github.com/ForOne-Club/ImproveGame/wiki/Config-Preset#explorer
+		Link: https://github.com/487666123/ImproveGame/wiki/Config-Preset#explorer
 	}
 
 	WarriorPreset: {
 		Label: "[centeritem:EmpressBlade] Воевода"
 		Tooltip: Хватит копать, пора убивать! Пропускает большую часть гринда, переводя фокус на битвы с боссами. Подходит лучше всего для таких модов, как Calamity или Fargo's Souls.
-		Link: https://github.com/ForOne-Club/ImproveGame/wiki/Config-Preset#fighter
+		Link: https://github.com/487666123/ImproveGame/wiki/Config-Preset#fighter
 	}
 
 	VanillaPreset: {
 		Label: "[centeritem:MusicBoxCredits] Любитель ваниллы"
 		Tooltip: Почти как ванильная Terraria. Включает в себя лишь некоторые функции «улучшения качества жизни».
-		Link: https://github.com/ForOne-Club/ImproveGame/wiki/Config-Preset#vanilla-enjoyer
+		Link: https://github.com/487666123/ImproveGame/wiki/Config-Preset#vanilla-enjoyer
 	}
 
 	AddPreset: {
 		Label: "[centeritem:ImproveGame/AddIconDummy] Сохранить как пресет"
 		Tooltip: Сохраняет выставленные настройки конфигурации как собственный пресет.
-		Link: https://github.com/ForOne-Club/ImproveGame/wiki/Config-Preset#adding-a-preset
+		Link: https://github.com/487666123/ImproveGame/wiki/Config-Preset#adding-a-preset
 	}
 
 	OpenFolder: {
@@ -170,6 +170,6 @@ Minimap: {
 Keybinds: {
 	Label: Управление
 	Tooltip: Редактирование горячих клавиш мода Quality of Terraria, <right> по позиции сбрасывает её по умолчанию.
-	// 快捷键会在Tooltip显示其默认绑定的键位
+	# 快捷键会在Tooltip显示其默认绑定的键位
 	Default: По умолчанию: {0}
 }

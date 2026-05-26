@@ -1,4 +1,6 @@
-﻿namespace ImproveGame.Common.Conditions
+﻿using ImproveGame.Common.Configs;
+
+namespace ImproveGame.Common.Conditions
 {
     public static class ConfigCondition
     {
@@ -22,8 +24,8 @@
         public static Condition AvailableDetectorDroneC { get; } = new Condition("Mods.ImproveGame.Conditions.AvailableDetectorDrone", () => AvailableConfig.AvailableDetectorDrone);
         public static Condition AvailableMoveChestC { get; } = new Condition("Mods.ImproveGame.Conditions.AvailableMoveChest", () => AvailableConfig.AvailableMoveChest);
         public static Condition AvailableShimmerBucketC { get; } = new Condition("Mods.ImproveGame.Conditions.AvailableShimmerBucket", () => AvailableConfig.AvailableShimmerBucket);
-        public static Condition EnableQuickShimmerC { get; } = new Condition("Mods.ImproveGame.Conditions.EnableQuickShimmer", () => Config.QuickShimmer);
-        public static Condition EnableMinimapMarkC { get; } = new Condition("Mods.ImproveGame.Conditions.EnableMinimapMark", () => Config.MinimapMark);
-        public static Condition EnableWeatherControlC { get; } = new Condition("Mods.ImproveGame.Conditions.EnableWeatherControl", () => Config.WeatherControl);
+        public static Condition EnableQuickShimmerC { get; } = new Condition("Mods.ImproveGame.Conditions.EnableQuickShimmer", () => ImproveConfigs.Instance.QuickShimmer);
+        public static Condition EnableMinimapMarkC { get; } = new Condition("Mods.ImproveGame.Conditions.EnableMinimapMark", () => ImproveConfigs.Instance.MinimapMark);
+        public static Condition EnableWeatherControlC { get; } = new Condition("Mods.ImproveGame.Conditions.EnableWeatherControl", () => ImproveConfigs.Instance.WeatherControl);
     }
 }

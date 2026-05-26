@@ -49,7 +49,7 @@ public class MinorPatches : ModSystem
             // 暂时保持即可，因为后续会被 IL 替换
             On_WorldGen.ShakeTree += (orig, i, j) =>
             {
-                if (!Config.ShakeTreeFruit)
+                if (!ImproveConfigs.Instance.ShakeTreeFruit)
                 {
                     orig(i, j);
                     return;
@@ -230,13 +230,13 @@ public class MinorPatches : ModSystem
         bool allPlayersSleeping =
             Main.CurrentFrameFlags.SleepingPlayersCount == Main.CurrentFrameFlags.ActivePlayersCount &&
             Main.CurrentFrameFlags.SleepingPlayersCount > 0;
-        allPlayersSleeping |= Config.BedOnlyOne && Main.CurrentFrameFlags.SleepingPlayersCount > 0;
+        allPlayersSleeping |= ImproveConfigs.Instance.BedOnlyOne && Main.CurrentFrameFlags.SleepingPlayersCount > 0;
 
         if (!Main.gameMenu && allPlayersSleeping)
         {
-            timeRate *= Config.BedTimeRate / 5f;
-            tileUpdateRate *= Config.BedTimeRate / 5f;
-            eventUpdateRate *= Config.BedTimeRate / 5f;
+            timeRate *= ImproveConfigs.Instance.BedTimeRate / 5f;
+            tileUpdateRate *= ImproveConfigs.Instance.BedTimeRate / 5f;
+            eventUpdateRate *= ImproveConfigs.Instance.BedTimeRate / 5f;
         }
     }
 
@@ -244,7 +244,7 @@ public class MinorPatches : ModSystem
     {
         if (Main.anglerQuestFinished || Main.anglerWhoFinishedToday.Count > 0)
         {
-            switch (Config.NoCD_FishermanQuest)
+            switch (ImproveConfigs.Instance.NoCD_FishermanQuest)
             {
                 case FishQuestResetType.NotResetFish:
                     Main.anglerQuestFinished = false;
@@ -288,6 +288,7 @@ public class MinorPatches : ModSystem
         On_NPC.CountKillForBannersAndDropThem += NPC_CountKillForBannersAndDropThem;
         // 熔岩史莱姆不生成熔岩
         IL_NPC.VanillaHitEffect += LavalessLavaSlime;
+        On_NPC.VanillaHitEffect += LavalessGFB;
         // 死后保存Buff
         IL_Player.UpdateDead += KeepBuffOnUpdateDead;
         // 禁止腐化蔓延
@@ -348,7 +349,7 @@ public class MinorPatches : ModSystem
             out bool lava, out bool honey, out int numWaters, out int chumCount) =>
         {
             orig.Invoke(x, y, out lava, out honey, out numWaters, out chumCount);
-            if (Config.NoLakeSizePenalty)
+            if (ImproveConfigs.Instance.NoLakeSizePenalty)
                 numWaters = 114514;
         };
         // 失焦运行
@@ -388,8 +389,7 @@ public class MinorPatches : ModSystem
             }
         };
         // 专家/大师延长Debuff
-        On_Player.AddBuff_DetermineBuffTimeToAdd += (orig, self, type, time1) =>
-            Config.LongerExpertDebuff ? orig.Invoke(self, type, time1) : time1;
+        On_Player.AddBuff_DetermineBuffTimeToAdd += (orig, self, type, time1) => ImproveConfigs.Instance.LongerExpertDebuff ? orig.Invoke(self, type, time1) : time1;
         // 床随地设置重生点
         On_Player.CheckSpawn += BetterCheckSpawn;
         // 固定 NPC 快乐度为指定数值
@@ -403,7 +403,7 @@ public class MinorPatches : ModSystem
         // 光照是否无视物块传播
         On_TileLightScanner.LightIsBlocked += LightNotBlocked;
         // 无条件队内传送
-        On_Player.HasUnityPotion += (orig, self) => Config.NoConditionTP || orig(self);
+        On_Player.HasUnityPotion += (orig, self) => ImproveConfigs.Instance.NoConditionTP || orig(self);
         // 无条件队内传送-虫洞药水无消耗
         On_Player.TakeUnityPotion += NotTakeUnityPotion;
         // 禁止非玩家爆炸物破坏物块
@@ -424,7 +424,7 @@ public class MinorPatches : ModSystem
         {
             c.EmitDelegate<Func<int, int>>(maxValue2 =>
             {
-                return (Config.LifeFruitGrowsFaster ? 1 : maxValue2);
+                return (ImproveConfigs.Instance.LifeFruitGrowsFaster ? 1 : maxValue2);
             });
         }
 
@@ -432,7 +432,7 @@ public class MinorPatches : ModSystem
         {
             c.EmitDelegate<Func<int, int>>((num7) =>
             {
-                int limit = Config.LifeFruitLimit;
+                int limit = ImproveConfigs.Instance.LifeFruitLimit;
 
                 if (limit == -1)
                     return num7;
@@ -450,7 +450,7 @@ public class MinorPatches : ModSystem
     private void On_WorldGenOnGrowPumpkin(On_WorldGen.orig_GrowPumpkin orig, int i, int j, int type)
     {
         orig.Invoke(i, j, type);
-        if (!Config.PumpkinGrowsFaster)
+        if (!ImproveConfigs.Instance.PumpkinGrowsFaster)
             return;
         orig.Invoke(i, j, type);
         orig.Invoke(i, j, type);
@@ -498,12 +498,12 @@ public class MinorPatches : ModSystem
     private void NoExplodeTiles(On_Projectile.orig_ExplodeTiles orig, Projectile self, Vector2 compareSpot,
         int radius, int minI, int maxI, int minJ, int maxJ, bool wallSplode)
     {
-        if (Config.DisableNonPlayerBombsExplosions != DisableNonPlayerBombsExplosionsType.Disabled &&
+        if (ImproveConfigs.Instance.DisableNonPlayerBombsExplosions != DisableNonPlayerBombsExplosionsType.Disabled &&
             (self.type == ProjectileID.Bomb && self.GetGlobalProjectile<ImproveProjectile>().NonPlayer ||
              self.type == ProjectileID.BombSkeletronPrime))
             return;
 
-        if (Config.DisableNonPlayerBombsExplosions == DisableNonPlayerBombsExplosionsType.FTWAndExplosives &&
+        if (ImproveConfigs.Instance.DisableNonPlayerBombsExplosions == DisableNonPlayerBombsExplosionsType.FTWAndExplosives &&
             self.type == ProjectileID.Explosives)
             return;
 
@@ -512,7 +512,7 @@ public class MinorPatches : ModSystem
 
     private bool BetterCheckSpawn(On_Player.orig_CheckSpawn orig, int x, int y)
     {
-        if (Config.BedEverywhere)
+        if (ImproveConfigs.Instance.BedEverywhere)
         {
             // 相比于原版判定，把床被阻挡和房间判定给删了
             if (x < 10 || x > Main.maxTilesX - 10 || y < 10 || y > Main.maxTilesX - 10)
@@ -532,14 +532,14 @@ public class MinorPatches : ModSystem
 
     private void NotTakeUnityPotion(On_Player.orig_TakeUnityPotion orig, Player self)
     {
-        if (Config.NoConditionTP) return;
+        if (ImproveConfigs.Instance.NoConditionTP) return;
 
         orig(self);
     }
 
     private bool LightNotBlocked(On_TileLightScanner.orig_LightIsBlocked orig, TileLightScanner self, Tile tile)
     {
-        if (Config.LightNotBlocked) return false;
+        if (ImproveConfigs.Instance.LightNotBlocked) return false;
         else return orig(self, tile);
     }
 
@@ -547,14 +547,14 @@ public class MinorPatches : ModSystem
         ref PlayerSleepingHelper self, Player player)
     {
         // 谁也无法阻止我睡觉！不管是Boss还是事件！
-        if (Config.NoSleepRestrictions) return false;
+        if (ImproveConfigs.Instance.NoSleepRestrictions) return false;
         else return orig(ref self, player);
     }
 
     private void PatchQuestFishCheck(On_Projectile.orig_FishingCheck_ProbeForQuestFish orig, Projectile self,
         ref FishingAttempt fisher)
     {
-        if (!Config.QuestFishStack)
+        if (!ImproveConfigs.Instance.QuestFishStack)
         {
             orig.Invoke(self, ref fisher);
             return;
@@ -622,7 +622,7 @@ public class MinorPatches : ModSystem
                 i => i.Match(OpCodes.Ldc_I4_S)))
             return;
         // < 50则会设置为0，开选项的时候把这个设置成114514就行了
-        c.EmitDelegate<Func<int, int>>((returnValue) => Config.NPCLiveInEvil ? 114514 : returnValue);
+        c.EmitDelegate<Func<int, int>>((returnValue) => ImproveConfigs.Instance.NPCLiveInEvil ? 114514 : returnValue);
     }
 
     private void DisableBiomeSpread(ILContext il)
@@ -644,8 +644,13 @@ public class MinorPatches : ModSystem
             return;
 
         var label = c.DefineLabel();
-        c.Emit<MyUtils>(OpCodes.Ldsfld, "_config");
-        c.Emit<ImproveConfigs>(OpCodes.Ldfld, nameof(Config.NoBiomeSpread));
+
+        // 获取 Instance 属性的 Get 方法
+        var getterMethod = typeof(ImproveConfigs).GetProperty("Instance").GetGetMethod();
+        // 发出调用指令
+        c.Emit(OpCodes.Call, getterMethod);
+
+        c.Emit<ImproveConfigs>(OpCodes.Ldfld, nameof(ImproveConfigs.Instance.NoBiomeSpread));
         c.Emit(OpCodes.Brfalse, label); // 为False，跳走
         c.Emit(OpCodes.Ldc_I4_0); // 推一个0，也就是False，设置到AllowedToSpreadInfections
         c.Emit<WorldGen>(OpCodes.Stsfld, nameof(WorldGen.AllowedToSpreadInfections));
@@ -684,7 +689,7 @@ public class MinorPatches : ModSystem
         c.Emit(OpCodes.Ldelem_I4); // 结合出int32
         c.EmitDelegate<Func<bool, int, bool>>((returnValue, buffType) =>
         {
-            if (Config.DontDeleteBuff)
+            if (ImproveConfigs.Instance.DontDeleteBuff)
             {
                 // 返回false就会进入删除
                 return !Main.debuff[buffType] && !Main.buffNoSave[buffType] && !Main.lightPet[buffType] &&
@@ -709,7 +714,18 @@ public class MinorPatches : ModSystem
             ))
             return;
 
-        c.EmitDelegate<Func<int, int>>(returnValue => Config.LavalessLavaSlime ? NPCLoader.NPCCount : returnValue);
+        c.EmitDelegate<Func<int, int>>(returnValue => ImproveConfigs.Instance.LavalessLavaSlime ? NPCLoader.NPCCount : returnValue);
+    }
+
+    private void LavalessGFB(On_NPC.orig_VanillaHitEffect orig, NPC self, int hitDirection, double dmg, bool instantKill)
+    {
+        bool gfb = Main.getGoodWorld;
+        if (ImproveConfigs.Instance.LavalessLavaSlime && self.type is NPCID.Hellbat or NPCID.Lavabat)
+            Main.getGoodWorld = false;
+
+        orig(self, hitDirection, dmg, instantKill);
+
+        Main.getGoodWorld = gfb;
     }
 
     private void NPC_CountKillForBannersAndDropThem(On_NPC.orig_CountKillForBannersAndDropThem orig,
@@ -718,27 +734,27 @@ public class MinorPatches : ModSystem
         int bannerID = Item.NPCtoBanner(npc.BannerID());
         int itemID = Item.BannerToItem(bannerID);
         int originalRequirement = ItemID.Sets.KillsToBanner[itemID];
-        ItemID.Sets.KillsToBanner[itemID] = (int)(ItemID.Sets.KillsToBanner[itemID] * Config.BannerRequirement);
+        ItemID.Sets.KillsToBanner[itemID] = (int)(ItemID.Sets.KillsToBanner[itemID] * ImproveConfigs.Instance.BannerRequirement);
         orig.Invoke(npc);
         ItemID.Sets.KillsToBanner[itemID] = originalRequirement;
     }
 
     private void TravelNPCStay(On_WorldGen.orig_UnspawnTravelNPC orig)
     {
-        if (!Config.TravellingMerchantStay)
+        if (!ImproveConfigs.Instance.TravellingMerchantStay)
             orig.Invoke();
     }
 
     private bool TileDrawing_IsAlchemyPlantHarvestable(On_TileDrawing.orig_IsAlchemyPlantHarvestable orig,
         TileDrawing self, int style)
     {
-        return Config.AlchemyGrassAlwaysBlooms || orig.Invoke(self, style);
+        return ImproveConfigs.Instance.AlchemyGrassAlwaysBlooms || orig.Invoke(self, style);
     }
 
     private bool WorldGen_IsHarvestableHerbWithSeed(On_WorldGen.orig_IsHarvestableHerbWithSeed orig, int type,
         int style)
     {
-        return Config.AlchemyGrassAlwaysBlooms || orig.Invoke(type, style);
+        return ImproveConfigs.Instance.AlchemyGrassAlwaysBlooms || orig.Invoke(type, style);
     }
 
     // “草药” 是否可以被 “再生法杖” 收割
@@ -758,7 +774,7 @@ public class MinorPatches : ModSystem
         // 如果开了自动补种就记录当前物块的Type和Style
         c.EmitDelegate(() =>
         {
-            if (Config.StaffOfRegenerationAutomaticPlanting)
+            if (ImproveConfigs.Instance.StaffOfRegenerationAutomaticPlanting)
             {
                 var tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
                 _herbStyle = tile.TileFrameX / 18;
@@ -800,8 +816,8 @@ public class MinorPatches : ModSystem
         {
             var tileTargetX = Player.tileTargetX;
             var tileTargetY = Player.tileTargetY;
-            if (Main.netMode != NetmodeID.MultiplayerClient) return;
-            if (Config.StaffOfRegenerationAutomaticPlanting &&
+            if (Main.dedServ) return;
+            if (ImproveConfigs.Instance.StaffOfRegenerationAutomaticPlanting &&
                 _herbType is TileID.BloomingHerbs or TileID.MatureHerbs &&
                 _herbStyle >= 0)
             {
@@ -821,7 +837,7 @@ public class MinorPatches : ModSystem
             }
             else
             {
-                if (!Main.tile[tileTargetX, tileTargetY].HasTile)
+                if (!Main.tile[tileTargetX, tileTargetY].HasTile && Main.netMode == NetmodeID.MultiplayerClient)
                     NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, tileTargetX, tileTargetY);
             }
         });
@@ -838,14 +854,14 @@ public class MinorPatches : ModSystem
         // 同样记录Type和Style
         c.EmitDelegate<Func<bool, bool>>(flag =>
         {
-            if (Config.StaffOfRegenerationAutomaticPlanting)
+            if (ImproveConfigs.Instance.StaffOfRegenerationAutomaticPlanting)
             {
                 var tile = Main.tile[Player.tileTargetX, Player.tileTargetY];
                 _herbStyle = tile.TileFrameX / 18;
                 _herbType = tile.TileType;
             }
 
-            return Config.AlchemyGrassAlwaysBlooms || flag;
+            return ImproveConfigs.Instance.AlchemyGrassAlwaysBlooms || flag;
         });
 
         // 移动到KillTile后面
@@ -883,8 +899,8 @@ public class MinorPatches : ModSystem
         {
             var tileTargetX = Player.tileTargetX;
             var tileTargetY = Player.tileTargetY;
-            if (Main.netMode != NetmodeID.MultiplayerClient) return;
-            if (Config.StaffOfRegenerationAutomaticPlanting &&
+            if (Main.dedServ) return;
+            if (ImproveConfigs.Instance.StaffOfRegenerationAutomaticPlanting &&
                 _herbType is TileID.BloomingHerbs or TileID.MatureHerbs &&
                 _herbStyle >= 0)
             {
@@ -904,7 +920,7 @@ public class MinorPatches : ModSystem
             }
             else
             {
-                if (!Main.tile[tileTargetX, tileTargetY].HasTile)
+                if (!Main.tile[tileTargetX, tileTargetY].HasTile && Main.netMode == NetmodeID.MultiplayerClient)
                     NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, tileTargetX, tileTargetY);
             }
         });
@@ -932,7 +948,7 @@ public class MinorPatches : ModSystem
                 i => i.Match(OpCodes.Call),
                 i => i.Match(OpCodes.Ldc_I4_S)))
             return;
-        c.EmitDelegate<Func<int, int>>(num => Config.AlchemyGrassGrowsFaster ? 1 : num);
+        c.EmitDelegate<Func<int, int>>(num => ImproveConfigs.Instance.AlchemyGrassGrowsFaster ? 1 : num);
 
         /*if (!c.TryGotoNext(MoveType.After,
             i => i.Match(OpCodes.Ret),
@@ -971,7 +987,7 @@ public class MinorPatches : ModSystem
     /// </summary>
     private int DisableDamageVar(On_Main.orig_DamageVar_float_int_float orig, float dmg, int percent, float luck)
     {
-        if (Config.BanDamageVar)
+        if (ImproveConfigs.Instance.BanDamageVar)
             return (int)Math.Round(dmg);
         else
             return orig(dmg, percent, luck);
@@ -1022,7 +1038,7 @@ public class MinorPatches : ModSystem
     private void DisableDropTombstone(On_Player.orig_DropTombstone orig, Player self, long coinsOwned,
         NetworkText deathText, int hitDirection)
     {
-        if (!Config.BanTombstone)
+        if (!ImproveConfigs.Instance.BanTombstone)
         {
             orig(self, coinsOwned, deathText, hitDirection);
         }
@@ -1036,8 +1052,13 @@ public class MinorPatches : ModSystem
         FieldInfo fShoppingSettingsPriceAdjustment =
             typeof(ShoppingSettings).GetField(nameof(ShoppingSettings.PriceAdjustment),
                 BindingFlags.Instance | BindingFlags.Public);
-        FieldInfo fMyUtilsConfig =
-            typeof(MyUtils).GetField("_config", BindingFlags.Static | BindingFlags.NonPublic);
+        //FieldInfo fMyUtilsConfig =
+        //    typeof(MyUtils).GetField("_config", BindingFlags.Static | BindingFlags.NonPublic);
+
+        // 获取 Instance 属性的 Get 方法
+        var getterMethod = typeof(ImproveConfigs).GetProperty("Instance").GetGetMethod();
+        // 发出调用指令
+
         FieldInfo fImproveConfigsModifyNPCHappiness =
             typeof(ImproveConfigs).GetField(nameof(ImproveConfigs.ModifyNPCHappiness),
                 BindingFlags.Instance | BindingFlags.Public);
@@ -1048,13 +1069,13 @@ public class MinorPatches : ModSystem
         if (c.TryGotoNext(MoveType.Before, x => x.MatchLdloc1(), x => x.MatchRet()))
         {
             ILLabel target = c.DefineLabel();
-            c.EmitLdsfld(fMyUtilsConfig);
+            c.Emit(OpCodes.Call, getterMethod);
             c.EmitLdfld(fImproveConfigsModifyNPCHappiness);
             c.EmitLdcI4(0);
             c.EmitCeq();
             c.EmitBrtrue(target);
             c.EmitLdloca(1);
-            c.EmitLdsfld(fMyUtilsConfig);
+            c.Emit(OpCodes.Call, getterMethod);
             c.EmitLdfld(fImproveConfigsNPCHappiness);
             c.EmitConvR8();
             c.EmitLdcR8(100.0);

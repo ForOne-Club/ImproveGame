@@ -69,6 +69,8 @@ QuickHome: {
 Tips: {
 	AmmoChainDisabled: Цепочка боеприпасов отключена
 	AmmoChain: "[centeritem:ImproveGame/AmmoChainItem]Цепочка боеприпасов: "
+	AmmoInfo: "弹药类型为 [i:{0}] {1}"
+	UseAmmoInfo: "使用弹药类型为 [i:{0}] {1}"
 	ShimmerInto: "Можно превратить с помощью мерцания в "
 	ShimmerIntoWithStack: "Каждые {0} можно превратить с помощью мерцания в "
 	ShimmerIntoWithCoinLuck: Можно превратить с помощью мерцания в {0} 'удачи монет'
@@ -179,12 +181,14 @@ Tips: {
 			'''
 		/* CreateWand:
 			'''
-			Use the wand by Middle-Click and choose a png for customize buildings
+			You can import Building style by Datamap or Structure file of ConstructWand in the CreateWand Controller
 			Files in [c/88CCEE:"Document/My Games/Terraria/tModLoader]
 			[c/88CCEE:/Mods/ImproveGame/CreateWand"]
 			will import automatically
 
+			In Datamap:
 			B channel of FF means there's wall, 00 means no wall.
+			A channel of FF means Left Direction, 7F means Right Direction
 			RG channel's tile table as followed:
 			| Color |    Hex   |        Tile        |
 			| ------- | ---------- | ------------------- |
@@ -341,12 +345,20 @@ SuperVault: {
 
 MoveChest.Heavy: Вес сундука мешает вам в передвижении
 
+BuffController: {
+	LeftClick: {
+		Enable: "[c/CC88AA:<left>], чтобы включить этот бафф"
+		Disable: "[c/CC88AA:<left>], чтобы отключить этот бафф"
+	}
+
+	RightClick: {
+		Enable: "[c/CC88AA:<right>], чтобы пометить как избранное"
+		Disable: "[c/CC88AA:<right>], чтобы убрать из избранного"
+	}
+}
+
 BuffTracker: {
 	Title: Трекер юаффов
-	LeftClickDisable: "[c/CC88AA:<left>], чтобы отключить этот бафф"
-	LeftClickEnable: "[c/CC88AA:<left>], чтобы включить этот бафф"
-	RightClickDisable: "[c/CC88AA:<right>], чтобы убрать из избранного"
-	RightClickEnable: "[c/CC88AA:<right>], чтобы пометить как избранное"
 	NoInfBuff: На данный момент нет бесконечных баффов
 	NoInfBuffAlt: Включите «Бесконечные зелья» в конфигурации мода
 	NPCSpawnRatePanel: Панель управления скоростью появления мобов
@@ -359,7 +371,7 @@ LifeAnalyzer: {
 
 Architecture: {
 	Materials: Материалы для дома
-	StoredMaterials: (Хранится: {MaterialCount})
+	StoredMaterials: (All: {MaterialCountTotal}, Stored: {MaterialCountWand}, Inventory: {MaterialCountInventory})
 	MaterialsRequired: "Нужные материалы: "
 	Block: Блоки
 	Platform: Платформы
@@ -408,7 +420,7 @@ SpaceWandGUI: {
 PackageGUI: {
 	AutoStorage: Авто-сбор
 	AutoSort: Авто-сортировка
-	// Synthesis: 参与合成
+	Synthesis: Использовать в создании
 	Incompatible: Данный предмет не может храниться в данном хранилище.
 }
 

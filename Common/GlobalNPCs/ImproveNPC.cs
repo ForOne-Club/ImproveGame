@@ -1,4 +1,5 @@
-﻿using Terraria.GameContent.ItemDropRules;
+﻿using ImproveGame.Common.Configs;
+using Terraria.GameContent.ItemDropRules;
 
 namespace ImproveGame.Common.GlobalNPCs
 {
@@ -6,7 +7,7 @@ namespace ImproveGame.Common.GlobalNPCs
     {
         public override void SetDefaults(NPC npc)
         {
-            npc.value *= Config.NPCCoinDropRate;
+            npc.value *= ImproveConfigs.Instance.NPCCoinDropRate;
         }
 
         public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
@@ -38,7 +39,7 @@ namespace ImproveGame.Common.GlobalNPCs
         public override bool PreAI(NPC npc)
         {
             // 实现史莱姆百分百额外掉落
-            if (Config.SlimeExDrop)
+            if (ImproveConfigs.Instance.SlimeExDrop)
             {
                 // 我复制的原版判定，然后把概率改成了100%
                 if (npc.type == NPCID.BlueSlime && npc.ai[1] is 0 or -1 && Main.netMode != NetmodeID.MultiplayerClient &&
@@ -110,7 +111,7 @@ namespace ImproveGame.Common.GlobalNPCs
     public class CoinOneDrop : IItemDropRuleCondition
     {
         public bool CanDrop(DropAttemptInfo info)
-            => Config.NPCCoinDropRate is 25 && AvailableConfig.AvailableCoinOne;
+            => ImproveConfigs.Instance.NPCCoinDropRate is 25 && AvailableConfig.AvailableCoinOne;
 
         // 彩蛋式物品，不在UI中显示
         public bool CanShowItemDropInUI() => false;

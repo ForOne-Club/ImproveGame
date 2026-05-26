@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.ModHooks;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Common.ModHooks;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Core;
 using System.Collections.ObjectModel;
@@ -11,7 +12,7 @@ namespace ImproveGame.Common.GlobalItems
         {
             On_Player.HandleBeingInChestRange += (orig, player) =>
             {
-                if (player.chest >= -1 || !Config.MiddleEnableBank)
+                if (player.chest >= -1 || !ImproveConfigs.Instance.MiddleEnableBank)
                 {
                     orig.Invoke(player);
                 }
@@ -64,7 +65,7 @@ namespace ImproveGame.Common.GlobalItems
             if (player.frozen || player.tongued || player.webbed || player.stoned ||
                 player.dead || player.noItems)
                 return false;
-            return Config.MiddleEnableBank && item.IsBankItem();
+            return ImproveConfigs.Instance.MiddleEnableBank && item.IsBankItem();
         }
 
         public void ManageHoverTooltips(Item item, List<TooltipLine> tooltips)

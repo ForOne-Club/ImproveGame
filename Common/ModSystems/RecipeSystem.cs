@@ -1,22 +1,44 @@
-﻿using ImproveGame.Content.Items;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Content.Items;
 
 namespace ImproveGame.Common.ModSystems;
 
 public class RecipeSystem : ModSystem
 {
+    /// <summary>任意铜锭（铜/锡）</summary>
     internal static RecipeGroup AnyCopperBar;
+
+    /// <summary>任意铁锭（铁/铅）</summary>
+    internal static RecipeGroup AnyIronBar;
+
+    /// <summary>任意银锭（银/钨）</summary>
     internal static RecipeGroup AnySilverBar;
+
+    /// <summary>任意金锭（金/铂）</summary>
     internal static RecipeGroup AnyGoldBar;
+
+    /// <summary>任意魔金锭（魔金/猩红）</summary>
     internal static RecipeGroup AnyDemoniteBar;
+
+    /// <summary>任意暗影鳞片（暗影鳞片/组织样本）</summary>
     internal static RecipeGroup AnyShadowScale;
+
+    /// <summary>任意钴锭（钴/钯金）</summary>
     internal static RecipeGroup AnyCobaltBar;
+
+    /// <summary>任意秘银锭（秘银/山铜）</summary>
     internal static RecipeGroup AnyMythrilBar;
+
+    /// <summary>任意精金锭（精金/钛金）</summary>
     internal static RecipeGroup AnyAdamantiteBar;
+
+    /// <summary>任意宝石</summary>
     internal static RecipeGroup AnyGem;
 
     public override void Unload()
     {
         AnyCopperBar = null;
+        AnyIronBar = null;
         AnySilverBar = null;
         AnyGoldBar = null;
         AnyDemoniteBar = null;
@@ -29,6 +51,7 @@ public class RecipeSystem : ModSystem
     public override void AddRecipeGroups()
     {
         AnyCopperBar = new RecipeGroup(() => GetText($"RecipeGroup.{nameof(AnyCopperBar)}"), 20, 703);
+        AnyIronBar = new RecipeGroup(() => GetText($"RecipeGroup.{nameof(AnyIronBar)}"), 22, 704);
         AnySilverBar = new RecipeGroup(() => GetText($"RecipeGroup.{nameof(AnySilverBar)}"), 21, 705);
         AnyGoldBar = new RecipeGroup(() => GetText($"RecipeGroup.{nameof(AnyGoldBar)}"), 19, 706);
         AnyDemoniteBar = new RecipeGroup(() => GetText($"RecipeGroup.{nameof(AnyDemoniteBar)}"), 57, 1257);
@@ -43,6 +66,7 @@ public class RecipeSystem : ModSystem
         AnyGoldBar = RecipeGroup.recipeGroups[RecipeGroup.RegisterGroup("GoldBar", AnyGoldBar)];
         AnySilverBar = RecipeGroup.recipeGroups[RecipeGroup.RegisterGroup("SilverBar", AnySilverBar)];
         AnyCopperBar = RecipeGroup.recipeGroups[RecipeGroup.RegisterGroup("CopperBar", AnyCopperBar)];
+        AnyIronBar = RecipeGroup.recipeGroups[RecipeGroup.RegisterGroup("IronBar", AnyIronBar)];
         AnyShadowScale = RecipeGroup.recipeGroups[RecipeGroup.RegisterGroup("ShadowScale", AnyShadowScale)];
         AnyDemoniteBar = RecipeGroup.recipeGroups[RecipeGroup.RegisterGroup("DemoniteBar", AnyDemoniteBar)];
         AnyCobaltBar = RecipeGroup.recipeGroups[RecipeGroup.RegisterGroup("CobaltBar", AnyCobaltBar)];
@@ -63,9 +87,9 @@ public class RecipeSystem : ModSystem
          * 1 Crimson Tigerfish, 1 Armored Cavefish, 1 Prismite, 1 Flarefin Koi, 2 Obsidifish, 1 Hemopiranha, 1 Ebonkoi
          */
         var redPotionCondition = new Condition("Mods.ImproveGame.Configs.ImproveConfigs.InfiniteRedPotion.Condition",
-            () => Config.InfiniteRedPotion);
+            () => ImproveConfigs.Instance.InfiniteRedPotion);
         var ftwCondition = new Condition("Mods.ImproveGame.Configs.ImproveConfigs.RedPotionEverywhere.Condition",
-            () => Config.RedPotionEverywhere || Condition.ForTheWorthyWorld.IsMet());
+            () => ImproveConfigs.Instance.RedPotionEverywhere || Condition.ForTheWorthyWorld.IsMet());
 
         Recipe.Create(ItemID.RedPotion)
             .AddTile(TileID.Bottles)
@@ -99,6 +123,7 @@ public class RecipeSystem : ModSystem
             .AddIngredient(ItemID.Obsidifish, 2)
             .AddIngredient(ItemID.Hemopiranha)
             .AddIngredient(ItemID.Ebonkoi)
+            .DisableDecraft()
             .Register();
     }
 

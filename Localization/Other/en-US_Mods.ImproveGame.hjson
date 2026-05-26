@@ -69,6 +69,8 @@ QuickHome: {
 Tips: {
 	AmmoChainDisabled: Ammo Chain disabled
 	AmmoChain: "[centeritem:ImproveGame/AmmoChainItem]Ammo Chain: "
+	AmmoInfo: "弹药类型为 [i:{0}] {1}"
+	UseAmmoInfo: "使用弹药类型为 [i:{0}] {1}"
 	ShimmerInto: "Can be shimmered into "
 	ShimmerIntoWithStack: "Every {0} can be shimmered into "
 	ShimmerIntoWithCoinLuck: Can be shimmered into {0} 'coin luck'
@@ -178,12 +180,14 @@ Tips: {
 			'''
 		CreateWand:
 			'''
-			Use the wand by Middle-Click and choose a png for customize buildings
+			You can import Building style by Datamap or Structure file of ConstructWand in the CreateWand Controller
 			Files in [c/88CCEE:"Document/My Games/Terraria/tModLoader]
 			[c/88CCEE:/Mods/ImproveGame/CreateWand"]
 			will import automatically
 
+			In Datamap:
 			B channel of FF means there's wall, 00 means no wall.
+			A channel of FF means Left Direction, 7F means Right Direction
 			RG channel's tile table as followed:
 			| Color |    Hex   |        Tile        |
 			| ------- | ---------- | ------------------- |
@@ -333,19 +337,27 @@ ConstructGUI: {
 SuperVault: {
 	Name: Big Backpack
 	Sort: Sort
-	Synthesis: Use in crafting
+	Synthesis: Use In Crafting
 	SmartPickup: Smart Pickup
 	OverflowPickup: Auto Pickup
 }
 
 MoveChest.Heavy: Weight of the chest limits your mobility
 
+BuffController: {
+	LeftClick: {
+		Enable: "[c/CC88AA:<left>] to enable this buff"
+		Disable: "[c/CC88AA:<left>] to disable this buff"
+	}
+
+	RightClick: {
+		Enable: "[c/CC88AA:<right>] to mark as favorite"
+		Disable: "[c/CC88AA:<right>] to remove from favorite"
+	}
+}
+
 BuffTracker: {
 	Title: Buff Tracker
-	LeftClickDisable: "[c/CC88AA:<left>] to disable this buff"
-	LeftClickEnable: "[c/CC88AA:<left>] to enable this buff"
-	RightClickDisable: "[c/CC88AA:<right>] to remove from favorite"
-	RightClickEnable: "[c/CC88AA:<right>] to mark as favorite"
 	NoInfBuff: Currently no infinite buff available
 	NoInfBuffAlt: Enable the Infinite Potions in the mod config
 	NPCSpawnRatePanel: Enemy Spawn Rate Panel
@@ -358,7 +370,7 @@ LifeAnalyzer: {
 
 Architecture: {
 	Materials: House Materials
-	StoredMaterials: (Stored: {MaterialCount})
+	StoredMaterials: (All: {MaterialCountTotal}, Stored: {MaterialCountWand}, Inventory: {MaterialCountInventory})
 	MaterialsRequired: "Materials Needed: "
 	Block: Block
 	Platform: Platform
@@ -407,7 +419,7 @@ SpaceWandGUI: {
 PackageGUI: {
 	AutoStorage: Auto Collection
 	AutoSort: Auto Sortation
-	Synthesis: 参与合成
+	Synthesis: Use In Crafting
 	Incompatible: The item cannot be contained in this inventory.
 }
 

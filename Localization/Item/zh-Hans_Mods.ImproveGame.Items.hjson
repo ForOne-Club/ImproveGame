@@ -43,23 +43,6 @@ CreateWand: {
 		请准备足量的材料，否则房屋将不完整！
 		[c/ff0000:若该物品被丢弃，里面存有的材料不会归还！] 
 		'''
-	CustomizeTip:
-		'''
-			中键打开文件资源管理器选择一张配置图以生成自定义的房屋样式
-			规则如下：
-			| 颜色 | Hex    | 代表的对象   |
-			| ---- | ------ | ------------ |
-			| 红色 | FF0000 | 实心块       |
-			| 黑色 | 000000 | 平台         |
-			| 白色 | FFFFFF | 火把         |
-			| 黄色 | FFFF00 | 椅子         |
-			| 粉色 | FF00FF | 桌子         |
-			| 蓝色 | 0000FF | 工作台       |
-			| 紫色 | 7F00FF | 床           |
-			| 青色 | 00FFFF | 禁止放置墙体 |
-			| 绿色 | 00FF00 | 门           |
-			| 透明 |        | 墙体         |
-		'''
 }
 
 WallPlace: {
@@ -228,7 +211,7 @@ EnchantedSwordGlobe: {
 	Reveal: "{0}在地图上标记了{$ItemName.EnchantedSword}"
 }
 
-# NotFound在大理石洞全部标记完了的情况下显示，花岗岩洞的文本亦是如此
+# NotFound在大理石洞全部标记完了的情况下显示，花岗岩洞和蜂巢的文本亦是如此
 MarbleCaveGlobe: {
 	BiomeName: 大理石洞
 	NotFound: 未能找到更多的大理石洞
@@ -237,6 +220,11 @@ MarbleCaveGlobe: {
 GraniteCaveGlobe: {
 	BiomeName: 花岗岩洞
 	NotFound: 未能找到更多的花岗岩洞
+}
+
+HiveGlobe: {
+	BiomeName: 蜂巢
+	NotFound: 未能找到更多的蜂巢
 }
 
 # NotFound在世界上没有足够的微光液体的情况下显示

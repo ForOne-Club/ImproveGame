@@ -50,12 +50,12 @@ public class UISystem : ModSystem
     public EventTrigger LifeformAnalyzerTrigger;
 
     // Buff 追踪站
-    public BuffTrackerGUI BuffTrackerGUI;
-    public EventTrigger BuffTrackerTrigger;
+    //public BuffTrackerGUI BuffTrackerGUI;
+    //public EventTrigger BuffTrackerTrigger;
 
     // 建筑法杖
-    public ArchitectureGUI ArchitectureGUI;
-    public EventTrigger ArchitectureTrigger;
+    // public ArchitectureGUI ArchitectureGUI;
+    // public EventTrigger ArchitectureTrigger;
 
     // 构造法杖
     public StructureGUI StructureGUI;
@@ -120,10 +120,10 @@ public class UISystem : ModSystem
         LoadGUIInfo();
 
         // UserInterface 之 EventTrigger 版
-        ArchitectureTrigger = new EventTrigger("Radial Hotbars", "Architecture").Register();
+        // ArchitectureTrigger = new EventTrigger("Radial Hotbars", "Architecture").Register();
         StructureTrigger = new EventTrigger("Radial Hotbars", "Structure").Register();
         LifeformAnalyzerTrigger = new EventTrigger("Radial Hotbars", "Lifeform Analyzer").Register();
-        BuffTrackerTrigger = new EventTrigger("Radial Hotbars", "Buff Tracker GUI").Register();
+        //BuffTrackerTrigger = new EventTrigger("Radial Hotbars", "Buff Tracker GUI").Register();
 
         SidedEventTrigger = new SidedEventTrigger();
         SidedEventTrigger.Register();

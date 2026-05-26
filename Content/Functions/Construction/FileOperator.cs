@@ -12,6 +12,13 @@ namespace ImproveGame.Content.Functions.Construction
         internal static string SavePath => Paths.SavePath;
         internal static string Extension => ".qotstruct";
 
+        public static event Action OnFileListChanged;
+
+        /// <summary>
+        /// 暴露给StruceturePanel来触发事件...重构构造魔杖之前只能这么干了
+        /// </summary>
+        public static void CallFileListChanged() => OnFileListChanged?.Invoke();
+
         public static void SaveAsFile(Rectangle rectInWorld)
         {
             TrUtils.TryCreatingDirectory(SavePath);
@@ -43,6 +50,7 @@ namespace ImproveGame.Content.Functions.Construction
                 if (WandSystem.ConstructFilePath == thisPath)
                     WandSystem.ConstructFilePath = string.Empty;
             }
+            OnFileListChanged?.Invoke();
         }
 
         public static bool LoadFile(string path)

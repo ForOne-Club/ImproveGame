@@ -40,7 +40,7 @@ public class OptionList : OptionCollections
     {
         //ListPanel.Clear();
         OptionView.ListView.RemoveAllChildren();
-        IList list = VariableInfo.GetValue(Item) as IList;
+        if (VariableInfo.GetValue(Item) is not IList list) return;
         int count = list.Count;
         for (int i = 0; i < count; i++)
         {

@@ -1,4 +1,5 @@
-﻿using ImproveGame.Content.Items.ItemContainer;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Content.Items.ItemContainer;
 using ImproveGame.Content.Tiles;
 using ImproveGame.UI.ExtremeStorage;
 using Terraria.DataStructures;
@@ -32,13 +33,13 @@ public class BannerPatches : ModSystem
         if (TileCounter.Simulating)
             return;
         // 随身旗帜（增益站）
-        if (Config.NoPlace_BUFFTile_Banner && Main.netMode is not NetmodeID.Server)
+        if (ImproveConfigs.Instance.NoPlace_BUFFTile_Banner && Main.netMode is not NetmodeID.Server)
         {
             AvailableBanners = new HashSet<Item>();
 
             TryAddBuff(Main.LocalPlayer);
-            if (Config.ShareInfBuffs)
-                CheckTeamPlayers(Main.myPlayer, TryAddBuff);
+            if (ImproveConfigs.Instance.ShareInfBuffs)
+                PlayerHelper.ForEachTeammate(Main.myPlayer, TryAddBuff);
 
             // 从TE中获取所有的无尽Buff物品
             foreach ((int _, TileEntity tileEntity) in TileEntity.ByID)

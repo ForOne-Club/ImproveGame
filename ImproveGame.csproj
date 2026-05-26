@@ -1,17 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-    <Import Project="..\tModLoader.targets" />
+
     <PropertyGroup>
         <AssemblyName>ImproveGame</AssemblyName>
         <LangVersion>preview</LangVersion>
+        <TargetFramework>net8.0</TargetFramework>
+        <!--<DebugMod>DragonLens</DebugMod>-->
     </PropertyGroup>
+
     <ItemGroup>
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
         <PackageReference Include="FuzzySearch.Net" Version="1.1.0" />
+        <!-- 夜幽模组构建工具 -->
         <PackageReference Include="Solaestas.tModLoader.ModBuilder" Version="1.6.1" />
+        <!-- SilkyUI -->
+        <ProjectReference Include="..\SilkyUIFramework\SilkyUIFramework.csproj" />
+        <!-- SilkyUI 分析器 -->
+        <ProjectReference Include="..\SilkyUIAnalyzer\SilkyUIAnalyzer.csproj">
+            <OutputItemType>Analyzer</OutputItemType>
+            <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+        </ProjectReference>
     </ItemGroup>
-    <PropertyGroup>
-        <!--自动打开DragonLens-->
-        <DebugMod>DragonLens</DebugMod>
-    </PropertyGroup>
 
     <ItemGroup>
         <Reference Include="lib\*.dll" />
@@ -19,29 +27,12 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Include="./README.md;./README-en.md;./How-To-Use-Search.md">
-            <Visible>true</Visible>
-        </None>
-        <None Include="./icon.png;./icon_workshop.png">
-            <Visible>false</Visible>
-        </None>
-        <None Include="./changelog.txt;./description.txt;./description_workshop.txt;./description_workshop_en.txt">
-            <Visible>false</Visible>
-        </None>
-        <None Include=".gitignore;.gitattributes;./LICENSE">
-            <Visible>false</Visible>
-        </None>
-    </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\SilkyUIAnalyzer\SilkyUIAnalyzer.csproj">
-            <OutputItemType>Analyzer</OutputItemType>
-            <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-        </ProjectReference>
-        <ProjectReference Include="..\SilkyUIFramework\SilkyUIFramework.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
         <AdditionalFiles Include="**/*.xml" Exclude="bin/**/*;obj/**/*" Pack="true" ModPath="%(Identity)" />
+
+        <!-- 不在解决方案管理器显示 -->
+        <None Visible="False" Include="./README.md;./README-en.md;./How-To-Use-Search.md" />
+        <None Visible="False" Include="./icon.png;./icon_workshop.png" />
+        <None Visible="False" Include="./changelog.txt;./description.txt;./description_workshop.txt;./description_workshop_en.txt" />
+        <None Visible="False" Include="./.editorconfig;./.gitignore;./.gitattributes;././LICENSE" />
     </ItemGroup>
 </Project>

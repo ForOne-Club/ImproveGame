@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Configs;
+using System.Reflection;
 using Terraria.GameContent.UI.States;
 using Terraria.GameInput;
 using Terraria.ModLoader.UI;
@@ -161,7 +162,7 @@ public class KeybindSystem : ModSystem
             button.OnLeftMouseDown += (_, _) =>
             {
                 UseKeybindTranslation = !UseKeybindTranslation;
-                AdditionalConfig.Save();
+                ClientConfigCore.SaveConfig();
                 SoundEngine.PlaySound(SoundID.MenuTick);
             };
             button.OnUpdate += _ => buttonText.SetText(UseKeybindTranslation ? "快换回去" : "让我看看");
@@ -176,19 +177,39 @@ public class KeybindSystem : ModSystem
 
     public override void Unload()
     {
-        MasterControlKeybind = null;
-        SuperVaultKeybind = null;
-        BuffTrackerKeybind = null;
-        OpenBagKeybind = null;
-        QuickShimmerKeybind = null;
-        GrabBagKeybind = null;
-        HotbarSwitchKeybind = null;
-        AutoTrashKeybind = null;
-        DiscordRodKeybind = null;
-        HomeKeybind = null;
-        ItemInteractKeybind = null;
-        ExtremeStorageSearch = null;
-        CopyItemNameKeybind = null;
-        CopyItemNameControlKeybind = null;
+        var flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
+        CleanupPropertyReferences(Mod, flags);
+        CleanupFieldReferences(Mod, flags);
+    }
+
+    /// <summary>
+    /// 写一个反射卸载试试, 临时放这里
+    /// </summary>
+    private static void CleanupPropertyReferences(Mod mod, BindingFlags bindingFlags)
+    {
+        foreach (var property in typeof(KeybindSystem).GetProperties(bindingFlags))
+        {
+            if (property.PropertyType.IsValueType) continue;
+            if (property.CanWrite) continue;
+
+            property.SetValue(null, null);
+            mod.Logger.Info($"使用反射卸载属性: {nameof(KeybindSystem)}.{property.Name}");
+        }
+    }
+
+    /// <summary>
+    /// 写一个反射卸载试试, 临时放这里
+    /// </summary>
+    private static void CleanupFieldReferences(Mod mod, BindingFlags bindingFlags)
+    {
+        foreach (var field in typeof(KeybindSystem).GetFields(bindingFlags))
+        {
+            if (field.FieldType.IsValueType) continue;
+            if (field.IsLiteral) continue;
+            if (field.IsInitOnly) continue;
+
+            field.SetValue(null, null);
+            mod.Logger.Info($"使用反射卸载字段: {nameof(KeybindSystem)}.{field.Name}");
+        }
     }
 }

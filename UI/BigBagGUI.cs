@@ -290,7 +290,7 @@ public class BigBagGUI : BaseBody
         StartTimer.Close();
 
         SoundEngine.PlaySound(SoundID.MenuClose);
-        AdditionalConfig.Save();
+        ClientConfigCore.SaveConfig();
     }
 
     #endregion

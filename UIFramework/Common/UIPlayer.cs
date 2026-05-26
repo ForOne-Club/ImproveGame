@@ -22,8 +22,8 @@ public class UIPlayer : ModPlayer
     private static CoroutineRunner _uiSetupDelayRunner = new();
     internal static readonly Vector2 HugeInventoryDefPosition = new(150, 340);
     internal static Vector2 HugeInventoryUIPosition;
-    internal static readonly Vector2 BuffTrackerDefPosition = new(630, 160);
-    internal static Vector2 BuffTrackerPosition;
+    //internal static readonly Vector2 BuffTrackerDefPosition = new(630, 160);
+    //internal static Vector2 BuffTrackerPosition;
     internal static readonly Vector2 WorldFeatureDefPosition = new(250, 280);
     internal static Vector2 WorldFeaturePosition;
     internal static readonly Vector2 ItemSearcherDefPosition = new(620, 400);
@@ -84,15 +84,15 @@ public class UIPlayer : ModPlayer
         BigBagGUI.Instance.MainPanel.SetPos(HugeInventoryUIPosition).Recalculate();
 
         // 增益追踪器
-        uiSystem.BuffTrackerGUI = new BuffTrackerGUI();
-        uiSystem.BuffTrackerTrigger.SetRootBody(uiSystem.BuffTrackerGUI);
-        CheckPositionValid(ref BuffTrackerPosition, BuffTrackerDefPosition);
-        uiSystem.BuffTrackerGUI.MainPanel.SetPos(BuffTrackerPosition).Recalculate();
-        UISystem.Instance.BuffTrackerGUI.BuffTrackerBattler.ResetDataForNewPlayer(Main.LocalPlayer.whoAmI);
+        //uiSystem.BuffTrackerGUI = new BuffTrackerGUI();
+        //uiSystem.BuffTrackerTrigger.SetRootBody(uiSystem.BuffTrackerGUI);
+        //CheckPositionValid(ref BuffTrackerPosition, BuffTrackerDefPosition);
+        //uiSystem.BuffTrackerGUI.MainPanel.SetPos(BuffTrackerPosition).Recalculate();
+        //UISystem.Instance.BuffTrackerGUI.BuffTrackerBattler.ResetDataForNewPlayer(Main.LocalPlayer.whoAmI);
 
         // 建筑法杖
-        uiSystem.ArchitectureGUI = new ArchitectureGUI();
-        uiSystem.ArchitectureTrigger.SetRootBody(uiSystem.ArchitectureGUI);
+        //uiSystem.ArchitectureGUI = new ArchitectureGUI();
+        //uiSystem.ArchitectureTrigger.SetRootBody(uiSystem.ArchitectureGUI);
 
         // 构造法杖
         uiSystem.StructureGUI = new StructureGUI();

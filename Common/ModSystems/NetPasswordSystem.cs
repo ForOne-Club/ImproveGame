@@ -1,4 +1,6 @@
-﻿namespace ImproveGame.Common.ModSystems;
+﻿using ImproveGame.Common.Configs;
+
+namespace ImproveGame.Common.ModSystems;
 
 public class NetPasswordSystem : ModSystem
 {
@@ -44,7 +46,7 @@ public class NetPasswordSystem : ModSystem
     {
         orig.Invoke();
 
-        if (!Config.OnlyHostByPassword)
+        if (!ImproveConfigs.Instance.OnlyHostByPassword)
             return;
 
         for (int i = 0; i < Main.maxPlayers; i++)
@@ -70,9 +72,9 @@ public class NetPasswordSystem : ModSystem
     {
         if (Main.netMode is not NetmodeID.Server)
             return true;
-        if (Config.OnlyHostByPassword && !Registered[whoAmI])
+        if (ImproveConfigs.Instance.OnlyHostByPassword && !Registered[whoAmI])
             return false;
-        if (Config.OnlyHost && !NetMessage.DoesPlayerSlotCountAsAHost(whoAmI))
+        if (ImproveConfigs.Instance.OnlyHost && !NetMessage.DoesPlayerSlotCountAsAHost(whoAmI))
             return false;
         return true;
     }

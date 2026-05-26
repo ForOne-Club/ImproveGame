@@ -1,4 +1,6 @@
-﻿namespace ImproveGame.UI.ModernConfig.Categories;
+﻿using ImproveGame.Common.Configs;
+
+namespace ImproveGame.UI.ModernConfig.Categories;
 
 public sealed class NpcSettings : Category
 {
@@ -6,15 +8,15 @@ public sealed class NpcSettings : Category
 
     public override void AddOptions(ConfigOptionsPanel panel)
     {
-        panel.AddToggle(Config, nameof(Config.TownNPCHome));
-        panel.AddToggle(Config, nameof(Config.TownNPCGetTFIntoHouse));
-        panel.AddToggle(Config, nameof(Config.NPCLiveInEvil));
-        panel.AddValueSlider(Config, nameof(Config.TownNPCSpawnSpeed));
-        panel.AddEnum(Config, nameof(Config.NoCD_FishermanQuest));
-        panel.AddToggle(Config, nameof(Config.ModifyNPCHappiness));
-        panel.AddValueSlider(Config, nameof(Config.NPCHappiness));
-        panel.AddToggle(Config, nameof(Config.TravellingMerchantStay));
-        panel.AddToggle(Config, nameof(Config.TravellingMerchantRefresh));
-        panel.AddToggle(Config, nameof(Config.QuickNurse));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.TownNPCHome));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.TownNPCGetTFIntoHouse));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.NPCLiveInEvil));
+        panel.AddValueSlider(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.TownNPCSpawnSpeed));
+        panel.AddEnum(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.NoCD_FishermanQuest));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.ModifyNPCHappiness));
+        panel.AddValueSlider(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.NPCHappiness));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.TravellingMerchantStay));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.TravellingMerchantRefresh));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.QuickNurse));
     }
 }

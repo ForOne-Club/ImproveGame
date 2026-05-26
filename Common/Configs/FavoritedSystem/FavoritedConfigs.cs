@@ -19,7 +19,7 @@ public class FavoritedConfigs : ModConfig
 
     public void PopulateElements(UIModConfig configUI)
     {
-        _pendingConfig = ConfigManager.GeneratePopulatedClone(Config) as ImproveConfigs;
+        _pendingConfig = ConfigManager.GeneratePopulatedClone(ImproveConfigs.Instance) as ImproveConfigs;
         if (_pendingConfig == null)
             return;
 

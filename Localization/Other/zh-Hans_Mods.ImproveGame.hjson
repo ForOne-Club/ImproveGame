@@ -69,6 +69,8 @@ QuickHome: {
 Tips: {
 	AmmoChainDisabled: 弹药链功能已关闭
 	AmmoChain: "[centeritem:ImproveGame/AmmoChainItem]弹药链："
+	AmmoInfo: "弹药类型为 [i:{0}] {1}"
+	UseAmmoInfo: "使用弹药类型为 [i:{0}] {1}"
 	ShimmerInto: "可在微光中转化为 "
 	ShimmerIntoWithStack: "每{0}个可在微光中转化为 "
 	ShimmerIntoWithCoinLuck: 可在微光中转换为{0}点钱币幸运
@@ -171,12 +173,14 @@ Tips: {
 			'''
 		CreateWand:
 			'''
-			中键使用物品以选择一张数据图导入建筑样式
+			在管理器界面可以用数据图或者构造魔杖结构导入建筑样式
 			在 [c/88CCEE:"文档/My Games/Terraria/tModLoader]
 			[c/88CCEE:/Mods/ImproveGame/CreateWand"]
-			目录下的会自动导入
+			目录下的图片会自动导入
 
+			数据图中
 			B通道为FF表示有墙壁，00表示没有墙壁
+			A通道为FF表示朝向左，7F表示朝向右
 			RG通道代表物块如下表：
 			| 颜色  |    Hex   |   代表的物块   |
 			| ------- | ---------- | -------------------- |
@@ -332,12 +336,20 @@ SuperVault: {
 
 MoveChest.Heavy: 箱子的重量使你行动有些受限
 
+BuffController: {
+	LeftClick: {
+		Enable: "[c/CC88AA:<left>]以启用该无限增益"
+		Disable: "[c/CC88AA:<left>]以禁用该无限增益"
+	}
+
+	RightClick: {
+		Enable: "[c/CC88AA:<right>]以收藏置顶该buff"
+		Disable: "[c/CC88AA:<right>]以取消收藏"
+	}
+}
+
 BuffTracker: {
 	Title: 增益追踪器
-	LeftClickDisable: "[c/CC88AA:<left>]以禁用该无限增益"
-	LeftClickEnable: "[c/CC88AA:<left>]以启用该无限增益"
-	RightClickDisable: "[c/CC88AA:<right>]以取消收藏"
-	RightClickEnable: "[c/CC88AA:<right>]以收藏置顶该buff"
 	NoInfBuff: 当前没有可用的无限增益
 	NoInfBuffAlt: 请在模组配置中打开无限续杯功能
 	NPCSpawnRatePanel: 敌人生成速度面板
@@ -350,7 +362,7 @@ LifeAnalyzer: {
 
 Architecture: {
 	Materials: 房屋材料
-	StoredMaterials: (存有: {MaterialCount})
+	StoredMaterials: (总共拥有: {MaterialCountTotal}, 存有: {MaterialCountWand}, 背包内: {MaterialCountInventory})
 	MaterialsRequired: 所需材料：
 	Block: 砖块
 	Platform: 平台

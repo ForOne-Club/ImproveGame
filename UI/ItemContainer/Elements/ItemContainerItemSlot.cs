@@ -150,12 +150,12 @@ public class ItemContainerItemSlot : GenericItemSlot
         {
             // 放大镜图标 - 输入到聊天框
             case CursorOverrideID.Magnifiers:
-                {
-                    if (ChatManager.AddChatText(FontAssets.MouseText.Value, ItemTagHandler.GenerateTag(Item),
-                            Vector2.One))
-                        SoundEngine.PlaySound(SoundID.MenuTick);
-                    return;
-                }
+            {
+                if (ChatManager.AddChatText(FontAssets.MouseText.Value, ItemTagHandler.GenerateTag(Item),
+                        Vector2.One))
+                    SoundEngine.PlaySound(SoundID.MenuTick);
+                return;
+            }
             // 放回物背包图标
             case CursorOverrideID.ChestToInventory:
                 Item = Main.player[Main.myPlayer].GetItem(Main.myPlayer, Item,

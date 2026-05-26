@@ -1,4 +1,5 @@
 using ImproveGame.Common;
+using ImproveGame.Common.Configs;
 using ImproveGame.Common.ModSystems;
 using Terraria.UI.Chat;
 
@@ -8,16 +9,13 @@ public class ImproveGame : Mod
 {
     private class DisplayNameUpdater : ModSystem
     {
-        public override void OnLocalizationsLoaded()
-        {
-            Instance.DisplayName = GetText("ModName");
-        }
+        public override void OnLocalizationsLoaded() => Instance.DisplayName = GetText("ModName");
     }
 
     public static ImproveGame Instance => ModContent.GetInstance<ImproveGame>();
 
     // 额外BUFF槽
-    public override uint ExtraPlayerBuffSlots => (uint)Config.ExtraPlayerBuffSlots;
+    public override uint ExtraPlayerBuffSlots => (uint)ImproveConfigs.Instance.ExtraPlayerBuffSlots;
 
     public override void Load()
     {
@@ -25,11 +23,6 @@ public class ImproveGame : Mod
         ChatManager.Register<BgItemTagHandler>("bgitem");
         ChatManager.Register<CenteredItemTagHandler>("centeritem");
         ChatManager.Register<QotGlyphTagHandler>("qotglyph");
-    }
-
-    public override void Unload()
-    {
-        Config = null;
     }
 
     public override void HandlePacket(BinaryReader reader, int whoAmI) => NetModule.ReceiveModule(reader, whoAmI);

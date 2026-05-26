@@ -1,11 +1,11 @@
-﻿using ImproveGame.Packets.Tiles;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Packets.Tiles;
 
 namespace ImproveGame.Content.Functions.VeinMiner;
 
 public class VeinMinerSystem : ModSystem
 {
-    private static bool VeinMiningEnabled =>
-        Config.SimpleVeinMining && !ModLoader.HasMod("BAM") && !ModLoader.HasMod("OreExcavator");
+    private static bool VeinMiningEnabled => ImproveConfigs.Instance.SimpleVeinMining && !ModLoader.HasMod("BAM") && !ModLoader.HasMod("OreExcavator");
 
     // 连锁挖矿可以关闭的提示每60min弹出一次
     private static int _popupTipTimer = 99999;
@@ -119,7 +119,7 @@ public class VeinMinerSystem : ModSystem
     private static void DoPopupTip()
     {
         // 60min一次提示
-        if (_popupTipTimer < 60 * 60 * 60 || Config.DisableVeinMiningPopup)
+        if (_popupTipTimer < 60 * 60 * 60 || ImproveConfigs.Instance.DisableVeinMiningPopup)
             return;
 
         _popupTipTimer = 0;

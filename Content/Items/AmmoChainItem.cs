@@ -1,4 +1,5 @@
-﻿using ImproveGame.Content.Functions.ChainedAmmo;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Content.Functions.ChainedAmmo;
 using ImproveGame.Core;
 using ImproveGame.UI.AmmoChainPanel;
 using Terraria.ModLoader.IO;
@@ -93,7 +94,7 @@ public class AmmoChainItem : ModItem
     {
         var tooltipLines = new List<TooltipLine>();
 
-        if (!Config.AmmoChain)
+        if (!ImproveConfigs.Instance.AmmoChain)
         {
             tooltipLines.Add(new TooltipLine(mod, "AmmoChainDisabled", GetText("Tips.AmmoChainDisabled"))
             {

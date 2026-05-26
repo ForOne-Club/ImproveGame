@@ -42,23 +42,6 @@ CreateWand: {
 		Please prepare enough materials, or the house will not be built completely!
 		[c/ff0000:If the item is trashed, the stored materials inside will not be returned!] 
 		'''
-	CustomizeTip:
-		'''
-			中键打开文件资源管理器选择一张配置图以生成自定义的房屋样式
-			规则如下：
-			| 颜色 | Hex    | 代表的对象   |
-			| ---- | ------ | ------------ |
-			| 红色 | FF0000 | 实心块       |
-			| 黑色 | 000000 | 平台         |
-			| 白色 | FFFFFF | 火把         |
-			| 黄色 | FFFF00 | 椅子         |
-			| 粉色 | FF00FF | 桌子         |
-			| 蓝色 | 0000FF | 工作台       |
-			| 紫色 | 7F00FF | 床           |
-			| 青色 | 00FFFF | 禁止放置墙体 |
-			| 绿色 | 00FF00 | 门           |
-			| 透明 |        | 墙体         |
-		'''
 }
 
 WallPlace: {
@@ -229,7 +212,7 @@ EnchantedSwordGlobe: {
 	Reveal: "{0} marked up {$ItemName.EnchantedSword} on the map."
 }
 
-# NotFound在大理石洞全部标记完了的情况下显示，花岗岩洞的文本亦是如此
+# NotFound在大理石洞全部标记完了的情况下显示，花岗岩洞和蜂巢的文本亦是如此
 MarbleCaveGlobe: {
 	BiomeName: Marble Cave
 	NotFound: Couldn't find more Marble Cave
@@ -238,6 +221,11 @@ MarbleCaveGlobe: {
 GraniteCaveGlobe: {
 	BiomeName: Granite Cave
 	NotFound: Couldn't find more Granite Cave
+}
+
+HiveGlobe: {
+	BiomeName: 蜂巢
+	NotFound: 未能找到更多的蜂巢
 }
 
 # NotFound在世界上没有足够的微光液体的情况下显示
@@ -264,7 +252,7 @@ DevMark: {
 		[c/ff0000:Developer's item]
 		When in the inventory, Wand of Construction will not consume materials (Only works in single player)
 		Opening the Fishing Machine will automatically fill it with fishing equipment
-		可放入钓鱼机的饰品位，来大幅度提升钓鱼速度
+		Can be placed in the Fishing Machine's accessory slot to significantly increase its fishing speed
 		'''
 }
 

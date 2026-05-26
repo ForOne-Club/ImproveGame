@@ -149,12 +149,12 @@ namespace ImproveGame.UI.ExtremeStorage
                         when ((Main.mouseItem.IsTheSameAs(Item) && ItemLoader.CanStack(Main.mouseItem, Item)) ||
                               Main.mouseItem.type is ItemID.None) && (Main.mouseItem.stack < Main.mouseItem.maxStack ||
                                                                       Main.mouseItem.type is ItemID.None):
-                        {
-                            RemoveItemOperationPacket.Send(_chestIndex, Index,
-                                RemoveItemOperationPacket.RemovedItemDestination.Mouse, stack);
-                            SoundEngine.PlaySound(SoundID.MenuTick);
-                            break;
-                        }
+                    {
+                        RemoveItemOperationPacket.Send(_chestIndex, Index,
+                            RemoveItemOperationPacket.RemovedItemDestination.Mouse, stack);
+                        SoundEngine.PlaySound(SoundID.MenuTick);
+                        break;
+                    }
                 }
             });
         }

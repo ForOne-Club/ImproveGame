@@ -17,7 +17,7 @@ public abstract class OfficialPreset
 
     public void OnApply()
     {
-        var mainConfig = Config;
+        var mainConfig = ImproveConfigs.Instance;
         var uiConfig = UIConfigs.Instance;
         var modItemConfig = AvailableConfig;
 

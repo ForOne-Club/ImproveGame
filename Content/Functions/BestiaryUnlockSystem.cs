@@ -1,4 +1,5 @@
-﻿using Terraria.GameContent.Bestiary;
+﻿using ImproveGame.Common.Configs;
+using Terraria.GameContent.Bestiary;
 
 namespace ImproveGame.Content.Functions
 {
@@ -23,7 +24,7 @@ namespace ImproveGame.Content.Functions
                     (GetEntryUICollectionInfoDelegate orig, IBestiaryUICollectionInfoProvider provider) =>
                     {
                         var info = orig.Invoke(provider);
-                        if (Config.BestiaryQuickUnlock && info.UnlockState != BestiaryEntryUnlockState.NotKnownAtAll_0)
+                        if (ImproveConfigs.Instance.BestiaryQuickUnlock && info.UnlockState != BestiaryEntryUnlockState.NotKnownAtAll_0)
                         {
                             info.UnlockState = BestiaryEntryUnlockState.CanShowDropsWithDropRates_4;
                         }

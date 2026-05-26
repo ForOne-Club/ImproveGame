@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Conditions;
+using ImproveGame.Common.Configs;
 using ImproveGame.Common.GlobalItems;
 using Terraria.ModLoader.IO;
 
@@ -77,7 +78,7 @@ public class ShellShipInBottle_Shimmered : ModItem
 public class QuickShimmerSystem : ModSystem
 {
     public static bool Unlocked;
-    public static bool Enabled => Unlocked && Config.QuickShimmer;
+    public static bool Enabled => Unlocked && ImproveConfigs.Instance.QuickShimmer;
 
     public override void SaveWorldData(TagCompound tag)
     {

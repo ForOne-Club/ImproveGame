@@ -1,3 +1,4 @@
+using ImproveGame.Common.Configs;
 using ImproveGame.Common.GlobalItems;
 using ImproveGame.Common.ModPlayers;
 using ImproveGame.Common.ModSystems;
@@ -118,13 +119,47 @@ public class TEAutofisher : ModTileEntity
         return placedEntity;
     }
 
-    public static int GetClosestPlayerIndex(Point16 Position) =>
-        Player.FindClosest(new Vector2(Position.X * 16, Position.Y * 16), 2, 2);
 
-    public static Player GetClosestPlayer(Point16 Position)
+    private static byte? FindClosestAvailable(Vector2 Position, int Width, int Height)
     {
-        int index = GetClosestPlayerIndex(Position);
-        return Main.player.IndexInRange(index) ? Main.player[index] : Main.player[0];
+        byte? result = null;
+        for (int i = 0; i < 255; i++)
+        {
+            var plr = Main.player[i];
+            if (plr.active && plr.TryGetModPlayer<AutofishAvailabliltyCheckPlayer>(out var mplr) && mplr.Available)
+            {
+                result = (byte)i;
+                break;
+            }
+        }
+
+        float num = -1f;
+        for (int j = 0; j < 255; j++)
+        {
+            var plr = Main.player[j];
+            if (plr.active && !plr.dead && plr.TryGetModPlayer<AutofishAvailabliltyCheckPlayer>(out var mplr) && mplr.Available)
+            {
+                float num2 = Math.Abs(plr.position.X + (float)(plr.width / 2) - (Position.X + (float)(Width / 2))) + Math.Abs(plr.position.Y + (float)(plr.height / 2) - (Position.Y + (float)(Height / 2)));
+                if (num == -1f || num2 < num)
+                {
+                    num = num2;
+                    result = (byte)j;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    public static byte? GetClosestPlayerIndex(Point16 Position) =>
+        FindClosestAvailable(new Vector2(Position.X * 16, Position.Y * 16), 2, 2);
+
+    public static Player? GetClosestPlayer(Point16 Position)
+    {
+        byte? index = GetClosestPlayerIndex(Position);
+        if (index is { } whoAmI && Main.player.IndexInRange(whoAmI))
+            return Main.player[whoAmI];
+        return null;
     }
 
     #region 钓鱼
@@ -221,7 +256,7 @@ public class TEAutofisher : ModTileEntity
     public void FishingCheck()
     {
         var player = GetClosestPlayer(Position);
-
+        if (player == null) return;
         FishingAttempt fisher = GetFisher(out bool inShimmer);
         if (fisher.waterTilesCount < 75)
         {
@@ -323,38 +358,52 @@ public class TEAutofisher : ModTileEntity
         }
     }
 
+    // 伪装一个 proj，用来调用 Projectile.FishingCheck_RollItemDrop
+    // 缓存一个，不必要的 GC 压力
+    private readonly Projectile _disguisedProjectile = new Projectile() { owner = 255 };
+    private readonly Player _disguisedPlayer = new Player();
+
     public void RollItemDrop(ref FishingAttempt fisher)
     {
-        // 伪装一个proj，用来调用Projectile.FishingCheck_RollItemDrop
-        var fakeProj = new Projectile
+        var originalPlayer = Main.player[255];
+        Main.player[255] = _disguisedPlayer;
+
+        try
         {
-            owner = 255
-        };
+            _disguisedPlayer.Center = Position.ToWorldCoordinates();
+            _disguisedPlayer.whoAmI = 255; // 玩家不进入世界初始化，是没有 whoAmI 的
 
-        Main.player[255].Center = Position.ToWorldCoordinates();
-        Main.player[255].whoAmI = 255; // 玩家不进入世界初始化，是没有whoAmI的
-        TileCounter tileCounter = new();
-        tileCounter.ScanAndExportToMain(Position);
-        tileCounter.Simulate(Main.player[255]);
-        tileCounter.FargosFountainSupport(Main.player[255]);
+            var tileCounter = new TileCounter();
+            tileCounter.ScanAndExportToMain(Position);
+            tileCounter.Simulate(_disguisedPlayer);
+            tileCounter.FargosFountainSupport(_disguisedPlayer);
 
-        // AssemblyPublicizer 使得 FishingCheck_RollItemDrop 可以直接访问
-        fakeProj.FishingCheck_RollItemDrop(ref fisher);
+            // AssemblyPublicizer 使得 FishingCheck_RollItemDrop 可以直接访问
+            _disguisedProjectile.FishingCheck_RollItemDrop(ref fisher);
 
-        AdvancedPopupRequest sonar = new();
-        Vector2 sonarPosition = new(-1145141f, -919810f); // 直接fake到世界外面
-        PlayerLoader.CatchFish(Main.player[255], fisher, ref fisher.rolledItemDrop, ref fisher.rolledEnemySpawn,
-            ref sonar, ref sonarPosition);
+            var sonar = new AdvancedPopupRequest();
+            var sonarPosition = new Vector2(-1145141f, -919810f); // 直接fake到世界外面
+            PlayerLoader.CatchFish(_disguisedPlayer, fisher, ref fisher.rolledItemDrop, ref fisher.rolledEnemySpawn,
+                ref sonar, ref sonarPosition);
 
-        // 单人模式和客户端里这还作为视效的判定，因此得强制更新
-        if (Main.netMode is NetmodeID.SinglePlayer or NetmodeID.MultiplayerClient)
-            Main.LocalPlayer.ForceUpdateBiomes();
+            // 单人模式和客户端里这还作为视效的判定，因此得强制更新
+            if (Main.netMode is NetmodeID.SinglePlayer or NetmodeID.MultiplayerClient)
+                Main.LocalPlayer.ForceUpdateBiomes();
+        }
+        catch { throw; } finally
+        {
+            Main.player[255] = originalPlayer;
+        }
     }
 
     public FishingAttempt GetFisher(out bool inShimmer)
     {
         var player = GetClosestPlayer(Position);
-
+        if (player == null) 
+        {
+            inShimmer = false;
+            return default;
+        }
         FishingAttempt fisher = default;
         fisher.X = locatePoint.X;
         fisher.Y = locatePoint.Y;
@@ -701,7 +750,7 @@ public class TEAutofisher : ModTileEntity
             if (bait.stack <= 0)
             {
                 bait.SetDefaults();
-                if (Config.EmptyAutofisher)
+                if (ImproveConfigs.Instance.EmptyAutofisher)
                 {
                     var center = new Point(Position.X + 1, Position.Y + 2);
                     GetMeterCoords(center, out NetworkText compassText, out NetworkText depthText);
@@ -783,7 +832,7 @@ public class TEAutofisher : ModTileEntity
         }
 
         numWaters = GetFishingPondSize(x, y, ref lava, ref honey, ref shimmer, ref chumCount);
-        if (ModIntegrationsSystem.NoLakeSizePenaltyLoaded || Config.NoLakeSizePenalty) // 不用if else是为了判定是否在熔岩/蜂蜜
+        if (ModIntegrationsSystem.NoLakeSizePenaltyLoaded || ImproveConfigs.Instance.NoLakeSizePenalty) // 不用if else是为了判定是否在熔岩/蜂蜜
             numWaters = 10000;
 
         if (honey)
@@ -841,6 +890,8 @@ public class TEAutofisher : ModTileEntity
             return result;
 
         var player = GetClosestPlayer(Position);
+        if (player == null)
+            return result;
         int num = result.BaitPower + result.PolePower + FishingSkill;
         result.LevelMultipliers = Fishing_GetPowerMultiplier(result.Pole, result.Bait, player);
         result.FinalFishingLevel = (int)(num * result.LevelMultipliers);

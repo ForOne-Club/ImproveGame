@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.ModSystems;
+﻿using ImproveGame.Common.Configs;
+using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Functions.Construction;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
@@ -281,7 +282,7 @@ namespace ImproveGame.UI
             if (materialsAndStacks.Count > 0)
             {
                 ComponentList.Add(QuickTitleText(GetText("ConstructGUI.MaterialInfo.Title"), 0.6f));
-                if (Config.SuperVault)
+                if (ImproveConfigs.Instance.SuperVault)
                     ComponentList.Add(QuickSmallUIText(GetTextWith("ConstructGUI.MaterialInfo.Tip", new { Name = name }))); // 文件名
 
                 var sortedResult = from pair in materialsAndStacks orderby pair.Key select pair; // 排序

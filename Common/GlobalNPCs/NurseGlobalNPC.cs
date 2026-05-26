@@ -1,4 +1,5 @@
-﻿using Terraria.GameContent.Achievements;
+﻿using ImproveGame.Common.Configs;
+using Terraria.GameContent.Achievements;
 
 namespace ImproveGame.Common.GlobalNPCs
 {
@@ -6,7 +7,7 @@ namespace ImproveGame.Common.GlobalNPCs
     {
         public override void GetChat(NPC npc, ref string chat)
         {
-            if (!Config.QuickNurse || npc.type is not NPCID.Nurse)
+            if (!ImproveConfigs.Instance.QuickNurse || npc.type is not NPCID.Nurse)
                 return;
 
             int health = Main.LocalPlayer.statLifeMax2 - Main.LocalPlayer.statLife;

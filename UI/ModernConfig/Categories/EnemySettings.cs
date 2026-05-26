@@ -1,4 +1,6 @@
-﻿namespace ImproveGame.UI.ModernConfig.Categories;
+﻿using ImproveGame.Common.Configs;
+
+namespace ImproveGame.UI.ModernConfig.Categories;
 
 public sealed class EnemySettings : Category
 {
@@ -6,10 +8,10 @@ public sealed class EnemySettings : Category
 
     public override void AddOptions(ConfigOptionsPanel panel)
     {
-        panel.AddValueSlider(Config, nameof(Config.NPCCoinDropRate));
-        panel.AddToggle(Config, nameof(Config.SlimeExDrop));
-        panel.AddToggle(Config, nameof(Config.LavalessLavaSlime));
-        panel.AddToggle(Config, nameof(Config.BestiaryQuickUnlock));
-        panel.AddValueSlider(Config, nameof(Config.BannerRequirement));
+        panel.AddValueSlider(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.NPCCoinDropRate));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.SlimeExDrop));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.LavalessLavaSlime));
+        panel.AddToggle(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.BestiaryQuickUnlock));
+        panel.AddValueSlider(ImproveConfigs.Instance, nameof(ImproveConfigs.Instance.BannerRequirement));
     }
 }

@@ -82,10 +82,10 @@ public class MasterControlManager : ModSystem
             Icon = ModAsset.BigBackpack.Value,
         }.Register();
 
-        bigBackpack.Available += () => Config.SuperVault;
+        bigBackpack.Available += () => ImproveConfigs.Instance.SuperVault;
         bigBackpack.OnMouseDown += tv =>
         {
-            if (!Config.SuperVault)
+            if (!ImproveConfigs.Instance.SuperVault)
             {
                 Main.NewText(GetText("MasterControl.NotEnabled"), Color.Pink);
                 return;
@@ -221,7 +221,7 @@ public class MasterControlManager : ModSystem
 
         weatherControl.OnMouseDown += _ =>
         {
-            if (!Config.WeatherControl)
+            if (!ImproveConfigs.Instance.WeatherControl)
             {
                 Main.NewText(GetText("MasterControl.NotEnabled"), Color.Pink);
                 return;
@@ -268,10 +268,10 @@ public class MasterControlManager : ModSystem
             Icon = ModAsset.WorldFeature.Value,
         }.Register();
 
-        worldFeature.Available += () => Config.WorldFeaturePanel;
+        worldFeature.Available += () => ImproveConfigs.Instance.WorldFeaturePanel;
         worldFeature.OnMouseDown += _ =>
         {
-            if (!Config.WorldFeaturePanel)
+            if (!ImproveConfigs.Instance.WorldFeaturePanel)
             {
                 Main.NewText(GetText("MasterControl.NotEnabled"), Color.Pink);
                 return;
@@ -319,7 +319,7 @@ public class MasterControlManager : ModSystem
         {
             var ui = QuickShimmerGUI.Instance;
             if (ui is null) return;
-            if (!Config.QuickShimmer)
+            if (!ImproveConfigs.Instance.QuickShimmer)
             {
                 Main.NewText(GetText("MasterControl.NotEnabled"), Color.Pink);
                 return;
@@ -346,10 +346,10 @@ public class MasterControlManager : ModSystem
             Icon = ModAsset.AmmoChain.Value,
         }.Register();
 
-        ammoChain.Available += () => Config.AmmoChain;
+        ammoChain.Available += () => ImproveConfigs.Instance.AmmoChain;
         ammoChain.OnMouseDown += _ =>
         {
-            if (!Config.AmmoChain)
+            if (!ImproveConfigs.Instance.AmmoChain)
             {
                 Main.NewText(GetText("MasterControl.NotEnabled"), Color.Pink);
                 return;

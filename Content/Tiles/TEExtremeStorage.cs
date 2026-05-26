@@ -1,3 +1,4 @@
+using ImproveGame.Common.Configs;
 using ImproveGame.Packets.NetStorager;
 using ImproveGame.UI.ExtremeStorage;
 using Terraria.DataStructures;
@@ -86,7 +87,7 @@ namespace ImproveGame.Content.Tiles
         // 上下左右 11 格内的所有箱子即视为在范围内
         public bool ChestInRange(int x, int y)
         {
-            int distance = Config.ExStorageSearchDistance;
+            int distance = ImproveConfigs.Instance.ExStorageSearchDistance;
             bool inRangeX = Math.Abs(x - Position.X) <= distance + 1 || Math.Abs(x - (Position.X + 2)) <= distance;
             bool inRangeY = Math.Abs(y - Position.Y) <= distance + 1 || Math.Abs(y - (Position.Y + 2)) <= distance;
             return inRangeX && inRangeY;

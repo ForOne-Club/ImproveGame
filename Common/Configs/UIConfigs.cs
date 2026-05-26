@@ -11,7 +11,20 @@ namespace ImproveGame.Common.Configs;
 public class UIConfigs : ModConfig
 {
     public static UIConfigs Instance { get; set; }
+    public override void OnLoaded() => Instance = this;
+
     public override ConfigScope Mode => ConfigScope.ClientSide;
+
+    public override void OnChanged()
+    {
+        BlurMakeSystem.EnableBlur = EnableBlur;
+        BlurMakeSystem.SingleBlur = SingleBlur;
+        BlurMakeSystem.BlurZoomMultiplierDenominator = BlurZoomMultiplierDenominator;
+        BlurMakeSystem.BlurIterationCount = BlurIterationCount;
+        BlurMakeSystem.BlurIterationOffsetMultiplier = BlurIterationOffsetMultiplier;
+        BlurMakeSystem.BlurMixingNumber = BlurMixingNumber;
+    }
+
 
     [CustomModConfigItem(typeof(OpenUIConfigElement))]
     public object OpenConfig;
@@ -95,6 +108,9 @@ public class UIConfigs : ModConfig
     public bool ShowShimmerInfo;
 
     [DefaultValue(true)]
+    public bool ShowAmmoInfo;
+
+    [DefaultValue(true)]
     public bool ShowModName;
 
     public enum PAPDisplayMode
@@ -135,7 +151,7 @@ public class UIConfigs : ModConfig
     [Range(0f, 1f)]
     [Increment(0.05f)]
     [Slider]
-    [CustomModConfigItem(typeof(RoundFloatElement))]
+    [CustomModConfigItem(typeof(Round4FloatElement))]
     public float InfernoTransparency;
 
     /// <summary>
@@ -145,7 +161,7 @@ public class UIConfigs : ModConfig
     [Range(0f, 1f)]
     [Increment(0.05f)]
     [Slider]
-    [CustomModConfigItem(typeof(RoundFloatElement))]
+    [CustomModConfigItem(typeof(Round4FloatElement))]
     public float InvisibleTransparency;
 
     [DefaultValue(true)]
@@ -165,6 +181,9 @@ public class UIConfigs : ModConfig
     [DisplayCondition(nameof(UIConfigs), nameof(RemoveGraveyardVisual))]
     public bool RemoveGraveyardMusic;
 
+    [DefaultValue(typeof(Color), "0, 0, 0, 0")]
+    public Color SpelunkerColor;
+
     [DefaultValue(false)]
     public bool FckKeybindPopup;
 
@@ -174,7 +193,7 @@ public class UIConfigs : ModConfig
     [Range(0f, 1.5f)]
     [Slider]
     [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
-    [CustomModConfigItem(typeof(RoundFloatElement))]
+    [CustomModConfigItem(typeof(Round4FloatElement))]
     public float MarkDungeon;
 
     [DefaultValue(1f)]
@@ -182,7 +201,7 @@ public class UIConfigs : ModConfig
     [Range(0f, 1.5f)]
     [Slider]
     [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
-    [CustomModConfigItem(typeof(RoundFloatElement))]
+    [CustomModConfigItem(typeof(Round4FloatElement))]
     public float MarkTemple;
 
     [DefaultValue(1f)]
@@ -190,7 +209,7 @@ public class UIConfigs : ModConfig
     [Range(0f, 1.5f)]
     [Slider]
     [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
-    [CustomModConfigItem(typeof(RoundFloatElement))]
+    [CustomModConfigItem(typeof(Round4FloatElement))]
     public float MarkAether;
 
     [DefaultValue(0.9f)]
@@ -198,7 +217,7 @@ public class UIConfigs : ModConfig
     [Range(0f, 1.5f)]
     [Slider]
     [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
-    [CustomModConfigItem(typeof(RoundFloatElement))]
+    [CustomModConfigItem(typeof(Round4FloatElement))]
     public float MarkFloatingIsland;
 
     [DefaultValue(1f)]
@@ -206,7 +225,7 @@ public class UIConfigs : ModConfig
     [Range(0f, 1.5f)]
     [Slider]
     [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
-    [CustomModConfigItem(typeof(RoundFloatElement))]
+    [CustomModConfigItem(typeof(Round4FloatElement))]
     public float MarkPyramid;
 
     [DefaultValue(0.8f)]
@@ -214,7 +233,7 @@ public class UIConfigs : ModConfig
     [Range(0f, 1.5f)]
     [Slider]
     [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
-    [CustomModConfigItem(typeof(RoundFloatElement))]
+    [CustomModConfigItem(typeof(Round4FloatElement))]
     public float MarkPlantera;
 
     [DefaultValue(0.8f)]
@@ -222,7 +241,7 @@ public class UIConfigs : ModConfig
     [Range(0f, 1.5f)]
     [Slider]
     [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
-    [CustomModConfigItem(typeof(RoundFloatElement))]
+    [CustomModConfigItem(typeof(Round4FloatElement))]
     public float MarkEnchantedSword;
 
     [DefaultValue(0.8f)]
@@ -230,7 +249,7 @@ public class UIConfigs : ModConfig
     [Range(0f, 1.5f)]
     [Slider]
     [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
-    [CustomModConfigItem(typeof(RoundFloatElement))]
+    [CustomModConfigItem(typeof(Round4FloatElement))]
     public float MarkMarbleCave;
 
     [DefaultValue(0.8f)]
@@ -238,7 +257,7 @@ public class UIConfigs : ModConfig
     [Range(0f, 1.5f)]
     [Slider]
     [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
-    [CustomModConfigItem(typeof(RoundFloatElement))]
+    [CustomModConfigItem(typeof(Round4FloatElement))]
     public float MarkGraniteCave;
 
     [DefaultValue(0.8f)]
@@ -246,21 +265,14 @@ public class UIConfigs : ModConfig
     [Range(0f, 1.5f)]
     [Slider]
     [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
-    [CustomModConfigItem(typeof(RoundFloatElement))]
+    [CustomModConfigItem(typeof(Round4FloatElement))]
+    public float MarkHive;
+
+    [DefaultValue(0.8f)]
+    [Increment(0.1f)]
+    [Range(0f, 1.5f)]
+    [Slider]
+    [DisplayCondition(nameof(ImproveConfigs), nameof(ImproveConfigs.MinimapMark))]
+    [CustomModConfigItem(typeof(Round4FloatElement))]
     public float MarkEmptyAutofisher;
-
-    public override void OnLoaded()
-    {
-        Instance = this;
-    }
-
-    public override void OnChanged()
-    {
-        BlurMakeSystem.EnableBlur = EnableBlur;
-        BlurMakeSystem.SingleBlur = SingleBlur;
-        BlurMakeSystem.BlurZoomMultiplierDenominator = BlurZoomMultiplierDenominator;
-        BlurMakeSystem.BlurIterationCount = BlurIterationCount;
-        BlurMakeSystem.BlurIterationOffsetMultiplier = BlurIterationOffsetMultiplier;
-        BlurMakeSystem.BlurMixingNumber = BlurMixingNumber;
-    }
 }

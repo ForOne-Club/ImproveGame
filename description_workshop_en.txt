@@ -1,12 +1,11 @@
-﻿[h2]Quality of Terraria, a mod to greatly improve your gameplay experience[/h2]
-[h2][url=https://discord.gg/rEmGMQv5z7]Join our Discord to report bugs and get replied quickly![/url][/h2]
-These features may bring you better gameplay experience
+﻿[h2]Communication and Feedback[/h2]
+[url=https://discord.gg/rEmGMQv5z7]Join our Discord to report bugs and get replied quickly![/url]
 Only some functions are enabled by default, please check mod config for details
 
 [img]https://i.imgur.com/ki1CPZe.gif[/img]
 
 [h2]Mod Items[/h2]
-[b]You can use Recipe Browser Mod to check their sources![/b]
+You can use Recipe Browser Mod to check their sources!
 [list]
 	[*]Banner Box: Any Iron Bar * 12
 	[*]Potion Bag: Silk * 8
@@ -23,7 +22,7 @@ Only some functions are enabled by default, please check mod config for details
 [/list]
 
 [h2]Feature Highlights[/h2]
-[b]For a detailed list, check mod config or changelog above[/b]
+For a detailed list, check mod config or changelog above
 [olist]
 	[*]General features like max stack
 	[*]A Storage Manager that integrates storage, crafting, infinite buffs, and more
@@ -34,15 +33,15 @@ Only some functions are enabled by default, please check mod config for details
 	[*]Features specially made for multiplayer, for example sharing your infinite buffs, portable crafting stations and even more with your teammates
 	[*]A Huge Inventory providing 100 item slots, no worries of storing your potions and banners
 	[*]Potion Bag and Banner Box, integrate all your potions or banners as a single item (and you are free to take them out)
-	[*][b]Most features are configurable, use on your own preference[/b]
+	[*]Most features are configurable, use on your own preference
 [/olist]
 [h2]Open Source[/h2]
-Change log: https://github.com/ForOne-Club/ImproveGame/blob/1.4.4/ChangeLog-en.md
-Source code: https://github.com/ForOne-Club/ImproveGame
+Change log: https://github.com/487666123/ImproveGame/blob/1.4.4/ChangeLog-en.md
+Source code: https://github.com/487666123/ImproveGame
 
 [h2]Authors and Special Thanks[/h2]
 Spriter:
-枫林半叶, 逆风而行的信鸽, 中学生
+枫林半叶, 逆风而行的信鸽, 中学生, Kaelis
 
 Translators:
 English: Lastprismer, Lacewing
