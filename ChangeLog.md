@@ -6,6 +6,11 @@
 
 </div>
 
+# v1.8.x
+
+- [v1.8.3](Changelog/zh/v1.8.x.md#v183)
+- [v1.8.2](Changelog/zh/v1.8.x.md#v182)
+
 # v1.8.1
 
 - [v1.8.1.15](Changelog/zh/v1.8.1.x.md#v18115)

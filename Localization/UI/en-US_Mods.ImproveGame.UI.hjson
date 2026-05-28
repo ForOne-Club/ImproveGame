@@ -84,6 +84,14 @@ WeatherGUI: {
 	RainOff: Rain stopped
 	RainLocked: Rain locked
 	RainUnlocked: Rain unlocked
+	SandstormActive: <left> to start a sandstorm
+	SandstormInactive: <left> to stop a sandstorm
+	SandstormLockFalse: <right> to lock the sandstorm
+	SandstormLockTrue: <right> to unlock the sandstorm
+	SandstormOn: Sandstorm started
+	SandstormOff: Sandstorm stopped
+	SandstormLocked: Sandstorm locked
+	SandstormUnlocked: Sandstorm unlocked
 	Time: <left> to adjust time
 	Dawn: Set to dawn
 	Noon: Set to noon

@@ -89,6 +89,14 @@ WeatherGUI: {
 	RainOff: Дождь закончился
 	RainLocked: Изменения дождя приостановлены
 	RainUnlocked: Изменения дождя возобновлены
+	SandstormActive: 左键点击以开始沙尘暴
+	SandstormInactive: 左键点击以停止沙尘暴
+	SandstormLockFalse: 右键点击以锁定沙尘暴状态
+	SandstormLockTrue: 右键点击以解锁沙尘暴状态
+	SandstormOn: 已开始沙尘暴
+	SandstormOff: 已停止沙尘暴
+	SandstormLocked: 沙尘暴状态已锁定
+	SandstormUnlocked: 沙尘暴状态已解锁
 	Time: <left>, чтобы изменить время
 	Dawn: Время изменено на рассвет
 	Noon: Время изменено на полдень

@@ -34,6 +34,7 @@ public sealed class VisualAndInterface : Category
         panel.AddToggle(uiConfig, nameof(uiConfig.RemoveGraveyardVisual));
         panel.AddToggle(uiConfig, nameof(uiConfig.RemoveGraveyardMist));
         panel.AddToggle(uiConfig, nameof(uiConfig.RemoveGraveyardMusic));
+        panel.AddColor(uiConfig, nameof(uiConfig.SpelunkerColor));
         panel.AddValueSlider(uiConfig, nameof(uiConfig.InfernoTransparency));
         panel.AddValueSlider(uiConfig, nameof(uiConfig.InvisibleTransparency));
     }

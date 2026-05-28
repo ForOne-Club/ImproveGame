@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Content.Functions;
+using Terraria.GameContent.Events;
 
 namespace ImproveGame.Packets.Weather;
 
@@ -8,33 +9,39 @@ public class WeatherLockerPacket : NetModule
     private byte _states;
 
     private bool RainLocked => ((BitsByte)_states)[0];
-    private bool MoonPhaseLocked => ((BitsByte)_states)[1];
-    private bool WindLocked => ((BitsByte)_states)[2];
+    private bool SandstormLocked => ((BitsByte)_states)[1];
+    private bool MoonPhaseLocked => ((BitsByte)_states)[2];
+    private bool WindLocked => ((BitsByte)_states)[3];
 
     public static void ToggleRain() => SetRain(!WeatherController.RainLocked);
 
     public static void SetRain(bool locked) =>
-        SetStates(locked, WeatherController.MoonPhaseLocked, WeatherController.WindLocked);
+        SetStates(locked, WeatherController.SandstormLocked, WeatherController.MoonPhaseLocked, WeatherController.WindLocked);
+
+    public static void ToggleSandstorm() => SetSandstorm(!WeatherController.SandstormLocked);
+
+    public static void SetSandstorm(bool locked) =>
+        SetStates(WeatherController.RainLocked, locked, WeatherController.MoonPhaseLocked, WeatherController.WindLocked);
 
     public static void ToggleMoonPhase() => SetMoonPhase(!WeatherController.MoonPhaseLocked);
 
     public static void SetMoonPhase(bool locked) =>
-        SetStates(WeatherController.RainLocked, locked, WeatherController.WindLocked);
+        SetStates(WeatherController.RainLocked, WeatherController.SandstormLocked, locked, WeatherController.WindLocked);
 
     public static void ToggleWind() => SetWind(!WeatherController.WindLocked);
 
     public static void SetWind(bool locked) =>
-        SetStates(WeatherController.RainLocked, WeatherController.MoonPhaseLocked, locked);
+        SetStates(WeatherController.RainLocked, WeatherController.SandstormLocked, WeatherController.MoonPhaseLocked, locked);
 
     /// <summary>
     /// 这个包只要一发，就会解锁气候控制功能，所以“解锁”就是发个包罢了。
-    /// 至于三个false，解锁的时候重置状态没问题罢（
+    /// 至于四个false，解锁的时候重置状态没问题罢（
     /// </summary>
-    public static void Unlock() => SetStates(false, false, false);
+    public static void Unlock() => SetStates(false, false, false, false);
 
-    public static void SetStates(bool rain, bool moonPhase, bool wind)
+    public static void SetStates(bool rain, bool sandstorm, bool moonPhase, bool wind)
     {
-        var states = new BitsByte(rain, moonPhase, wind);
+        var states = new BitsByte(rain, sandstorm, moonPhase, wind);
         var module = NetModuleLoader.Get<WeatherLockerPacket>();
         module._states = states;
         module.Send(runLocally: true);
@@ -43,6 +50,7 @@ public class WeatherLockerPacket : NetModule
     public override void Receive()
     {
         WeatherController.RainLocked = RainLocked;
+        WeatherController.SandstormLocked = SandstormLocked;
         WeatherController.MoonPhaseLocked = MoonPhaseLocked;
         WeatherController.WindLocked = WindLocked;
         WeatherController.Unlocked = true;
@@ -99,6 +107,28 @@ public class SetRainPacket : NetModule
 }
 
 [AutoSync]
+public class SetSandstormPacket : NetModule
+{
+    public static void ToggleSandstorm()
+    {
+        var module = NetModuleLoader.Get<SetSandstormPacket>();
+        module.Send(runLocally: true);
+    }
+
+    public override void Receive()
+    {
+        if (Sandstorm.Happening)
+        {
+            Sandstorm.StopSandstorm();
+        }
+        else
+        {
+            Sandstorm.StartSandstorm();
+        }
+    }
+}
+
+[AutoSync]
 public class SetMoonPhasePacket : NetModule
 {
     private byte _moonPhase;
@@ -142,7 +172,7 @@ public class SetWindPacket : NetModule
 
     public override void Receive()
     {
-        Main.windSpeedCurrent = Main.windSpeedTarget = _windStage * 0.5f;
+        Main.windSpeedCurrent = Main.windSpeedTarget = _windStage * 0.61f;
         // 皮一下，不要完全没风
         if (_windStage is 0)
             Main.windSpeedCurrent = Main.windSpeedTarget = Main.rand.NextFloat(-0.04f, 0.04f);

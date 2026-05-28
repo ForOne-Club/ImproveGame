@@ -1,6 +1,8 @@
 ﻿using ImproveGame.Content.Functions;
 using ImproveGame.Packets.Weather;
 using ImproveGame.UIFramework.BaseViews;
+using Terraria.GameContent.Events;
+using Terraria.GameContent.Skies;
 using Terraria.Graphics.Effects;
 using Terraria.UI.Chat;
 using Terraria.Utilities;
@@ -23,6 +25,9 @@ public partial class WeatherAmbientElement : View
     // 模拟雨
     private float _rainScroller1;
     private float _rainScroller2;
+
+    // 模拟沙尘
+    private List<(Vector3, uint)> _dustScroller1 = [];
 
     // 会动的云
     private float _cloudScroller1;
@@ -104,14 +109,7 @@ public partial class WeatherAmbientElement : View
         var pinWheelHitbox = new Rectangle(boundary.X + 160, boundary.Y + 136, 32, 48);
         if (pinWheelHitbox.Contains(Main.MouseScreen.ToPoint()))
         {
-            var setToStage = Main.windSpeedCurrent switch
-            {
-                > -0.4f and < 0.4f => SetWindPacket.WindStage.West,
-                >= 0.4f => SetWindPacket.WindStage.East,
-                _ => SetWindPacket.WindStage.No
-            };
-            Main.NewText(GetText($"UI.WeatherGUI.Wind{setToStage}"), tipColor);
-            SetWindPacket.SetTo(setToStage);
+            ProcessWindSetting();
         }
 
         // 钟和时间调节
@@ -163,6 +161,35 @@ public partial class WeatherAmbientElement : View
 
             SetRainPacket.ToggleRain();
         }
+
+        // 音乐盒和沙尘暴调节
+        var sandstormMusixBoxHitbox = new Rectangle(boundary.X + 348, boundary.Y + 95, 36, 36);
+        if (sandstormMusixBoxHitbox.Contains(Main.MouseScreen.ToPoint()))
+        {
+            if (!Sandstorm.HasSufficientWind())
+            {
+                ProcessWindSetting();
+            }
+
+            if (Sandstorm.Happening)
+                Main.NewText(GetText("UI.WeatherGUI.SandstormOff"), tipColor);
+            else
+                Main.NewText(GetText("UI.WeatherGUI.SandstormOn"), tipColor);
+
+            SetSandstormPacket.ToggleSandstorm();
+        }
+
+        void ProcessWindSetting()
+        {
+            var setToStage = Main.windSpeedCurrent switch
+            {
+                > -0.4f and < 0.4f => SetWindPacket.WindStage.West,
+                >= 0.4f => SetWindPacket.WindStage.East,
+                _ => SetWindPacket.WindStage.No
+            };
+            Main.NewText(GetText($"UI.WeatherGUI.Wind{setToStage}"), tipColor);
+            SetWindPacket.SetTo(setToStage);
+        }
     }
 
     public override void RightMouseDown(UIMouseEvent evt)
@@ -205,6 +232,17 @@ public partial class WeatherAmbientElement : View
                 WeatherController.RainLocked
                     ? GetText("UI.WeatherGUI.RainLocked")
                     : GetText("UI.WeatherGUI.RainUnlocked"), tipColor);
+        }
+
+        // 音乐盒和沙尘暴调节
+        var sandstormMusixBoxHitbox = new Rectangle(boundary.X + 348, boundary.Y + 95, 36, 36);
+        if (sandstormMusixBoxHitbox.Contains(Main.MouseScreen.ToPoint()))
+        {
+            WeatherLockerPacket.ToggleSandstorm();
+            Main.NewText(
+                WeatherController.SandstormLocked
+                    ? GetText("UI.WeatherGUI.SandstormLocked")
+                    : GetText("UI.WeatherGUI.SandstormUnlocked"), tipColor);
         }
 
         // 钟和时间调节（暂不开放时间锁定）
@@ -251,14 +289,18 @@ public partial class WeatherAmbientElement : View
         DrawSunAndMoon(boundary, sunColor, moonColor);
         Main.spriteBatch.Draw(foreground, boundary.Location.ToVector2(), colorOfTheSkies);
         DrawClouds(boundary, colorOfTheSkies);
+        DrawSandstormFilter(boundary);
         DrawLivingObjects(boundary, tileColor);
         Main.spriteBatch.Draw(tiles, boundary.Location.ToVector2(), tileColor);
         DrawHighlights(boundary, tileColor);
         DrawRainMusicBox(boundary, tileColor);
+        DrawSandstormMusicBox(boundary, tileColor);
         DrawPinWheel(boundary, tileColor);
         DrawHands(boundary, tileColor); // 时钟指针: hands
         DrawEasterEgg(boundary, tileColor);
+        DrawSandstormDust(boundary, tileColor);
         DrawRainingOverlay(boundary, Color.White, tileColor);
+        DrawSandstormVignette(boundary);
     }
 
     private static void GetColors(out Color skiesColor, out Color tileColor, out Color sunColor, out Color moonColor)
@@ -329,6 +371,14 @@ public partial class WeatherAmbientElement : View
         Main.spriteBatch.Draw(clouds, pos2, color * _cloudFade);
     }
 
+    private void DrawSandstormFilter(Rectangle boundary)
+    {
+        boundary.Height -= 4;
+        float num = Math.Min(1f, Sandstorm.Severity * 1.5f);
+        Color color3 = new Color(new Vector4(0.85f, 0.66f, 0.33f, 1f) * 0.8f * Main.ColorOfTheSkies.ToVector4()) * (SkyManager.Instance["Sandstorm"] as SandstormSky)._opacity * num;
+        Main.spriteBatch.Draw(TextureAssets.MagicPixel.Value, boundary, color3);
+    }
+
     private static void DrawHighlights(Rectangle boundary, Color color)
     {
         var clock = ModAsset.ClockHighlight.Value;
@@ -378,6 +428,32 @@ public partial class WeatherAmbientElement : View
         }
 
         if (WeatherController.RainLocked)
+            DrawLock(musixBoxHitbox, color);
+    }
+    private static void DrawSandstormMusicBox(Rectangle boundary, Color color)
+    {
+        var musixBoxHitbox = new Rectangle(boundary.X + 348, boundary.Y + 95, 36, 36);
+        var position = musixBoxHitbox.Location.ToVector2();
+
+        var musixBoxHighlight_1 = ModAsset.SandstormHighlight_1.Value;
+        var musixBoxHighlight_2 = ModAsset.SandstormHighlight_2.Value;
+        var musixBoxTexture = Sandstorm.Happening ? ModAsset.SandstormActive.Value : ModAsset.SandstormInactive.Value;
+
+        Main.spriteBatch.Draw(musixBoxTexture, position, color);
+        if (musixBoxHitbox.Contains(Main.MouseScreen.ToPoint()))
+        {
+            if (Sandstorm.Happening)
+                Main.spriteBatch.Draw(musixBoxHighlight_2, position, color);
+            else
+                Main.spriteBatch.Draw(musixBoxHighlight_1, position, color);
+
+            _hoverText = Sandstorm.Happening
+                ? GetText("UI.WeatherGUI.SandstormInactive")
+                : GetText("UI.WeatherGUI.SandstormActive");
+            _hoverText += "\n" + GetText($"UI.WeatherGUI.SandstormLock{WeatherController.SandstormLocked}");
+        }
+
+        if (WeatherController.SandstormLocked)
             DrawLock(musixBoxHitbox, color);
     }
 
@@ -433,9 +509,51 @@ public partial class WeatherAmbientElement : View
         Main.spriteBatch.Draw(minuteHand, center, null, color, angleMinutes, origin, 1f, SpriteEffects.None, 0f);
     }
 
+    private void DrawSandstormDust(Rectangle boundary, Color tileColor)
+    {
+        var dust = ModAsset.SandstormDust.Value;
+        var startPosition = boundary.Location.ToVector2();
+
+        if (Sandstorm.ShouldSandstormDustPersist())
+            for (int i = 0; i < 5f * Sandstorm.Severity; i++)
+                if (Main.rand.NextBool(5))
+                {
+                    WeightedRandom<Color> weightedRandom = new WeightedRandom<Color>();
+                    weightedRandom.Add(new Color(200, 160, 20, 180), Main.SceneMetrics.GetTileCount(53) + Main.SceneMetrics.GetTileCount(396) + Main.SceneMetrics.GetTileCount(397));
+                    weightedRandom.Add(new Color(103, 98, 122, 180), Main.SceneMetrics.GetTileCount(112) + Main.SceneMetrics.GetTileCount(400) + Main.SceneMetrics.GetTileCount(398));
+                    weightedRandom.Add(new Color(135, 43, 34, 180), Main.SceneMetrics.GetTileCount(234) + Main.SceneMetrics.GetTileCount(401) + Main.SceneMetrics.GetTileCount(399));
+                    weightedRandom.Add(new Color(213, 196, 197, 180), Main.SceneMetrics.GetTileCount(116) + Main.SceneMetrics.GetTileCount(403) + Main.SceneMetrics.GetTileCount(402));
+
+                    if (Main.windSpeedCurrent > 0)
+                        _dustScroller1.Add((new Vector3(-8, Main.rand.NextFloat(boundary.Height - 40), Main.rand.NextFloat(6.00f, 10.00f)), weightedRandom.Get().PackedValue));
+                    else
+                        _dustScroller1.Add((new Vector3(boundary.Width + 8, Main.rand.NextFloat(boundary.Height), Main.rand.NextFloat(-10.00f, -6.00f)), weightedRandom.Get().PackedValue));
+                }
+
+        for (int i = _dustScroller1.Count - 1; i >= 0; i--)
+        {
+            var vec = _dustScroller1[i].Item1;
+
+            var pos1 = startPosition + new Vector2(vec.X, vec.Y);
+            _dustScroller1[i] = (new Vector3(vec.X + vec.Z, vec.Y + (float)Math.Sin(i / 11f) * 1.5f + 0.7f, vec.Z), _dustScroller1[i].Item2);
+            vec = _dustScroller1[i].Item1;
+
+            if (vec.X > boundary.Width + 10 || vec.X < -10 || new Vector2(0, boundary.Height).Distance(new Vector2(vec.X, vec.Y)) < 8 || new Vector2(boundary.Width, boundary.Height).Distance(new Vector2(vec.X, vec.Y)) < 8)
+                _dustScroller1.RemoveAt(i);
+            else
+                Main.spriteBatch.Draw(dust, pos1, new Rectangle(0, 8 * (Math.Abs((int)(vec.Z * 100)) % 3), 8, 8), new Color(_dustScroller1[i].Item2), 0, new Vector2(4, 4), 1, SpriteEffects.None, 0);
+        }
+
+        if (_dustScroller1.Count == 0)
+            return;
+
+        var overlayOnRain = ModAsset.OverlayOnRain.Value;
+        Main.spriteBatch.Draw(overlayOnRain, boundary.Location.ToVector2(), tileColor);
+    }
+
     private void DrawRainingOverlay(Rectangle boundary, Color color, Color tileColor)
     {
-        if (!Main.IsItRaining)
+        if (!Main.IsItRaining || Main.LocalPlayer.ZoneSandstorm)
             return;
 
         float scaleX = 1.4f;
@@ -464,6 +582,11 @@ public partial class WeatherAmbientElement : View
 
         var overlayOnRain = ModAsset.OverlayOnRain.Value;
         Main.spriteBatch.Draw(overlayOnRain, boundary.Location.ToVector2(), tileColor);
+    }
+
+    private static void DrawSandstormVignette(Rectangle boundary)
+    {
+        Main.spriteBatch.Draw(ModAsset.SandstormVignette.Value, boundary, Color.White * (SkyManager.Instance["Sandstorm"] as SandstormSky)._opacity * 0.5f);
     }
 
     private static void DrawStars(Rectangle boundary, Color color, Color colorOfTheSkies)
@@ -543,10 +666,8 @@ public partial class WeatherAmbientElement : View
         DrawGrass(ModAsset.Grass1, 264, 146, false);
         DrawGrass(ModAsset.Grass4, 296, 130, false);
         DrawGrass(ModAsset.Grass3, 308, 130, false);
-        DrawGrass(ModAsset.Grass5, 360, 130, false);
-        DrawGrass(ModAsset.Grass3, 372, 130, false);
         if (!_easterEggActivated)
-            DrawGrass(ModAsset.Mushroom, 392, 130, false);
+            DrawGrass(ModAsset.Mushroom, 394, 130, false);
 
         if (!Testing)
             return;

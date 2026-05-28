@@ -181,6 +181,9 @@ public class UIConfigs : ModConfig
     [DisplayCondition(nameof(UIConfigs), nameof(RemoveGraveyardVisual))]
     public bool RemoveGraveyardMusic;
 
+    [DefaultValue(typeof(Color), "0, 0, 0, 0")]
+    public Color SpelunkerColor;
+
     [DefaultValue(false)]
     public bool FckKeybindPopup;
 
