@@ -415,7 +415,7 @@ public static class ItemExtensions
         Main.MouseText_DrawItemTooltip_GetLinesInfo(hoverItem, ref yoyoLogo, ref researchLine, knockBack, ref numLines, mouseTextTooltipLine_Text, mouseTextTooltipLine_Color, tooltipNames, out int prefixlineIndex);
         Main.MouseText_DrawItemTooltip_AddShopLines(hoverItem, ref numLines, mouseTextTooltipLine_Text, mouseTextTooltipLine_Color, tooltipNames);
         if (NewCraftingUI.Visible)
-            NewCraftingUI.AddTooltipLines(hoverItem, ref numLines, mouseTextTooltipLine_Text, mouseTextTooltipLine_Color);
+            NewCraftingUI.AddTooltipLines(hoverItem, ref numLines, mouseTextTooltipLine_Text, mouseTextTooltipLine_Color, tooltipNames);
 
         Vector2 zero = Vector2.Zero;
 
