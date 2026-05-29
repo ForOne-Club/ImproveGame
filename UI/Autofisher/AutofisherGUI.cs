@@ -1,4 +1,5 @@
-﻿using ImproveGame.Common.ModPlayers;
+﻿using ImproveGame.Common.GlobalItems;
+using ImproveGame.Common.ModPlayers;
 using ImproveGame.Common.ModSystems;
 using ImproveGame.Packets.NetAutofisher;
 using ImproveGame.UIFramework;
@@ -199,9 +200,6 @@ public partial class AutofisherGUI : BaseBody, ISidedView
                 continue;
             fish[i] = ItemStackToInventory(inventory, fish[i], false, 50);
         }
-
-        Recipe.FindRecipes();
-
         // 同步
         SyncFromTileEntity();
         if (Main.netMode is NetmodeID.MultiplayerClient)
@@ -217,7 +215,7 @@ public partial class AutofisherGUI : BaseBody, ISidedView
             (Main.mouseItem is null || Main.mouseItem.IsAir))
         {
             // 添加特殊标识，在AutofishItemListener中将根据这个标识特异性识别物品并添加tooltip
-            Main.HoverItem.playerIndexTheItemIsReservedFor = 254;
+            Main.HoverItem.GetGlobalItem<AutofishItemListener>().IsInAutoFisher = true;
         }
 
         // 是否开启制作栏侧栏，只有在开启或正在开启状态才隐藏，正在关闭状态不隐藏

@@ -81,13 +81,12 @@ public class AmmoChainItem : ModItem
         Item.color = Chain.Color;
         return base.PreDrawInInventory(spriteBatch, position, frame, drawColor, itemColor, origin, scale);
     }
-
-    public override bool PreDrawInWorld(SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation,
+    public override bool PreDrawInWorld(WorldItem item, SpriteBatch spriteBatch, Color lightColor, Color alphaColor, ref float rotation,
         ref float scale,
         int whoAmI)
     {
         Item.color = Chain.Color;
-        return base.PreDrawInWorld(spriteBatch, lightColor, alphaColor, ref rotation, ref scale, whoAmI);
+        return base.PreDrawInWorld(item, spriteBatch, lightColor, alphaColor, ref rotation, ref scale, whoAmI);
     }
 
     public static void AddAmmoChainTooltips(Mod mod, AmmoChain ammoChain, List<TooltipLine> tooltips)
@@ -98,7 +97,7 @@ public class AmmoChainItem : ModItem
         {
             tooltipLines.Add(new TooltipLine(mod, "AmmoChainDisabled", GetText("Tips.AmmoChainDisabled"))
             {
-                OverrideColor = Color.Yellow
+                Color = Color.Yellow
             });
             AddToTooltip();
             return;
@@ -118,7 +117,7 @@ public class AmmoChainItem : ModItem
             ammoChainLineText += theText;
             tooltipLines.Add(new TooltipLine(mod, "AmmoChain", ammoChainLineText)
             {
-                OverrideColor = Color.Yellow
+                Color = Color.Yellow
             });
 
             // 这里return，强调一下
@@ -128,7 +127,7 @@ public class AmmoChainItem : ModItem
 
         tooltipLines.Add(new TooltipLine(mod, "AmmoChain", ammoChainLineText)
         {
-            OverrideColor = Color.Yellow
+            Color = Color.Yellow
         });
 
         string cachedText = "";

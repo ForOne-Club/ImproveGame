@@ -299,6 +299,6 @@ public class ChainEditPage : View
 
         Vector2 position = _editableText.InnerText.GetDimensions().ToRectangle().Bottom();
         position.Y += 32f;
-        Main.instance.DrawWindowsIMEPanel(position, 0.5f);
+        Main.instance.SetIMEPanelAnchor(position, 0.5f);
     }
 }

@@ -92,7 +92,7 @@ namespace ImproveGame.Content.Items
             CreateRecipe()
                 .AddRecipeGroup(RecipeSystem.AnyMythrilBar, 18)
                 .AddIngredient(ItemID.Amber, 8)
-                .AddRecipeGroup(RecipeGroupID.Wood, 80)
+                .AddRecipeGroup(RecipeGroups.Wood, 80)
                 .AddIngredient(ItemID.StoneBlock, 80)
                 .AddTile(TileID.MythrilAnvil)
                 .Register();

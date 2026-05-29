@@ -58,7 +58,7 @@ public class DetectorDroneProj : ModProjectile
             }
             else
             {
-                Player.DirectionalInputSyncCache localInputCache = player.LocalInputCache;
+                Player.PlayerInputSyncCache localInputCache = player.LocalInputCache;
                 direction.X -= (localInputCache.controlLeft ^ gravityFlipped).ToInt();
                 direction.X += (localInputCache.controlRight ^ gravityFlipped).ToInt();
                 direction.Y -= localInputCache.controlUp.ToInt();
@@ -162,15 +162,15 @@ public class DetectorDroneProj : ModProjectile
         }
     }
 
-    public override bool PreDraw(ref Color lightColor)
+    public override bool PreDraw(Player player, ref Color lightColor)
     {
         Main.DrawTrail(Projectile, new Vector2(10f, 2f), new Color(59, 217, 180, 100));
         Main.DrawTrail(Projectile, new Vector2(-10f, 2f), new Color(59, 217, 180, 100));
-        return base.PreDraw(ref lightColor);
+        return base.PreDraw(player, ref lightColor);
     }
 
     // 改了DrawOffset和DrawOriginOffset就是这么麻烦
-    public override void PostDraw(Color lightColor)
+    public override void PostDraw(Player player, Color lightColor)
     {
         var tex = ModAsset.DetectorDrone_Glow.Value;
 

@@ -370,11 +370,11 @@ public class DefinitionSUIDetour : ILoadable
     public void Load(Mod mod)
     {
         On_UIPanel.DrawSelf += SUIize;
-        MonoModHooks.Modify(typeof(NPCDefinitionOptionElement).GetMethod("DrawSelf", BindingFlags.NonPublic | BindingFlags.Instance), Modify_SUIDefinition_Normal);
-        MonoModHooks.Modify(typeof(BuffDefinitionOptionElement).GetMethod("DrawSelf", BindingFlags.NonPublic | BindingFlags.Instance), Modify_SUIDefinition_Normal);
-        MonoModHooks.Modify(typeof(ProjectileDefinitionOptionElement).GetMethod("DrawSelf", BindingFlags.NonPublic | BindingFlags.Instance), Modify_SUIDefinition_Normal);
-        MonoModHooks.Modify(typeof(ItemDefinitionOptionElement).GetMethod("DrawSelf", BindingFlags.NonPublic | BindingFlags.Instance), Modify_SUIDefinition_Item);
-        MonoModHooks.Modify(typeof(TileDefinitionOptionElement).GetMethod("DrawSelf", BindingFlags.NonPublic | BindingFlags.Instance), Modify_SUIDefinition_Tile);
+        // MonoModHooks.Modify(typeof(NPCDefinitionOptionElement).GetMethod("DrawSelf", BindingFlags.NonPublic | BindingFlags.Instance), Modify_SUIDefinition_Normal);
+        // MonoModHooks.Modify(typeof(BuffDefinitionOptionElement).GetMethod("DrawSelf", BindingFlags.NonPublic | BindingFlags.Instance), Modify_SUIDefinition_Normal);
+        // MonoModHooks.Modify(typeof(ProjectileDefinitionOptionElement).GetMethod("DrawSelf", BindingFlags.NonPublic | BindingFlags.Instance), Modify_SUIDefinition_Normal);
+        // MonoModHooks.Modify(typeof(ItemDefinitionOptionElement).GetMethod("DrawSelf", BindingFlags.NonPublic | BindingFlags.Instance), Modify_SUIDefinition_Item);
+        // MonoModHooks.Modify(typeof(TileDefinitionOptionElement).GetMethod("DrawSelf", BindingFlags.NonPublic | BindingFlags.Instance), Modify_SUIDefinition_Tile);
     }
     void Modify_SUIDefinition_Normal(ILContext il)
     {

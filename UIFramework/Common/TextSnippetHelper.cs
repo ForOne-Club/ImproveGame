@@ -167,7 +167,7 @@ public static class TextSnippetHelper
 
             if (originalSnippets[i].GetType() == typeof(TextSnippet))
             {
-                snippet = new PlainTagHandler.PlainSnippet(snippet.Text, snippet.Color, snippet.Scale);
+                snippet = new PlainTagHandler.PlainSnippet(snippet.Text, snippet.Color);
             }
 
             finalSnippets.Add(snippet);
@@ -179,7 +179,7 @@ public static class TextSnippetHelper
     /// <summary>
     /// 针对textSnippet特殊文本的换行
     /// </summary>
-    public static TextSnippet[] WordwrapString(TextSnippet[] originalSnippets, Color textColor, DynamicSpriteFont font,
+    public static List<TextSnippet> WordwrapString(List<TextSnippet> originalSnippets, Color textColor, DynamicSpriteFont font,
         int maxWidth, out float lastLineLength, int maxCharacterCount = 19, int maxLines = -1)
     {
         int lineCount = 1; // 行数
@@ -248,7 +248,7 @@ public static class TextSnippetHelper
             }
             else
             {
-                float length = snippet.GetStringLength(font);
+                float length = snippet.UniqueDraw(true, out var size, null) ? size.X : 0;
                 workingLineLength += length;
                 // 超了 - 换行再添加，注意起始长度
                 if (workingLineLength > maxWidth)
@@ -276,21 +276,21 @@ public static class TextSnippetHelper
                 }
 
                 lastLineLength = 0;
-                return finalSnippets.ToArray();
+                return finalSnippets;
             }
         }
 
         lastLineLength = workingLineLength;
-        return finalSnippets.ToArray();
+        return finalSnippets;
     }
 
     /// <summary>
     /// 针对textSnippet特殊文本的换行
     /// </summary>
-    public static TextSnippet[] WordwrapString(string text, Color textColor, DynamicSpriteFont font, int maxWidth,
+    public static List<TextSnippet> WordwrapString(string text, Color textColor, DynamicSpriteFont font, int maxWidth,
         out float lastLineLength, int maxCharacterCount = 19, int maxLines = -1)
     {
-        TextSnippet[] originalSnippets = ChatManager.ParseMessage(text, textColor).ToArray();
+        var originalSnippets = ChatManager.ParseMessage(text, textColor);
         ChatManager.ConvertNormalSnippets(originalSnippets);
         return WordwrapString(originalSnippets, textColor, font, maxWidth, out lastLineLength, maxCharacterCount,
             maxLines);

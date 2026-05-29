@@ -29,7 +29,7 @@ public class RecipeSearchSystem : ModSystem
         if (!Main.recipe.IndexInRange(recipeIndex))
             return true;
         // 判断有没有在搜索
-        if (SearchUnavailable(out var searchUI) || !Main.recBigList)
+        if (SearchUnavailable(out var searchUI) || Player.Settings.CraftingGridControl != Player.Settings.CraftingGridMode.Classic || !Main.PipsUseGrid)
             return true;
         // 真正的判断
         return Main.recipe[recipeIndex].createItem.MatchWithString(searchUI.SearchContent, false);
@@ -66,10 +66,11 @@ public class RecipeSearchSystem : ModSystem
 
     public override void UpdateUI(GameTime gameTime)
     {
-        if (_oldRecBigList != Main.recBigList && UIConfigs.Instance.RecipeSearch)
+        bool flag = Player.Settings.CraftingGridControl == Player.Settings.CraftingGridMode.Classic && Main.PipsUseGrid;
+        if (_oldRecBigList != flag && UIConfigs.Instance.RecipeSearch)
         {
-            Recipe.FindRecipes();
-            _oldRecBigList = Main.recBigList;
+            // Recipe.FindRecipes();
+            _oldRecBigList = flag;
         }
     }
 }

@@ -129,8 +129,8 @@ public class BannerChest : ModItem, IItemOverrideLeftClick, IItemOverrideHover, 
         {
             var font = FontAssets.MouseText.Value;
             var position = new Vector2(line.X, line.Y);
-            var color = line.OverrideColor ?? line.Color;
-            TextSnippet[] snippets = ChatManager.ParseMessage(line.Text, color).ToArray();
+            var color = line.Color;
+            var snippets = ChatManager.ParseMessage(line.Text, color);
             ChatManager.ConvertNormalSnippets(snippets);
             ChatManager.DrawColorCodedString(Main.spriteBatch, font, snippets, position, Color.White, 0f,
                 Vector2.Zero, Vector2.One, out _, -1);
@@ -154,7 +154,7 @@ public class BannerChest : ModItem, IItemOverrideLeftClick, IItemOverrideHover, 
         {
             tooltips.Add(new TooltipLine(Mod, "BannerChestUseless", GetText("Tips.BannerChestUseless"))
             {
-                OverrideColor = Color.SkyBlue
+                Color = Color.SkyBlue
             });
         }
 
@@ -165,7 +165,7 @@ public class BannerChest : ModItem, IItemOverrideLeftClick, IItemOverrideHover, 
                 : GetTextWith("Tips.BannerChestCurrent", new { StoredCount = ItemContainer.Count });
             tooltips.Add(new TooltipLine(Mod, "BannerChestCurrent", storeText)
             {
-                OverrideColor = Color.LightGreen
+                Color = Color.LightGreen
             });
 
             string cachedText = string.Empty;
@@ -192,7 +192,7 @@ public class BannerChest : ModItem, IItemOverrideLeftClick, IItemOverrideHover, 
         {
             tooltips.Add(new TooltipLine(Mod, "BannerChestNone", GetText("Tips.BannerChestNone"))
             {
-                OverrideColor = Color.SkyBlue
+                Color = Color.SkyBlue
             });
         }
     }
@@ -251,7 +251,7 @@ public class BannerChest : ModItem, IItemOverrideLeftClick, IItemOverrideHover, 
     public override void AddRecipes()
     {
         CreateRecipe()
-            .AddRecipeGroup(RecipeGroupID.IronBar, 12)
+            .AddRecipeGroup(RecipeGroups.IronBar, 12)
             .AddTile(TileID.Anvils)
             .Register();
     }

@@ -4,6 +4,8 @@ using ImproveGame.UIFramework.Common;
 using ReLogic.Graphics;
 using System.Text.RegularExpressions;
 using Terraria.UI.Chat;
+using static System.Net.Mime.MediaTypeNames;
+using static Terraria.GameContent.Animations.Actions.Sprites;
 
 namespace ImproveGame.UIFramework.SUIElements;
 
@@ -152,7 +154,7 @@ public class SUIText : TimerView
     /// <summary>
     /// 最终展示文本
     /// </summary>
-    public TextSnippet[] FinalTextSnippets { get; protected set; }
+    public List<TextSnippet> FinalTextSnippets { get; protected set; }
 
     /// <summary>
     /// 最后一次的 inner 宽度
@@ -214,7 +216,7 @@ public class SUIText : TimerView
         }
         else
         {
-            FinalTextSnippets = [.. TextSnippetHelper.ConvertNormalSnippets(TextSnippetHelper.ParseMessage(LastString, TextColor))];
+            FinalTextSnippets = TextSnippetHelper.ConvertNormalSnippets(TextSnippetHelper.ParseMessage(LastString, TextColor));
         }
         TextSize = ChatManager.GetStringSize(Font, FinalTextSnippets, new Vector2(1f));
         OnRecalculateText?.Invoke();
@@ -246,15 +248,17 @@ public class SUIText : TimerView
         textPos -= TextOrigin * TextSize * TextScale;
         textPos.Y += TextScale * (_isLarge ? UIConfigs.Instance.BigFontOffsetY : UIConfigs.Instance.GeneralFontOffsetY);
 
-        DrawColorCodedStringShadow(spriteBatch, Font, FinalTextSnippets,
-            textPos, TextBorderColor, 0f, Vector2.Zero, new Vector2(TextScale), -1f, TextBorder);
+        var scale = new Vector2(TextScale);
+        ChatManager.DrawColorCodedStringShadow(spriteBatch, Font, FinalTextSnippets
+            , textPos, TextColor, 0f, Vector2.Zero, scale, -1, TextBorder);
 
-        DrawColorCodedString(spriteBatch, Font, FinalTextSnippets,
-            textPos, TextColor, 0f, Vector2.Zero, new Vector2(TextScale), out var _, -1f);
+        ChatManager.DrawColorCodedString(spriteBatch, Font, FinalTextSnippets,
+            textPos, TextColor, 0f, Vector2.Zero, scale, out var _, -1f);
     }
 
     public Vector2[] ShadowDirections = [-Vector2.UnitX, Vector2.UnitX, -Vector2.UnitY, Vector2.UnitY];
 
+#if false
     public void DrawColorCodedStringShadow(SpriteBatch spriteBatch, DynamicSpriteFont font, TextSnippet[] snippets, Vector2 position, Color baseColor, float rotation, Vector2 origin, Vector2 baseScale, float maxWidth = -1f, float spread = 2f)
     {
         for (int i = 0; i < ShadowDirections.Length; i++)
@@ -364,7 +368,7 @@ public class SUIText : TimerView
         hoveredSnippet = num;
         return result;
     }
-
+#endif
     /*/// <summary>
     /// 绘制偏移
     /// </summary>

@@ -12,10 +12,10 @@ namespace ImproveGame.Content.Functions
         public override void Load()
         {
             // 更好的NPC生成机制 + NPC生成加速
-            On_Main.UpdateTime_SpawnTownNPCs += orig =>
+            On_Main.UpdateTime_SpawnTownNPCs += (orig, force) =>
             {
                 _isExtraUpdate = false;
-                orig.Invoke();
+                orig.Invoke(force);
                 TrySpawnNPCsThatNeedsToUntie();
 
                 // 2023.3.25: 调用次数从指数级改为乘数，发现实际速度并无差异，减少开销的操作也可有可无了，不过还是保留吧
@@ -27,7 +27,7 @@ namespace ImproveGame.Content.Functions
                 _isExtraUpdate = true;
                 for (int i = 0; i < times; i++)
                 {
-                    TrySetNPCSpawn(orig, worldUpdateRate);
+                    TrySetNPCSpawn(orig, force, worldUpdateRate);
                 }
 
                 // 重置标记防止影响其他模组或原版代码
@@ -50,9 +50,9 @@ namespace ImproveGame.Content.Functions
             };
         }
 
-        private static void TrySetNPCSpawn(On_Main.orig_UpdateTime_SpawnTownNPCs orig, double worldUpdateRate)
+        private static void TrySetNPCSpawn(On_Main.orig_UpdateTime_SpawnTownNPCs orig, bool force, double worldUpdateRate)
         {
-            orig.Invoke();
+            orig.Invoke(force);
 
             // 确保原版在生成NPC的阶段
             if (Main.netMode is NetmodeID.MultiplayerClient || worldUpdateRate <= 0 || Main.checkForSpawns != 0)
@@ -129,7 +129,7 @@ namespace ImproveGame.Content.Functions
         public override void PostUpdateTime()
         {
             if (!Main.dayTime && ImproveConfigs.Instance.TownNPCGetTFIntoHouse)
-                Main.UpdateTime_SpawnTownNPCs();
+                Main.UpdateTime_SpawnTownNPCs(true);
         }
 
         private static void TrySetNPCSpawn(int npcId)

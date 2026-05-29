@@ -1,4 +1,5 @@
 ﻿using ImproveGame.Common.Configs;
+using Terraria.Graphics.Capture;
 
 namespace ImproveGame.Common.RenderTargetContents;
 
@@ -16,9 +17,10 @@ public class RenderTargetContentSystem : ILoadable
 
         ItemSlotTarget = new ItemSlotContent(UIConfigs.Instance.ThemeType);
 
-        On_TimeLogger.NewDrawFrame += orig =>
+        // On_TimeLogger.NewDrawFrame += orig =>
+        On_CaptureManager.DrawTick += (orig, self) =>
         {
-            orig.Invoke();
+            orig.Invoke(self);
 
             if (ItemSlotTarget.Theme != UIConfigs.Instance.ThemeType)
             {

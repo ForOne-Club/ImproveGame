@@ -514,7 +514,7 @@ public partial class WeatherAmbientElement : View
         var dust = ModAsset.SandstormDust.Value;
         var startPosition = boundary.Location.ToVector2();
 
-        if (Sandstorm.ShouldSandstormDustPersist())
+        if (Sandstorm.ShowSandstormVisuals())
             for (int i = 0; i < 5f * Sandstorm.Severity; i++)
                 if (Main.rand.NextBool(5))
                 {

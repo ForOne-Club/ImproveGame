@@ -216,57 +216,65 @@ public class StructureDatas : ModSystem
 
     public override void Load()
     {
-        On_WorldGen.Pyramid += (orig, x, y) =>
-        {
-            QotVersionInWorldGeneration = Mod.Version.ToString();
-            if (orig(x, y))
-            {
-                PyramidPositions.Add(new Point16(x, y + 50));
-                return true;
-            }
-
-            return false;
-        };
+        On_WorldGen.Pyramid += PyramidIndicator;
 
         // 可恶的醉酒会互换大理石和花岗岩，但没关系，我也会互换嘻嘻
-        On_MarbleBiome.Place += (orig, marbleBiome, origin, structures) =>
+        On_MarbleBiome.Place += MarbleIndicator;
+
+        On_GraniteBiome.Place += GraniteIndicator;
+
+        On_HiveBiome.Place += HiveBiomeIndicator;
+    }
+
+    private bool HiveBiomeIndicator(On_HiveBiome.orig_Place orig, HiveBiome self, Point origin, StructureMap structures, GenerationProgress progress)
+    {
+        if (orig.Invoke(self, origin, structures, progress))
         {
-            if (orig(marbleBiome, origin, structures))
-            {
-                if (Main.drunkWorld)
-                    AllGraniteCavePositions.Add(new Point16(origin.X, origin.Y));
-                else
-                    AllMarbleCavePositions.Add(new Point16(origin.X, origin.Y));
-                return true;
-            }
+            AllHivePositions.Add(new Point16(origin.X, origin.Y));
+            return true;
+        }
 
-            return false;
-        };
+        return false;
+    }
 
-        On_GraniteBiome.Place += (orig, graniteBiome, origin, structures) =>
+    private bool GraniteIndicator(On_GraniteBiome.orig_Place orig, GraniteBiome self, Point origin, StructureMap structures, GenerationProgress progress)
+    {
+        if (orig.Invoke(self, origin, structures, progress))
         {
-            if (orig(graniteBiome, origin, structures))
-            {
-                if (Main.drunkWorld)
-                    AllMarbleCavePositions.Add(new Point16(origin.X, origin.Y));
-                else
-                    AllGraniteCavePositions.Add(new Point16(origin.X, origin.Y));
-                return true;
-            }
+            if (Main.drunkWorld)
+                AllMarbleCavePositions.Add(new Point16(origin.X, origin.Y));
+            else
+                AllGraniteCavePositions.Add(new Point16(origin.X, origin.Y));
+            return true;
+        }
 
-            return false;
-        };
+        return false;
+    }
 
-        On_HiveBiome.Place += (orig, hiveBiome, origin, structures) =>
+    private bool MarbleIndicator(On_MarbleBiome.orig_Place orig, MarbleBiome self, Point origin, StructureMap structures, GenerationProgress progress)
+    {
+        if (orig.Invoke(self, origin, structures, progress))
         {
-            if (orig(hiveBiome, origin, structures))
-            {
-                AllHivePositions.Add(new Point16(origin.X, origin.Y));
-                return true;
-            }
+            if (Main.drunkWorld)
+                AllGraniteCavePositions.Add(new Point16(origin.X, origin.Y));
+            else
+                AllMarbleCavePositions.Add(new Point16(origin.X, origin.Y));
+            return true;
+        }
 
-            return false;
-        };
+        return false;
+    }
+
+    private bool PyramidIndicator(On_WorldGen.orig_Pyramid orig, int i, int j, int pyramidMinDepth, int pyramidMaxDepth, bool noTunnel)
+    {
+        QotVersionInWorldGeneration = Mod.Version.ToString();
+        if (orig.Invoke(i, j, pyramidMinDepth, pyramidMaxDepth, noTunnel))
+        {
+            PyramidPositions.Add(new Point16(i, j + 50));
+            return true;
+        }
+
+        return false;
     }
 
     public override void PreWorldGen()

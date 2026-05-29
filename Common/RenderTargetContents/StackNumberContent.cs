@@ -4,7 +4,7 @@ public class StackNumberContent(string number) : ARenderTargetContentByRequest
 {
     private string _number = number;
 
-    public override void HandleUseReqest(GraphicsDevice device, SpriteBatch spriteBatch)
+    public override void HandleUseRequest(GraphicsDevice device, SpriteBatch spriteBatch)
     {
         var font = FontAssets.ItemStack.Value;
         var size = font.MeasureString(_number);

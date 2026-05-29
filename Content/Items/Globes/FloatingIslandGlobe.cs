@@ -189,7 +189,7 @@ public class FloatingIslandGlobe : OnceForAllGlobe
     }
     protected override Recipe AddCraftingMaterials(Recipe recipe) =>
         recipe.AddIngredient(ItemID.Glass, 18)
-            .AddRecipeGroup(RecipeGroupID.Wood, 100)
+            .AddRecipeGroup(RecipeGroups.Wood, 100)
             .AddIngredient(ItemID.Rope, 100)
             .AddTile(TileID.WorkBenches);
 }

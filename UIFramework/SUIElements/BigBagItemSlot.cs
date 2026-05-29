@@ -1,6 +1,7 @@
 ﻿using ImproveGame.Common.ModHooks;
 using ImproveGame.UIFramework.BaseViews;
 using ImproveGame.UIFramework.Common;
+using ImproveGame.UIFramework.UIElements;
 using Terraria.GameContent.UI.Chat;
 using Terraria.UI.Chat;
 
@@ -79,7 +80,7 @@ namespace ImproveGame.UIFramework.SUIElements
                 Main.mouseRightRelease = true;
 
                 if (Main.ItemDropsDB.GetRulesForItemID(Item.type).Count != 0)
-                    ItemSlot.TryOpenContainer(Item, Main.LocalPlayer);
+                    ItemSlot.TryOpenContainer([Item], 0, 0, Main.LocalPlayer);
                 else
                     ItemLoader.RightClick(Item, Main.LocalPlayer);
 
@@ -134,7 +135,7 @@ namespace ImproveGame.UIFramework.SUIElements
         /// </summary>
         protected void TakeSlotItemToMouseItem(int stack)
         {
-            if (((!Main.mouseItem.IsTheSameAs(Item) || !ItemLoader.CanStack(Main.mouseItem, Item)) &&
+            if (((Main.mouseItem.type != Item.type || !ItemLoader.CanStack(Main.mouseItem, Item)) &&
                  Main.mouseItem.type is not ItemID.None) || (Main.mouseItem.stack >= Main.mouseItem.maxStack &&
                                                              Main.mouseItem.type is not ItemID.None))
             {
@@ -152,7 +153,7 @@ namespace ImproveGame.UIFramework.SUIElements
             {
                 ItemLoader.StackItems(Main.mouseItem, Item, out _, numToTransfer: stack);
                 if (Item.stack <= 0)
-                    Item.SetDefaults();
+                    Item.TurnToAir();
                 SoundEngine.PlaySound(SoundID.MenuTick);
             }
         }
@@ -236,12 +237,12 @@ namespace ImproveGame.UIFramework.SUIElements
                     // 假装自己是一个物品栏物品
                     var temp = new Item[1];
                     temp[0] = Item;
-                    ItemSlot.SellOrTrash(temp, ItemSlot.Context.InventoryItem, 0);
+                    ModItemSlot.SellOrTrash(temp, ItemSlot.Context.InventoryItem, 0);
                     return;
                 // 放回物品栏图标
                 case CursorOverrideID.ChestToInventory:
-                    Item = Main.player[Main.myPlayer].GetItem(Main.myPlayer, Item,
-                        GetItemSettings.InventoryEntityToPlayerInventorySettings);
+                    Item = Main.LocalPlayer.GetItem(Item,
+                        GetItemSettings.QuickTransferFromSlot);
                     SoundEngine.PlaySound(SoundID.Grab);
                     return;
             }
@@ -279,7 +280,7 @@ namespace ImproveGame.UIFramework.SUIElements
                             if (Item.stack + Main.mouseItem.stack <= Item.maxStack)
                             {
                                 Item.stack += Main.mouseItem.stack;
-                                Main.mouseItem.SetDefaults();
+                                Main.mouseItem.TurnToAir();
                             }
                             else
                             {
@@ -292,7 +293,7 @@ namespace ImproveGame.UIFramework.SUIElements
                             if (Main.mouseItem.stack + Item.stack <= Main.mouseItem.maxStack)
                             {
                                 Main.mouseItem.stack += Item.stack;
-                                Item.SetDefaults();
+                                Item.TurnToAir();
                             }
                             else
                             {
@@ -369,7 +370,7 @@ namespace ImproveGame.UIFramework.SUIElements
 
             if (IsMouseHovering && Interactable)
             {
-                PlayerLoader.HoverSlot(Main.player[Main.myPlayer], Items, ItemSlot.Context.InventoryItem, Index);
+                PlayerLoader.HoverSlot(Main.LocalPlayer, Items, ItemSlot.Context.InventoryItem, Index);
                 Main.hoverItemName = Item.Name;
                 Main.HoverItem = Item.Clone();
                 SetCursorOverride();

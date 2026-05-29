@@ -129,8 +129,7 @@ public class TileCounter : ILoadable
 
         SystemLoader.ResetNearbyTileEffects();
 
-        Rectangle tileRectangle = new Rectangle(tileCoord.X - Main.buffScanAreaWidth / 2,
-            tileCoord.Y - Main.buffScanAreaHeight / 2, Main.buffScanAreaWidth, Main.buffScanAreaHeight);
+        Rectangle tileRectangle = Utils.CenteredRectangle(tileCoord, SceneMetrics.ZoneScanSize);
         tileRectangle = WorldUtils.ClampToWorld(tileRectangle);
         for (int i = tileRectangle.Left; i < tileRectangle.Right; i++)
         {

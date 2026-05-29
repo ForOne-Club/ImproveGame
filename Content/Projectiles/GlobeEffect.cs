@@ -13,7 +13,7 @@
         }
         //RenderTarget2D render = null;
         //RenderTarget2D render2 = null;
-        public override bool PreDraw(ref Color lightColor)
+        public override bool PreDraw(Player player, ref Color lightColor)
         {
             Main.spriteBatch.ReBegin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
             float factor = 1 - Projectile.timeLeft / 90f;

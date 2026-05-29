@@ -31,7 +31,7 @@ public class LootItemSlot : BaseItemSlot
         if (Main.gamePaused && Main.mouseItem.type == ItemID.None)
             Main.mouseItem = Item.Clone();
         else
-            Main.LocalPlayer.QuickSpawnItem(Main.LocalPlayer.GetSource_FromThis(_context), Item, Item.stack);
+            Main.LocalPlayer.QuickSpawnItem(Main.LocalPlayer.GetSource_FromThis(_context), Item);
         Item.TurnToAir();
     }
 

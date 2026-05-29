@@ -105,17 +105,17 @@ public class SUIButton : TimerView
 
         textPos.Y += UIConfigs.Instance.GeneralFontOffsetY;
         DynamicSpriteFont font = FontAssets.MouseText.Value;
-        TextSnippet[] array = ChatManager.ParseMessage(_text, TextColor).ToArray();
-        ChatManager.ConvertNormalSnippets(array);
+        var list = ChatManager.ParseMessage(_text, TextColor);
+        ChatManager.ConvertNormalSnippets(list);
         var textScale = new Vector2(TextScale);
 
         if (TextHasBorder)
         {
-            ChatManager.DrawColorCodedStringShadow(spriteBatch, font, array, textPos,
+            ChatManager.DrawColorCodedStringShadow(spriteBatch, font, list, textPos,
                 new Color(0, 0, 0, TextColor.A), 0f, Vector2.Zero, textScale, spread: 1f);
         }
 
-        ChatManager.DrawColorCodedString(spriteBatch, font, array, textPos, Color.White, 0f, Vector2.Zero, textScale, out int _, -1f);
+        ChatManager.DrawColorCodedString(spriteBatch, font, list, textPos, Color.White, 0f, Vector2.Zero, textScale, out int _, -1f);
         // TrUtils.DrawBorderString(spriteBatch, _text, textPos, TextColor);
     }
 }

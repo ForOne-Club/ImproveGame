@@ -17,8 +17,8 @@ public static class ChestItemOperation
     /// <inheritdoc cref="SendItemWithSync"/>
     public static void SendAllItemsWithSync(int chestIndex)
     {
-        if (chestIndex is -1 || Main.chest[chestIndex] is null) return;
-        for (var k = 0; k < Chest.maxItems; k++)
+        if (chestIndex is -1 || Main.chest[chestIndex] is not { } chest) return;
+        for (var k = 0; k < chest.maxItems; k++)
         {
             SendItemWithSync(chestIndex, k);
         }
@@ -42,8 +42,8 @@ public static class ChestItemOperation
 
     public static void SendAllItems(int chestIndex, int toClient = -1, int ignoreClient = -1)
     {
-        if (chestIndex is -1 || Main.chest[chestIndex] is null) return;
-        for (var k = 0; k < Chest.maxItems; k++)
+        if (chestIndex is -1 || Main.chest[chestIndex] is not { } chest) return;
+        for (var k = 0; k < chest.maxItems; k++)
         {
             SendItem(chestIndex, k, toClient, ignoreClient);
         }
@@ -52,8 +52,8 @@ public static class ChestItemOperation
     /// <inheritdoc cref="TellServerToForwardItem"/>
     public static void TellServerToForwardAllItems(int chestIndex)
     {
-        if (chestIndex is -1 || Main.chest[chestIndex] is null) return;
-        for (var k = 0; k < Chest.maxItems; k++)
+        if (chestIndex is -1 || Main.chest[chestIndex] is not { } chest) return;
+        for (var k = 0; k < chest.maxItems; k++)
         {
             TellServerToForwardItem(chestIndex, k);
         }
@@ -77,7 +77,7 @@ public static class ChestItemOperation
 
         public static ChestOperationWithResend Get(int chestIndex, int slotIndex)
         {
-            var packet = ModContent.GetInstance<ChestOperationWithResend>();
+            var packet = NetModuleLoader.Get<ChestOperationWithResend>();
             packet._chestIndex = (short)chestIndex;
             packet._slotIndex = (byte)slotIndex;
             return packet;
@@ -97,7 +97,7 @@ public static class ChestItemOperation
 
         public static RequestForChestItem Get(int chestIndex, int slotIndex)
         {
-            var packet = ModContent.GetInstance<RequestForChestItem>();
+            var packet = NetModuleLoader.Get<RequestForChestItem>();
             packet._chestIndex = (short)chestIndex;
             packet._slotIndex = (sbyte)slotIndex;
             return packet;

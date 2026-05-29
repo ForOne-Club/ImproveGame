@@ -19,12 +19,14 @@ public class ModernConfigDetours : ILoadable
         On_Main.CanPauseGame += orig =>
             orig.Invoke() || (Main.netMode is NetmodeID.SinglePlayer && Main.InGameUI.CurrentState is ModernConfigUI);
 
-        On_IngameFancyUI.Close += orig =>
+
+
+        On_IngameFancyUI.Close += (orig, quiet) =>
         {
             // 现记录，因为执行完原版之后CurrentState就是null了
             bool isInGameModernConfig = !Main.gameMenu && Main.InGameUI.CurrentState is ModernConfigUI;
 
-            orig.Invoke();
+            orig.Invoke(quiet);
 
             if (!isInGameModernConfig)
                 return;

@@ -382,7 +382,7 @@ public class ItemSearcherGUI : BaseBody
         {
             Vector2 position = _searchBar.GetDimensions().Position();
             position.Y += 60f;
-            Main.instance.DrawWindowsIMEPanel(position, 0f);
+            Main.instance.SetIMEPanelAnchor(position, 0f);
         }
     }
 

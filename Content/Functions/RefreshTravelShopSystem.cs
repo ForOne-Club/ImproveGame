@@ -124,7 +124,7 @@ namespace ImproveGame.Content.Functions
                                 shadowColor: (!focused) ? Color.Black : Color.Brown,
                                 rotation: 0f,
                                 origin: stringSize * 0.5f,
-                                baseScale: scale);
+                                scale: scale);
                         }
                         return true;
                     }, InterfaceScaleType.UI));

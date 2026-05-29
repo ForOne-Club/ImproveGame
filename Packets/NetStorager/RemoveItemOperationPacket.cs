@@ -35,7 +35,7 @@ public class RemoveItemOperationPacket : NetModule
     /// <param name="count">若stack为null，则全部移出</param>
     public static void Send(int chestIndex, int slotIndex, RemovedItemDestination destination, int? count = null)
     {
-        var packet = ModContent.GetInstance<RemoveItemOperationPacket>();
+        var packet = NetModuleLoader.Get<RemoveItemOperationPacket>();
         packet._chestIndex = (short)chestIndex;
         packet._slotIndex = (byte)slotIndex;
         packet.Target = destination;
@@ -88,8 +88,7 @@ public class RemoveItemOperationPacket : NetModule
 
                         break;
                     case RemovedItemDestination.Inventory:
-                        Main.LocalPlayer.GetItem(Sender, item,
-                            GetItemSettings.InventoryEntityToPlayerInventorySettings);
+                        Main.LocalPlayer.GetItem(item, GetItemSettings.QuickTransferFromSlot);
                         break;
                     case RemovedItemDestination.Trash:
                         Main.LocalPlayer.trashItem = item;

@@ -12,7 +12,7 @@ public class DungeonGlobe : OnceForAllGlobe
         public override Point16[] Positions => [StructureDatas.DungeonPosition];
     }
     protected override Recipe AddCraftingMaterials(Recipe recipe) =>
-        recipe.AddRecipeGroup(RecipeGroupID.Sand, 10)
+        recipe.AddRecipeGroup(RecipeGroups.Sand, 10)
             .AddIngredient(ItemID.DirtBlock, 30)
             .AddIngredient(ItemID.StoneBlock, 50)
             .AddTile(TileID.WorkBenches);

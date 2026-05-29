@@ -90,7 +90,7 @@ public class Dummy : ModItem
     public override void AddRecipes()
     {
         CreateRecipe()
-            .AddRecipeGroup(RecipeGroupID.Wood, 100)
+            .AddRecipeGroup(RecipeGroups.Wood, 100)
             .AddIngredient(ItemID.Hay, 50)
             .AddTile(TileID.WorkBenches).Register();
     }

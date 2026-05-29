@@ -6,8 +6,8 @@ namespace ImproveGame.Common.RenderTargetContents;
 public class ItemSlotContent(ThemeType theme) : ARenderTargetContentByRequest
 {
     internal ThemeType Theme = theme;
-
-    public override void HandleUseReqest(GraphicsDevice device, SpriteBatch spriteBatch)
+    
+    public override void HandleUseRequest(GraphicsDevice device, SpriteBatch spriteBatch)
     {
         var size = new Vector2(40);
 

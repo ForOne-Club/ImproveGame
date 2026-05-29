@@ -7,15 +7,19 @@ namespace ImproveGame.Common.GlobalItems;
 
 public class AutofishItemListener : GlobalItem
 {
+    public override bool InstancePerEntity => true;
+
+    public bool IsInAutoFisher { get; set; }
+
     internal static TEAutofisher ListeningAutofisher;
 
     // 监听有没有额外生成的物品
-    public override void OnSpawn(Item item, IEntitySource source)
+    public override void OnSpawn(WorldItem item, IEntitySource source)
     {
         if (Main.netMode is NetmodeID.MultiplayerClient || ListeningAutofisher is null)
             return;
 
-        ListeningAutofisher.DirectAddItemToStorage(item);
+        ListeningAutofisher.DirectAddItemToStorage(item.inner);
         item.TurnToAir();
     }
 
@@ -23,7 +27,7 @@ public class AutofishItemListener : GlobalItem
     public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
     {
         // 处理特殊标识，这个标识在AutofisherGUI中被应用到Main.HoverItem身上，用于特异性识别要添加tooltip的物品
-        if (item.playerIndexTheItemIsReservedFor is not 254)
+        if (!item.GetGlobalItem<AutofishItemListener>().IsInAutoFisher)
             return;
         if (AutofishPlayer.LocalPlayer.Autofisher is not { } autofisher)
             return;
@@ -40,6 +44,6 @@ public class AutofishItemListener : GlobalItem
             text += $"\n{GetText("UI.Autofisher.AccBoostTackle")}";
         if (stat.LavaFishing)
             text += $"\n{GetText("UI.Autofisher.AccBoostLava")}";
-        tooltips.Add(new TooltipLine(Mod, "AutofisherAccBoost", text) { OverrideColor = Color.Pink });
+        tooltips.Add(new TooltipLine(Mod, "AutofisherAccBoost", text) { Color = Color.Pink });
     }
 }

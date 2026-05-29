@@ -24,10 +24,10 @@ public class AddItemOperationPacket : NetModule
     /// <param name="count">存放的数量</param>
     public static void Send(int chestIndex, int slotIndex, int count = default)
     {
-        Debug.Assert(!Main.mouseItem.IsAir && chestIndex != -1 && slotIndex is >= 0 and < Chest.maxItems,
+        Debug.Assert(!Main.mouseItem.IsAir && chestIndex != -1 && slotIndex >= 0 && slotIndex < Main.chest[chestIndex].maxItems,
             "Invalid data, Check your code");
         Debug.Assert(count < Main.mouseItem.stack, "Count must be less than mouseItem.stack!");
-        var packet = ModContent.GetInstance<AddItemOperationPacket>();
+        var packet = NetModuleLoader.Get<AddItemOperationPacket>();
         packet._item = Main.mouseItem;
         packet._chestIndex = (short)chestIndex;
         packet._slotIndex = (byte)slotIndex;
@@ -135,7 +135,7 @@ public class AddItemOperationPacket : NetModule
 
         // 存储失败，尝试存到其他地方（必要性存疑
         slotItem = ref Unsafe.Add(ref slotItem, 1);
-        if (++realSlotIndex >= Chest.maxItems) // 用maxItems而不是Item[]::Length，应该没问题（？
+        if (++realSlotIndex >= Main.chest[_chestIndex].maxItems) // 用maxItems而不是Item[]::Length，应该没问题（？
         {
             // 得到存进去的的数量
             if (_count != _item.stack)

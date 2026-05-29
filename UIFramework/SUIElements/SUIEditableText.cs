@@ -59,7 +59,7 @@ public class SUIEditableText : TimerView
             }
 
             FinalTextSnippets = TextSnippetHelper
-                .ConvertNormalSnippets(TextSnippetHelper.ParseMessageWithCursorCheck(text, textColor)).ToArray();
+                .ConvertNormalSnippets(TextSnippetHelper.ParseMessageWithCursorCheck(text, textColor));
             if (_isWrapped)
             {
                 FinalTextSnippets = TextSnippetHelper.WordwrapString(FinalTextSnippets, textColor, Font,
@@ -88,10 +88,10 @@ public class SUIEditableText : TimerView
             textPos.Y += TextScale *
                          (_isLarge ? UIConfigs.Instance.BigFontOffsetY : UIConfigs.Instance.GeneralFontOffsetY);
 
-            DrawColorCodedStringShadow(spriteBatch, Font, FinalTextSnippets,
+            ChatManager.DrawColorCodedStringShadow(spriteBatch, Font, FinalTextSnippets,
                 textPos, TextBorderColor, 0f, Vector2.Zero, new Vector2(TextScale), -1f, TextBorder * TextScale);
 
-            DrawColorCodedString(spriteBatch, Font, FinalTextSnippets,
+            ChatManager.DrawColorCodedString(spriteBatch, Font, FinalTextSnippets,
                 textPos, textColor, 0f, Vector2.Zero, new Vector2(TextScale), out var _, -1f);
         }
     }
@@ -404,7 +404,7 @@ public class SUIEditableText : TimerView
 
         Vector2 position = InnerText.GetDimensions().ToRectangle().Bottom();
         position.Y += 32f;
-        Main.instance.DrawWindowsIMEPanel(position, 0.5f);
+        Main.instance.SetIMEPanelAnchor(position, 0.5f);
     }
 
     private void HandleShortcutOperation(out bool usingShortcut)

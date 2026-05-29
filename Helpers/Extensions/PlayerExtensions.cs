@@ -1,4 +1,6 @@
-﻿using Terraria.DataStructures;
+﻿
+#if false
+using Terraria.DataStructures;
 
 namespace ImproveGame.Helpers.Extensions;
 
@@ -44,3 +46,4 @@ public static class PlayerExtensions
         player.QuickSpawnItem(source, item, item.stack);
     }
 }
+#endif

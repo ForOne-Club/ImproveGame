@@ -54,8 +54,6 @@ public class CenteredItemTagHandler : ITagHandler
             size = new Vector2(24) * scale;
             return true;
         }
-
-        public override float GetStringLength(DynamicSpriteFont font) => 28 * Scale;
     }
 
     TextSnippet ITagHandler.Parse(string text, Color baseColor, string options)
@@ -119,7 +117,7 @@ public class CenteredItemTagHandler : ITagHandler
         string str = "[centeritem";
         if (I.stack != 1)
             str = $"{str}/s{I.stack}";
-        return $"{str}:{I.netID}]";
+        return $"{str}:{I.type}]";
     }
 
     /// <summary>

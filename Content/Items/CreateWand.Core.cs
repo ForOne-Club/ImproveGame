@@ -270,7 +270,7 @@ public partial class CreateWand
             if (TryPlaceBuilding(player, CurrentBuildData))
             {
                 // 重新刷新合成配方，这样如果一个物品没了就可以把它的合成配方刷新掉
-                Recipe.FindRecipes();
+                // Recipe.FindRecipes();
                 // 刷新材料来源字典以显示消耗后的量
                 UpdateMaterialSource(player);
                 if (UIConfigs.Instance.ExplosionEffect)

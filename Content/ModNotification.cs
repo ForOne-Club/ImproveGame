@@ -68,7 +68,7 @@ public class ModNotificationPopup : IInGameNotification
         if (!_isMouseHovering || TimeLeft <= 24 || TimeLeft >= TimeLeftMax - 15)
             TimeLeft--;
 
-        if (_isMouseHovering && Main.mouseLeft && Main.hasFocus && clickCoolDown <= 0)
+        if (_isMouseHovering && Main.mouseLeft && FocusHelper.AllowUIInputs && clickCoolDown <= 0)
         {
             OnLeftMouseClick?.Invoke();
             clickCoolDown = 10;
@@ -127,8 +127,7 @@ public class ModNotificationPopup : IInGameNotification
     {
         if (PlayerInput.IgnoreMouseInterface)
             return;
-
-        Main.player[Main.myPlayer].mouseInterface = true;
+        Main.LocalPlayer.mouseInterface = true;
         if (Main.mouseLeft && Main.mouseLeftRelease)
         {
             Main.mouseLeftRelease = false;

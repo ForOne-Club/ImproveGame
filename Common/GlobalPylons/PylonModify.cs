@@ -20,11 +20,11 @@ public class PylonModify : GlobalPylon
             _runningHandleTeleportRequest = false;
         };
 
-        On_Player.InInteractionRange += (orig, self, x, y, settings) =>
+        On_Player.InTileEntityInteractionRange += (orig, self, x, y, sizeX, sizeY, settings) =>
         {
             if (_runningHandleTeleportRequest && ImproveConfigs.Instance.PylonTeleNoNear)
                 return true;
-            return orig.Invoke(self, x, y, settings);
+            return orig.Invoke(self, x, y, sizeX, sizeY, settings);
         };
     }
 
@@ -39,15 +39,12 @@ public class PylonModify : GlobalPylon
         return orig(player);
     }
 
-    public override bool? ValidTeleportCheck_PreAnyDanger(TeleportPylonInfo pylonInfo)
+    public override void PostValidTeleportCheck(TeleportPylonInfo destinationPylonInfo, TeleportPylonInfo nearbyPylonInfo, ref bool destinationPylonValid, ref bool validNearbyPylonFound, ref string errorKey)
     {
         if (ImproveConfigs.Instance.PylonTeleNoDanger)
-        {
-            return true;
-        }
-
-        return base.ValidTeleportCheck_PreAnyDanger(pylonInfo);
+            destinationPylonValid = true;
     }
+
 
     public override bool? ValidTeleportCheck_PreBiomeRequirements(TeleportPylonInfo pylonInfo, SceneMetrics sceneData)
     {

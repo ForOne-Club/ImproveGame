@@ -257,7 +257,7 @@ public partial class SpaceWand : ModItem, IMarqueeItem, IConditionItem
     public override void AddRecipes()
     {
         CreateRecipe()
-            .AddRecipeGroup(RecipeGroupID.Wood, 24)
+            .AddRecipeGroup(RecipeGroups.Wood, 24)
             .AddRecipeGroup(RecipeSystem.AnyDemoniteBar, 8)
             .AddIngredient(ItemID.Amethyst, 8)
             .AddTile(TileID.WorkBenches)

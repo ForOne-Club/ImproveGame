@@ -77,7 +77,7 @@ internal class SystemUpdater : ModSystem
                 or NPCID.LunarTowerVortex)
                 continue;
 
-            if (npc.active && (npc.boss || NPCID.Sets.ShouldBeCountedAsBoss[npc.type]))
+            if (npc.active && (npc.boss || NPCID.Sets.ShouldBeCountedAsBossForBestiary[npc.type]))
             {
                 CurrentFrameProperties.AnyActiveBoss = true;
                 return;

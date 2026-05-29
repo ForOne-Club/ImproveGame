@@ -91,7 +91,7 @@ public class TEAutofisher : ModTileEntity
         {
             var player = Main.player[i];
             // 距离用 DistanceSQ 判断，没有开方操作运行更快
-            if (player.active && !player.DeadOrGhost &&
+            if (player.active && !player.dead &&
                 player.Center.DistanceSQ(Position.ToWorldCoordinates()) <= distance)
                 FishingTipPacket.Get(ID, tipType, fishingLevel, waterQuality).Send(i);
         }
@@ -388,7 +388,10 @@ public class TEAutofisher : ModTileEntity
 
             // 单人模式和客户端里这还作为视效的判定，因此得强制更新
             if (Main.netMode is NetmodeID.SinglePlayer or NetmodeID.MultiplayerClient)
-                Main.LocalPlayer.ForceUpdateBiomes();
+            {
+                Main.LocalPlayer.UpdateSceneMetrics();
+                Main.LocalPlayer.UpdateBiomes();
+            }
         }
         catch { throw; } finally
         {
@@ -660,8 +663,8 @@ public class TEAutofisher : ModTileEntity
         if (item.stack != oldStack)
         {
             // 用dummyItem，因为填充后item可能是Air
-            Chest.VisualizeChestTransfer(locatePoint.ToWorldCoordinates(), Position.ToWorldCoordinates(16, 16),
-                dummyItem, dummyItem.stack);
+            Chest.VisualizeChestTransfer(locatePoint.ToWorldCoordinates(), Position.ToWorldCoordinates(16, 16), 
+                dummyItem.type, Chest.ItemTransferVisualizationSettings.PlayerToChest);
 
             if (TryConsumeBait(player) && Main.netMode is NetmodeID.Server)
             {
@@ -690,7 +693,7 @@ public class TEAutofisher : ModTileEntity
                 for (int p = 0; p < Main.maxPlayers; p++)
                 {
                     var client = Main.player[p];
-                    if (client.active && !client.DeadOrGhost &&
+                    if (client.active && !client.dead &&
                         client.GetModPlayer<AutofishPlayer>().IsAutofisherOpened)
                         ItemsStackChangePacket.Get(ID, (byte)i, fish[i].stack - oldStackSlot).Send(p);
                 }
@@ -749,7 +752,7 @@ public class TEAutofisher : ModTileEntity
             bait.stack--;
             if (bait.stack <= 0)
             {
-                bait.SetDefaults();
+                bait.TurnToAir();
                 if (ImproveConfigs.Instance.EmptyAutofisher)
                 {
                     var center = new Point(Position.X + 1, Position.Y + 2);
@@ -1006,7 +1009,7 @@ public class TEAutofisher : ModTileEntity
 
                     // 用dummyItem，因为填充后item可能是Air
                     Chest.VisualizeChestTransfer(Position.ToWorldCoordinates(16, 16),
-                        new Vector2(chest.x * 16 + 16, chest.y * 16 + 16), dummyItem, dummyItem.stack);
+                        new Vector2(chest.x * 16 + 16, chest.y * 16 + 16), dummyItem.type, Chest.ItemTransferVisualizationSettings.PlayerToChest);
                 }
 
                 if (Main.netMode is NetmodeID.SinglePlayer)
@@ -1024,17 +1027,17 @@ public class TEAutofisher : ModTileEntity
     public override void OnKill()
     {
         if (!fishingPole.IsAir)
-            SpawnDropItem(ref fishingPole);
+            SpawnDropItem(fishingPole);
         if (!bait.IsAir)
-            SpawnDropItem(ref bait);
+            SpawnDropItem(bait);
         if (!accessory.IsAir)
-            SpawnDropItem(ref accessory);
+            SpawnDropItem(accessory);
         for (int k = 0; k < fish.Length; k++)
             if (!fish[k].IsAir)
-                SpawnDropItem(ref fish[k]);
+                SpawnDropItem(fish[k]);
     }
 
-    private void SpawnDropItem(ref Item item) => SpawnTileBreakItem(Position, ref item, "FishingMachine");
+    private void SpawnDropItem(Item item) => SpawnTileBreakItem(Position, item, "FishingMachine");
 
     // 返回的是物品禁用状态，true就是没禁用，false就是禁用了
     public bool ToggleItem(Item item)

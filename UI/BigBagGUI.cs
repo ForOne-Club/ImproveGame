@@ -145,7 +145,7 @@ public class BigBagGUI : BaseBody
             state =>
             {
                 setting.SuperVault_ParticipateSynthesis = state;
-                Recipe.FindRecipes();
+                // Recipe.FindRecipes();
             }, GetText("SuperVault.Synthesis"), 0.8f)
         {
             ResetAnotherPosition = true,
@@ -327,7 +327,7 @@ public class BigBagGUI : BaseBody
             ItemStackToInventory(items, item, false);
         }
 
-        Recipe.FindRecipes();
+        // Recipe.FindRecipes();
     }
 
     private void Replenish()
@@ -348,7 +348,7 @@ public class BigBagGUI : BaseBody
             }
         }
 
-        Recipe.FindRecipes();
+        // Recipe.FindRecipes();
     }
 
     private void PutAll()
@@ -365,7 +365,7 @@ public class BigBagGUI : BaseBody
                 inventory[i] = ItemStackToInventory(bigBag, inventory[i], false);
         }
 
-        Recipe.FindRecipes();
+        // Recipe.FindRecipes();
     }
 
     /// <summary>
@@ -387,7 +387,7 @@ public class BigBagGUI : BaseBody
             }
         }
 
-        Recipe.FindRecipes();
+        // Recipe.FindRecipes();
     }
 
     public override bool RenderTarget2DDraw => !StartTimer.Opened;

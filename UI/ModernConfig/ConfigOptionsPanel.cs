@@ -372,7 +372,7 @@ public sealed partial class ConfigOptionsPanel : SUIPanel
 
         Vector2 position = _searchBar.GetDimensions().ToRectangle().BottomLeft();
         position.Y += 32f;
-        Main.instance.DrawWindowsIMEPanel(position, 0f);
+        Main.instance.SetIMEPanelAnchor(position, 0f);
     }
 
     // 用于捕获分辨率变化，以便 Recalculate 并且重新计算位置

@@ -1,5 +1,7 @@
 ﻿using ImproveGame.Common.ModSystems;
 using ImproveGame.Content.Items;
+using MonoMod.Cil;
+using System.Reflection;
 using Terraria.GameContent.Drawing;
 using Terraria.ObjectData;
 
@@ -24,7 +26,15 @@ namespace ImproveGame.Content.Functions.Construction
                 return;
 
             On_Main.SetDisplayMode += RefreshTarget;
-            On_Main.CheckMonoliths += DrawTarget;
+            IL_Main.DoDraw += DrawTarget;
+        }
+
+        private void DrawTarget(ILContext il)
+        {
+            var cursor = new ILCursor(il);
+            if (!cursor.TryGotoNext(c => c.MatchCall(typeof(Main).GetMethod(nameof(Main.DoDraw_UpdateCameraPosition), BindingFlags.Static | BindingFlags.NonPublic)))) return;
+            cursor.Index += 2;
+            cursor.EmitDelegate(DrawTarget_Inner);
         }
 
         public override void Unload()
@@ -78,7 +88,7 @@ namespace ImproveGame.Content.Functions.Construction
             }
         }
 
-        private void DrawTarget(On_Main.orig_CheckMonoliths orig)
+        private void DrawTarget_Inner()
         {
             bool canDraw = Main.LocalPlayer.HeldItem?.type == ModContent.ItemType<ConstructWand>() &&
                 WandSystem.ConstructMode == WandSystem.Construct.Place;
@@ -112,8 +122,6 @@ namespace ImproveGame.Content.Functions.Construction
                 if (ResetUIPreviewTarget != ResetState.WaitReset)
                     ResetUIPreviewTarget = ResetState.Finished;
             }
-
-            orig();
         }
 
         private static void DrawPreviewToRender(RenderTarget2D renderTarget, string filePath)

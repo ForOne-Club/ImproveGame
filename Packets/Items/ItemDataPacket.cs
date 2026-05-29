@@ -34,7 +34,7 @@ public class InventoryItemDataPacket : NetModule
 
     public static InventoryItemDataPacket Get(byte playerIndex, int slot, BitsByte options)
     {
-        var packet = ModContent.GetInstance<InventoryItemDataPacket>();
+        var packet = NetModuleLoader.Get<InventoryItemDataPacket>();
         packet._item = Main.player[playerIndex].inventory[slot];
         packet._options = options;
         packet._playerIndex = playerIndex;
@@ -55,7 +55,7 @@ public class InventoryItemDataPacket : NetModule
 
     public static InventoryItemDataPacket Get(ItemPosition itemID, bool ensureExistence)
     {
-        var packet = ModContent.GetInstance<InventoryItemDataPacket>();
+        var packet = NetModuleLoader.Get<InventoryItemDataPacket>();
         packet._item = Main.player[itemID.player].inventory[itemID.slot];
         packet._options = new BitsByte(ensureExistence, false);
         packet._playerIndex = itemID.player;
@@ -78,7 +78,7 @@ public class InventoryItemDataPacket : NetModule
 
         if (spawnItemIfWasFilled && !player.inventory[_slot].IsAir && !_item.IsAir)
         {
-            player.QuickSpawnItem(new EntitySource_Sync("SyncFromServer"), _item, _item.stack);
+            player.QuickSpawnItem(new EntitySource_Sync("SyncFromServer"), _item);
         }
 
         if (setFavorite)
@@ -92,9 +92,11 @@ public class InventoryItemDataPacket : NetModule
             player.inventory[_slot].favorited = oldFavorited;
         }
 
+        /*
         if (Main.netMode is NetmodeID.MultiplayerClient)
         {
             Recipe.FindRecipes();
         }
+        */
     }
 }

@@ -94,7 +94,7 @@ public class DataPlayer : ModPlayer
         if (RefreshRecipes && RefreshTimer % 30 == 0)
         {
             RefreshRecipes = false;
-            Recipe.FindRecipes();
+            // Recipe.FindRecipes();
         }
 
         RefreshTimer++;

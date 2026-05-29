@@ -29,7 +29,7 @@ public class HomeTeleportingPlayer : ModPlayer
 
     public override void ProcessTriggers(TriggersSet triggersSet)
     {
-        if (!Main.LocalPlayer.DeadOrGhost && KeybindSystem.HomeKeybind.JustPressed)
+        if (!Main.LocalPlayer.dead && KeybindSystem.HomeKeybind.JustPressed)
             PressHomeKeybind();
     }
 

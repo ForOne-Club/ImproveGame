@@ -128,18 +128,14 @@ partial class MyUtils
         return -1;
     }
 
-    public static void SpawnTileBreakItem(int x, int y, ref Item item, string? context = null) =>
-        SpawnTileBreakItem(new Point16(x, y), ref item, context);
+    public static void SpawnTileBreakItem(int x, int y, Item item, string? context = null) =>
+        SpawnTileBreakItem(new Point16(x, y), item, context);
 
-    public static void SpawnTileBreakItem(Point16 tileCoords, ref Item item, string? context = null)
+    public static void SpawnTileBreakItem(Point16 tileCoords, Item item, string? context = null)
     {
         var position = tileCoords.ToWorldCoordinates();
-        int i = Item.NewItem(new EntitySource_TileBreak(tileCoords.X, tileCoords.Y, context), (int)position.X, (int)position.Y, 32, 32,
-            item.type);
-        item.position = Main.item[i].position;
-        Main.item[i] = item;
+        int i = Item.NewItem(new EntitySource_TileBreak(tileCoords.X, tileCoords.Y, context), (int)position.X, (int)position.Y, 32, 32, item.type);
         var drop = Main.item[i];
-        item = new Item();
         drop.velocity.Y = -2f;
         drop.velocity.X = Main.rand.NextFloat(-4f, 4f);
         drop.favorited = false;
@@ -702,7 +698,7 @@ partial class MyUtils
         // 能否忽略掉落检查
         if (!TileID.Sets.IgnoresTileReplacementDropCheckWhenBeingPlaced[createTile])
         {
-            WorldGen.KillTile_GetItemDrops(x, y, tile, out var dropItem, out var _, out var _, out var _);
+            WorldGen.KillTile_GetItemDrops(x, y, tile, out var dropItem, out var _, out var _, out var _, out var _);
             if (dropItem == tileItem.type)
                 return false;
         }

@@ -5,10 +5,10 @@ public class SpawnRateSliderGlobalNPC : GlobalNPC
     public override void Load()
     {
         // SlimeRain 史莱姆雨
-        On_NPC.SlimeRainSpawns += (orig, plr) =>
+        On_NPC.Spawner.SlimeRainSpawns += (orig, plr) =>
         {
-            if (!Main.player[plr].TryGetModPlayer<SpawnRateSliderModPlayer>(out var battler) ||
-                !Main.player[plr].TryGetModPlayer<InfiniteBuffModPlayer>(out var infinitePlayer) ||
+            if (!plr.TryGetModPlayer<SpawnRateSliderModPlayer>(out var battler) ||
+                !plr.TryGetModPlayer<InfiniteBuffModPlayer>(out var infinitePlayer) ||
                 !infinitePlayer.MeetsBattlerCombination())
             {
                 orig.Invoke(plr);

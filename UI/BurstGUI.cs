@@ -30,7 +30,7 @@ namespace ImproveGame.UI
 
             fixedModeButton = ModAsset.FixedMode;
             freeModeButton = ModAsset.FreeMode;
-
+            
             modeButton = new(fixedModeButton);
             modeButton.OnLeftMouseDown += SwitchMode;
             modeButton.OnMouseOver += MouseOver;

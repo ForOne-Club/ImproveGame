@@ -135,7 +135,7 @@ public class PotionBag : ModItem, IItemOverrideLeftClick, IItemOverrideHover, II
                 : GetTextWith("Tips.PotionBagCurrent", new { StoredCount = ItemContainer.Count });
             tooltips.Add(new(Mod, "PotionBagCurrent", storeText)
             {
-                OverrideColor = Color.LightGreen
+                Color = Color.LightGreen
             });
 
             // 20+类药水时不显示详细信息
@@ -193,7 +193,7 @@ public class PotionBag : ModItem, IItemOverrideLeftClick, IItemOverrideHover, II
 
                     tooltips.Add(new(Mod, $"PotionBagP{i}", text)
                     {
-                        OverrideColor = color
+                        Color = color
                     });
                 }
             }
@@ -202,7 +202,7 @@ public class PotionBag : ModItem, IItemOverrideLeftClick, IItemOverrideHover, II
         {
             tooltips.Add(new(Mod, "PotionBagNone", GetText("Tips.PotionBagNone"))
             {
-                OverrideColor = Color.SkyBlue
+                Color = Color.SkyBlue
             });
         }
     }
@@ -214,8 +214,8 @@ public class PotionBag : ModItem, IItemOverrideLeftClick, IItemOverrideHover, II
         {
             var font = FontAssets.MouseText.Value;
             var position = new Vector2(line.X, line.Y);
-            var color = line.OverrideColor ?? line.Color;
-            TextSnippet[] snippets = ChatManager.ParseMessage(line.Text, color).ToArray();
+            var color = line.Color;
+            var snippets = ChatManager.ParseMessage(line.Text, color);
             ChatManager.ConvertNormalSnippets(snippets);
             ChatManager.DrawColorCodedString(Main.spriteBatch, font, snippets, position, Color.White, 0f,
                 Vector2.Zero, Vector2.One, out _, -1);

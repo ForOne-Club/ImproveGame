@@ -105,7 +105,7 @@ public class OptionKeybind : TimerView
         base.LeftClick(evt);
         if (PlayerInput.ListeningTrigger != KeybindName)
         {
-            if (PlayerInput.CurrentProfile.AllowEditting)
+            if (PlayerInput.CurrentProfile.AllowEditing)
                 PlayerInput.ListenFor(KeybindName, InputMode);
             else
                 PlayerInput.ListenFor(null, InputMode);

@@ -6,8 +6,8 @@
     <members>
         <member name="T:NetSimplified.AggregateModule">
             <summary>
-            以一个 <see cref="T:Terraria.ModLoader.ModPacket"/> 包的形式发送多个 <see cref="T:NetSimplified.NetModule"/> 包, 能有效避免分散性地多次发包。<br/>
-            与普通包一样, 发包时调用 <see cref="M:NetSimplified.NetModule.Send(System.Int32,System.Int32,System.Boolean)"/> 即可
+                以一个 <see cref="T:Terraria.ModLoader.ModPacket" /> 包的形式发送多个 <see cref="T:NetSimplified.NetModule" /> 包, 能有效避免分散性地多次发包。<br />
+                与普通包一样, 发包时调用 <see cref="M:NetSimplified.NetModule.Send(System.Int32,System.Int32,System.Boolean)" /> 即可
             </summary>
         </member>
         <member name="P:NetSimplified.AggregateModule.Modules">
@@ -15,146 +15,441 @@
         </member>
         <member name="M:NetSimplified.AggregateModule.Get(System.Collections.Generic.List{NetSimplified.NetModule})">
             <summary>
-            创建一个 <see cref="T:NetSimplified.AggregateModule"/> 包实例
+                创建一个 <see cref="T:NetSimplified.AggregateModule" /> 包实例
             </summary>
-            <param name="modules">所有要发的 <see cref="T:NetSimplified.NetModule"/> 包</param>
+            <param name="modules">所有要发的 <see cref="T:NetSimplified.NetModule" /> 包</param>
         </member>
         <member name="M:NetSimplified.AggregateModule.Read(System.IO.BinaryReader)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:NetSimplified.AggregateModule.Send(Terraria.ModLoader.ModPacket)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:NetSimplified.AggregateModule.Receive">
-            <inheritdoc/>
+            <inheritdoc />
+        </member>
+        <member name="T:NetSimplified.AutoSyncType">
+            <summary>
+                表示一个可用于在网络中自动序列化和反序列化特定类型值的抽象基类。
+                派生类需实现如何将目标类型写入包（Send）以及如何从包中读取值（Read）。
+            </summary>
+        </member>
+        <member name="M:NetSimplified.AutoSyncType.#ctor(System.Type)">
+            <summary>
+                初始化一个新的 <see cref="T:NetSimplified.AutoSyncType"/> 实例并关联指定的目标类型。
+            </summary>
+            <param name="type">此 AutoSyncType 关联的目标类型（例如 Color / Item / bool）。</param>
+        </member>
+        <member name="P:NetSimplified.AutoSyncType.Type">
+            <summary>
+                此 AutoSyncType 关联的类型（例如 Color / Item / bool）
+            </summary>
+        </member>
+        <member name="P:NetSimplified.AutoSyncType.CustomAttributeType">
+            <summary>
+                可选：此 AutoSyncType 对应的自定义属性类型（例如 ColorSyncAttribute / ItemSyncAttribute）
+            </summary>
+        </member>
+        <member name="M:NetSimplified.AutoSyncType.Send(System.IO.BinaryWriter,System.Object,System.Reflection.MemberInfo)">
+            <summary>
+                此 AutoSyncType 应该如何将对应类型的值写入网络包。
+            </summary>
+            <param name="bw">用于写入值的 <see cref="T:System.IO.BinaryWriter"/>。</param>
+            <param name="value">要写入的数据值，通常为与此 AutoSyncType 关联的类型的实例。</param>
+            <param name="fieldInfo">该值来源的成员信息，可为字段或属性，用于根据自定义特性或元数据决定序列化行为。</param>
+        </member>
+        <member name="M:NetSimplified.AutoSyncType.Read(System.IO.BinaryReader,System.Reflection.MemberInfo)">
+            <summary>
+                此 AutoSyncType 应该如何从网络包中读取对应类型的值。
+            </summary>
+            <param name="r">用于读取数据的 <see cref="T:System.IO.BinaryReader"/>。</param>
+            <param name="fieldInfo">目标成员的成员信息，可用于基于特性或元数据调整反序列化行为。</param>
+            <returns>返回读取并反序列化后的对象，类型应与 <see cref="P:NetSimplified.AutoSyncType.Type"/> 对应。</returns>
+        </member>
+        <member name="T:NetSimplified.AutoSyncType`1">
+            <summary>
+                提供基于泛型类型参数的 AutoSyncType 基类，方便在定义具体同步类型时使用泛型参数获得目标类型信息。
+            </summary>
+        </member>
+        <member name="M:NetSimplified.AutoSyncType`1.#ctor">
+            <summary>
+                使用泛型类型参数初始化一个新的 AutoSyncType 实例，等价于 new AutoSyncType(typeof(T))。
+            </summary>
+        </member>
+        <member name="T:NetSimplified.CrossMod">
+            <summary>
+                提供与其他 tModLoader 模组之间的调用与模块传递的辅助方法。
+                包含用于获取外部模块实例、发送模块实例到其它客户端以及在跨模组调用中处理操作的通用入口。
+            </summary>
+        </member>
+        <member name="M:NetSimplified.CrossMod.HandleModCalls(System.Object[])">
+            <summary>
+                处理来自其他模组的通用调用接口。根据第一个字符串参数决定具体操作（例如获取或发送模块）。
+            </summary>
+            <param name="args">来自模组调用的参数数组，第一个参数应为操作名称字符串。</param>
+            <returns>对调用的处理结果，成功与否或请求的数据（取决于操作）。返回 false 代表并没有在调用 NetSimplified 的接口，返回 null 表示调用不成功，其他返回表示成功调用，返回了对应的处理结果。</returns>
+        </member>
+        <member name="M:NetSimplified.CrossMod.TryGetExternalModule(System.String,System.String,System.Object@)">
+            <summary>
+                尝试从已加载的模组中按名称获取外部模块实例（返回 object）。
+            </summary>
+            <param name="mod">模组的名称。</param>
+            <param name="name">模块的名称。</param>
+            <param name="module">若成功则输出模块实例，否则为 null。</param>
+            <returns>如果成功获取则为 true，否则为 false。</returns>
+        </member>
+        <member name="M:NetSimplified.CrossMod.TryGetExternalModule``1(System.String,``0@)">
+            <summary>
+                尝试从已加载的模组中按类型获取外部模块实例（泛型版本）。
+            </summary>
+            <typeparam name="T">期望的模块类型。</typeparam>
+            <param name="mod">模组的名称。</param>
+            <param name="module">若成功则输出模块实例（T 类型），否则为 null。</param>
+            <returns>如果成功获取则为 true，否则为 false。</returns>
+        </member>
+        <member name="M:NetSimplified.CrossMod.TryGetExternalModule(Terraria.ModLoader.Mod,System.String,System.Object@)">
+            <summary>
+                尝试从指定的 Mod 实例中按名称获取外部模块实例（返回 object）。
+            </summary>
+            <param name="modInstance">目标模组的 Mod 实例。</param>
+            <param name="name">模块的名称。</param>
+            <param name="module">若成功则输出模块实例，否则为 null。</param>
+            <returns>如果成功获取则为 true，否则为 false。</returns>
+        </member>
+        <member name="M:NetSimplified.CrossMod.TryGetExternalModule``1(Terraria.ModLoader.Mod,``0@)">
+            <summary>
+                尝试从指定的 Mod 实例中按类型获取外部模块实例（泛型版本）。
+            </summary>
+            <typeparam name="T">期望的模块类型。</typeparam>
+            <param name="modInstance">目标模组的 Mod 实例。</param>
+            <param name="module">若成功则输出模块实例（T 类型），否则为 null。</param>
+            <returns>如果成功获取则为 true，否则为 false。</returns>
+        </member>
+        <member name="M:NetSimplified.CrossMod.GetExternalModule(System.String,System.String)">
+            <summary>
+                从指定模组名称获取外部模块实例（非泛型，若失败返回 null）。
+            </summary>
+            <param name="mod">模组名称。</param>
+            <param name="name">模块名称。</param>
+            <returns>找到的模块实例，或 null。</returns>
+        </member>
+        <member name="M:NetSimplified.CrossMod.GetExternalModule(Terraria.ModLoader.Mod,System.String)">
+            <summary>
+                从指定 Mod 实例获取外部模块实例（非泛型，若失败返回 null）。
+            </summary>
+            <param name="modInstance">目标 Mod 实例。</param>
+            <param name="name">模块名称。</param>
+            <returns>找到的模块实例，或 null。</returns>
+        </member>
+        <member name="M:NetSimplified.CrossMod.GetExternalModule``1(System.String)">
+            <summary>
+                从指定模组名称获取外部模块实例（泛型版本，若失败返回 null）。
+            </summary>
+            <typeparam name="T">期望的模块类型。</typeparam>
+            <param name="mod">模组名称。</param>
+            <returns>找到的模块实例（T 类型），或 null。</returns>
+        </member>
+        <member name="M:NetSimplified.CrossMod.GetExternalModule``1(Terraria.ModLoader.Mod)">
+            <summary>
+                从指定 Mod 实例获取外部模块实例（泛型版本，若失败返回 null）。
+            </summary>
+            <typeparam name="T">期望的模块类型。</typeparam>
+            <param name="modInstance">目标 Mod 实例。</param>
+            <returns>找到的模块实例（T 类型），或 null。</returns>
+        </member>
+        <member name="M:NetSimplified.CrossMod.TrySendExternalModule(Terraria.ModLoader.Mod,System.Object,System.Int32,System.Int32,System.Boolean)">
+            <summary>
+                尝试将给定模块实例通过目标 Mod 进行发送（用于跨模组的模块传递）。
+            </summary>
+            <param name="modInstance">目标 Mod 实例。</param>
+            <param name="module">要发送的模块实例。</param>
+            <param name="toClient">目标客户端 ID，默认为 -1 表示广播。</param>
+            <param name="ignoreClient">要忽略的客户端 ID，默认为 -1 表示不忽略。</param>
+            <param name="runLocally">是否在本地也执行该模块的发送逻辑。</param>
+            <returns>如果发送成功则为 true，否则为 false。</returns>
+        </member>
+        <member name="M:NetSimplified.CrossMod.TrySendExternalModule(System.String,System.Object,System.Int32,System.Int32,System.Boolean)">
+            <summary>
+                尝试将给定模块实例通过目标模组名称进行发送（用于跨模组的模块传递）。
+            </summary>
+            <param name="mod">目标模组的名称。</param>
+            <param name="module">要发送的模块实例。</param>
+            <param name="toClient">目标客户端 ID，默认为 -1 表示广播。</param>
+            <param name="ignoreClient">要忽略的客户端 ID，默认为 -1 表示不忽略。</param>
+            <param name="runLocally">是否在本地也执行该模块的发送逻辑。</param>
+            <returns>如果发送成功则为 true，否则为 false。</returns>
+        </member>
+        <member name="M:NetSimplified.CrossMod.TrySendExternalFlexibleModule(Terraria.ModLoader.Mod,System.String,System.Object[],System.Int32,System.Int32,System.Boolean)">
+            <summary>
+                尝试在目标模组中设置并发送一个指定名称的 <see cref="T:NetSimplified.FlexibleModule" />。
+                <para>
+                    此方法通过 <see cref="M:Terraria.ModLoader.Mod.Call(System.Object[])" /> 在目标模组的程序集上下文内完成 Set 与 Send，
+                    因此不受 tModLoader 各模组分别加载同名 DLL 导致的跨程序集类型不兼容问题影响。
+                </para>
+            </summary>
+            <param name="modInstance">目标模组的 Mod 实例。</param>
+            <param name="name"><see cref="T:NetSimplified.FlexibleModule" /> 的名称（不含 "FlexibleModule." 前缀）。</param>
+            <param name="values">传给 <c>Set</c> 的值数组，须与目标模块声明的字段类型一一对应。</param>
+            <param name="toClient">目标客户端 ID，默认为 -1 表示广播。</param>
+            <param name="ignoreClient">要忽略的客户端 ID，默认为 -1 表示不忽略。</param>
+            <param name="runLocally">是否在目标模组本地也执行该模块的接收逻辑。</param>
+            <returns>如果设置并发送成功则为 true，否则为 false。</returns>
+        </member>
+        <member name="M:NetSimplified.CrossMod.TrySendExternalFlexibleModule(System.String,System.String,System.Object[],System.Int32,System.Int32,System.Boolean)">
+            <summary>
+                尝试在目标模组中设置并发送一个指定名称的 <see cref="T:NetSimplified.FlexibleModule" />。
+                <para>
+                    此方法通过 <see cref="M:Terraria.ModLoader.Mod.Call(System.Object[])" /> 在目标模组的程序集上下文内完成 Set 与 Send，
+                    因此不受 tModLoader 各模组分别加载同名 DLL 导致的跨程序集类型不兼容问题影响。
+                </para>
+            </summary>
+            <param name="mod">目标模组的名称。</param>
+            <param name="name"><see cref="T:NetSimplified.FlexibleModule" /> 的名称（不含 "FlexibleModule." 前缀）。</param>
+            <param name="values">传给 <c>Set</c> 的值数组，须与目标模块声明的字段类型一一对应。</param>
+            <param name="toClient">目标客户端 ID，默认为 -1 表示广播。</param>
+            <param name="ignoreClient">要忽略的客户端 ID，默认为 -1 表示不忽略。</param>
+            <param name="runLocally">是否在目标模组本地也执行该模块的接收逻辑。</param>
+            <returns>如果设置并发送成功则为 true，否则为 false。</returns>
+        </member>
+        <member name="M:NetSimplified.CrossMod.SendAsExternalModule(NetSimplified.NetModule,System.Int32,System.Int32,System.Boolean)">
+            <summary>
+                将当前模块作为外部模块发送到其它模组/客户端的快捷扩展方法。
+            </summary>
+            <param name="module">要发送的模块实例（作为扩展方法的 this 参数）。</param>
+            <param name="toClient">目标客户端 ID，默认为 -1 表示广播。</param>
+            <param name="ignoreClient">要忽略的客户端 ID，默认为 -1 表示不忽略。</param>
+            <param name="runLocally">是否在本地也执行该模块的发送逻辑。</param>
         </member>
         <member name="T:NetSimplified.Extensions">
             <summary>
-            发包的一些实用方法
+                发包的一些实用方法
             </summary>
         </member>
         <member name="M:NetSimplified.Extensions.WriteRGBA(System.IO.BinaryWriter,Microsoft.Xna.Framework.Color)">
             <summary>
-            写入 <see cref="T:Microsoft.Xna.Framework.Color"/> RGBA值<br/>
-            对应: <see cref="M:NetSimplified.Extensions.ReadRGBA(System.IO.BinaryReader)"/>
+                写入 <see cref="T:Microsoft.Xna.Framework.Color" /> RGBA值<br />
+                对应: <see cref="M:NetSimplified.Extensions.ReadRGBA(System.IO.BinaryReader)" />
             </summary>
         </member>
         <member name="M:NetSimplified.Extensions.ReadRGBA(System.IO.BinaryReader)">
             <summary>
-            读取 <see cref="T:Microsoft.Xna.Framework.Color"/> RGBA值<br/>
-            对应: <see cref="M:NetSimplified.Extensions.WriteRGBA(System.IO.BinaryWriter,Microsoft.Xna.Framework.Color)"/>
+                读取 <see cref="T:Microsoft.Xna.Framework.Color" /> RGBA值<br />
+                对应: <see cref="M:NetSimplified.Extensions.WriteRGBA(System.IO.BinaryWriter,Microsoft.Xna.Framework.Color)" />
             </summary>
         </member>
         <member name="M:NetSimplified.Extensions.Write(System.IO.BinaryWriter,Microsoft.Xna.Framework.Point)">
             <summary>
-            写入 <see cref="T:Microsoft.Xna.Framework.Point"/> 坐标<br/>
-            对应: <see cref="M:NetSimplified.Extensions.ReadPoint(System.IO.BinaryReader)"/>
+                写入 <see cref="T:Microsoft.Xna.Framework.Point" /> 坐标<br />
+                对应: <see cref="M:NetSimplified.Extensions.ReadPoint(System.IO.BinaryReader)" />
             </summary>
         </member>
         <member name="M:NetSimplified.Extensions.ReadPoint(System.IO.BinaryReader)">
             <summary>
-            读取 <see cref="T:Microsoft.Xna.Framework.Point"/> 坐标<br/>
-            对应: <see cref="M:NetSimplified.Extensions.Write(System.IO.BinaryWriter,Microsoft.Xna.Framework.Point)"/>
+                读取 <see cref="T:Microsoft.Xna.Framework.Point" /> 坐标<br />
+                对应: <see cref="M:NetSimplified.Extensions.Write(System.IO.BinaryWriter,Microsoft.Xna.Framework.Point)" />
             </summary>
         </member>
         <member name="M:NetSimplified.Extensions.Write(System.IO.BinaryWriter,Terraria.DataStructures.Point16)">
             <summary>
-            写入 <see cref="T:Terraria.DataStructures.Point16"/> 坐标<br/>
-            对应: <see cref="M:NetSimplified.Extensions.ReadPoint16(System.IO.BinaryReader)"/>
+                写入 <see cref="T:Terraria.DataStructures.Point16" /> 坐标<br />
+                对应: <see cref="M:NetSimplified.Extensions.ReadPoint16(System.IO.BinaryReader)" />
             </summary>
         </member>
         <member name="M:NetSimplified.Extensions.ReadPoint16(System.IO.BinaryReader)">
             <summary>
-            读取 <see cref="T:Terraria.DataStructures.Point16"/> 坐标<br/>
-            对应: <see cref="M:NetSimplified.Extensions.Write(System.IO.BinaryWriter,Terraria.DataStructures.Point16)"/>
+                读取 <see cref="T:Terraria.DataStructures.Point16" /> 坐标<br />
+                对应: <see cref="M:NetSimplified.Extensions.Write(System.IO.BinaryWriter,Terraria.DataStructures.Point16)" />
             </summary>
         </member>
         <member name="M:NetSimplified.Extensions.Write(System.IO.BinaryWriter,Terraria.Item,System.Boolean,System.Boolean)">
             <summary>
-            写入 <see cref="T:Terraria.Item"/> 若值为 <see langword="null"/> 则直接实例化一个空 <see cref="T:Terraria.Item"/><br/>
-            对应: <see cref="M:NetSimplified.Extensions.ReadItem(System.IO.BinaryReader,System.Boolean,System.Boolean)"/>
+                写入 <see cref="T:Terraria.Item" /> 若值为 <see langword="null" /> 则直接实例化一个空 <see cref="T:Terraria.Item" /><br />
+                对应: <see cref="M:NetSimplified.Extensions.ReadItem(System.IO.BinaryReader,System.Boolean,System.Boolean)" />
             </summary>
         </member>
         <member name="M:NetSimplified.Extensions.ReadItem(System.IO.BinaryReader,System.Boolean,System.Boolean)">
             <summary>
-            读取 <see cref="T:Terraria.Item"/><br/>
-            对应: <see cref="M:NetSimplified.Extensions.Write(System.IO.BinaryWriter,Terraria.Item,System.Boolean,System.Boolean)"/>
+                读取 <see cref="T:Terraria.Item" /><br />
+                对应: <see cref="M:NetSimplified.Extensions.Write(System.IO.BinaryWriter,Terraria.Item,System.Boolean,System.Boolean)" />
             </summary>
         </member>
         <member name="M:NetSimplified.Extensions.Write(System.IO.BinaryWriter,Terraria.Item[],System.Boolean,System.Boolean)">
             <summary>
-            写入 <see cref="T:Terraria.Item"/> 数组, 若存在值为 <see langword="null"/> 的物品则直接实例化一个空 <see cref="T:Terraria.Item"/><br/>
-            对应: <see cref="M:NetSimplified.Extensions.ReadItemArray(System.IO.BinaryReader,System.Boolean,System.Boolean)"/>
+                写入 <see cref="T:Terraria.Item" /> 数组, 若存在值为 <see langword="null" /> 的物品则直接实例化一个空 <see cref="T:Terraria.Item" /><br />
+                对应: <see cref="M:NetSimplified.Extensions.ReadItemArray(System.IO.BinaryReader,System.Boolean,System.Boolean)" />
             </summary>
         </member>
         <member name="M:NetSimplified.Extensions.ReadItemArray(System.IO.BinaryReader,System.Boolean,System.Boolean)">
             <summary>
-            读取 <see cref="T:Terraria.Item"/> 数组<br/>
-            对应: <see cref="M:NetSimplified.Extensions.Write(System.IO.BinaryWriter,Terraria.Item[],System.Boolean,System.Boolean)"/>
+                读取 <see cref="T:Terraria.Item" /> 数组<br />
+                对应: <see cref="M:NetSimplified.Extensions.Write(System.IO.BinaryWriter,Terraria.Item[],System.Boolean,System.Boolean)" />
             </summary>
+        </member>
+        <member name="T:NetSimplified.FlexibleModule">
+            <summary>
+                一个灵活的 <see cref="T:NetSimplified.NetModule" />，允许在不继承 <see cref="T:NetSimplified.NetModule" /> 的情况下，动态定义包内容和收包行为。<br />
+                在 <see cref="M:Terraria.ModLoader.Mod.Load" /> 中通过 <see cref="M:NetSimplified.NetModuleLoader.Register``1(``0)" /> 注册，随后可调用 <see cref="M:NetSimplified.FlexibleModule.Set(System.Object[])" /> 和
+                <see cref="M:NetSimplified.NetModule.Send(System.Int32,System.Int32,System.Boolean)" /> 进行发包。
+            </summary>
+            <example>
+                <code>
+                    // 在 SetStaticDefaults 中注册：
+                    _myModule = NetModuleLoader.Register(new FlexibleModule("MyPacket", OnReceive, new[] { typeof(int), typeof(string) }));
+                    
+                    // 发包：
+                    _myModule.Set(new object[] { 42, "hello" });
+                    _myModule.Send();
+                    
+                    // 收包回调：
+                    void OnReceive(FlexibleModule self) {
+                        var number = self.GetValue&lt;int&gt;(0);
+                        var text   = self.GetValue&lt;string&gt;(1);
+                    }
+                </code>
+            </example>
+        </member>
+        <member name="P:NetSimplified.FlexibleModule.Name">
+            <inheritdoc />
+        </member>
+        <member name="M:NetSimplified.FlexibleModule.#ctor(System.String,System.Action{NetSimplified.FlexibleModule},System.Type[],System.Attribute[])">
+            <summary>
+                创建一个 <see cref="T:NetSimplified.FlexibleModule" /> 实例。
+            </summary>
+            <param name="name">该模块的唯一名称，用于区分不同的 <see cref="T:NetSimplified.FlexibleModule" /></param>
+            <param name="receiveAction">收包时执行的操作，参数为该 <see cref="T:NetSimplified.FlexibleModule" /> 实例自身</param>
+            <param name="args">
+                该包所包含的字段类型数组，所有类型必须已通过
+                <see cref="M:NetSimplified.NetModuleLoader.LoadAutoSyncsFrom(System.Reflection.Assembly)" /> 注册了对应的 <see cref="T:NetSimplified.AutoSyncType" />
+            </param>
+            <param name="attributes">
+                可选：与 <paramref name="args" /> 一一对应的 <see cref="T:System.Attribute" /> 数组，用于控制各字段的自动传输行为
+                （例如 <see cref="T:NetSimplified.Syncing.ItemSyncAttribute" />、<see cref="T:NetSimplified.Syncing.ColorSyncAttribute" />）。
+                数组中的每项均可为 <see langword="null" />，表示该字段无额外属性。
+                若提供此参数，其长度必须与 <paramref name="args" /> 相同。
+            </param>
+            <exception cref="T:System.ArgumentNullException">当 <paramref name="name" /> 为 <see langword="null" /> 时抛出</exception>
+            <exception cref="T:System.ArgumentException">
+                当 <paramref name="attributes" /> 不为 <see langword="null" /> 且长度与 <paramref name="args" /> 不匹配时抛出
+            </exception>
+            <exception cref="T:System.InvalidOperationException">
+                当 <paramref name="args" /> 中有任何类型未注册对应的 <see cref="T:NetSimplified.AutoSyncType" /> 时抛出
+            </exception>
+        </member>
+        <member name="M:NetSimplified.FlexibleModule.Set(System.Object[])">
+            <summary>
+                对 <see cref="T:NetSimplified.FlexibleModule" /> 中的变量进行赋值，赋值后才可调用
+                <see cref="M:NetSimplified.NetModule.Send(System.Int32,System.Int32,System.Boolean)" /> 发包。
+            </summary>
+            <param name="args">
+                变量值数组，与构造时声明的变量类型一一对应。
+                每个元素须与对应位置的类型兼容，或为 <see langword="null" />（仅当该类型为引用类型时）。
+                注意：此方法执行浅拷贝，对于引用类型的元素，调用方在传入后不应再修改这些对象本身。
+            </param>
+            <exception cref="T:System.ArgumentException">
+                当 <paramref name="args" /> 的长度与字段数量不匹配，或某个值的类型与声明类型不兼容时抛出
+            </exception>
+        </member>
+        <member name="M:NetSimplified.FlexibleModule.GetValue(System.Int32)">
+            <summary>
+                获取接收到的第 <paramref name="index" /> 个字段的值
+            </summary>
+            <param name="index">字段索引（从 0 开始）</param>
+            <returns>该字段的值</returns>
+            <exception cref="T:System.IndexOutOfRangeException">当 <paramref name="index" /> 超出范围时抛出</exception>
+        </member>
+        <member name="M:NetSimplified.FlexibleModule.GetValue``1(System.Int32)">
+            <summary>
+                获取接收到的第 <paramref name="index" /> 个字段的值（泛型版本）
+            </summary>
+            <typeparam name="T">期望的字段类型</typeparam>
+            <param name="index">字段索引（从 0 开始）</param>
+            <returns>强类型的字段值</returns>
+            <exception cref="T:System.IndexOutOfRangeException">当 <paramref name="index" /> 超出范围时抛出</exception>
+            <exception cref="T:System.InvalidCastException">当实际类型与 <typeparamref name="T" /> 不兼容时抛出</exception>
+        </member>
+        <member name="M:NetSimplified.FlexibleModule.Send(Terraria.ModLoader.ModPacket)">
+            <inheritdoc />
+        </member>
+        <member name="M:NetSimplified.FlexibleModule.Read(System.IO.BinaryReader)">
+            <inheritdoc />
+        </member>
+        <member name="M:NetSimplified.FlexibleModule.Receive">
+            <inheritdoc />
         </member>
         <member name="T:NetSimplified.NetModule">
             <summary>
-            用于写入、读取 <see cref="T:Terraria.ModLoader.ModPacket"/> 的基类
+                用于写入、读取 <see cref="T:Terraria.ModLoader.ModPacket" /> 的基类
+                注：NetModule 不再继承 ModType，需由 NetModuleLoader 手动加载/注册。
             </summary>
         </member>
         <member name="P:NetSimplified.NetModule.Sender">
             <summary>包的发送者</summary>
         </member>
         <member name="P:NetSimplified.NetModule.Type">
-            <summary>该 <see cref="T:NetSimplified.NetModule"/> 被分配到的ID</summary>
+            <summary>该 <see cref="T:NetSimplified.NetModule" /> 被分配到的ID</summary>
+        </member>
+        <member name="P:NetSimplified.NetModule.Mod">
+            <summary>关联的 Mod 实例（由 NetModuleLoader 在注册时设置）</summary>
+        </member>
+        <member name="P:NetSimplified.NetModule.Name">
+            <summary>模块显示名（默认为类型名，可重写）</summary>
         </member>
         <member name="M:NetSimplified.NetModule.Send(Terraria.ModLoader.ModPacket)">
             <summary>
-            使用这个函数来自行发送字段
+                使用这个函数来自行发送字段
             </summary>
-            <param name="p">用于发包的 <see cref="T:Terraria.ModLoader.ModPacket"/> 实例</param>
+            <param name="p">用于发包的 <see cref="T:Terraria.ModLoader.ModPacket" /> 实例</param>
         </member>
         <member name="M:NetSimplified.NetModule.Send(System.Int32,System.Int32,System.Boolean)">
             <summary>
-            通过 <see cref="T:Terraria.ModLoader.ModPacket"/> 发包
+                通过 <see cref="T:Terraria.ModLoader.ModPacket" /> 发包
             </summary>
             <param name="toClient">如果不是 -1, 则包<b>只会</b>发送给对应的客户端</param>
             <param name="ignoreClient">如果不是 -1, 则包<b>不会</b>发送给对应的客户端</param>
-            <param name="runLocally">如果为 <see langword="true"/> 则在发包时会调用 <see cref="M:NetSimplified.NetModule.Receive"/> 方法</param>
+            <param name="runLocally">如果为 <see langword="true" /> 则在发包时会调用 <see cref="M:NetSimplified.NetModule.Receive" /> 方法</param>
+            <param name="handler">自定义的自动传输处理器</param>
         </member>
         <member name="M:NetSimplified.NetModule.Read(System.IO.BinaryReader)">
             <summary>
-            使用这个函数来自行读取字段
+                使用这个函数来自行读取字段
             </summary>
-            <param name="r">用于读取的 <see cref="T:System.IO.BinaryReader"/> 实例</param>
+            <param name="r">用于读取的 <see cref="T:System.IO.BinaryReader" /> 实例</param>
         </member>
         <member name="M:NetSimplified.NetModule.Receive">
             <summary>
-            使用这个函数来进行接收后的操作 (与 <see cref="M:NetSimplified.NetModule.Read(System.IO.BinaryReader)"/> 分开以适配 runLocally)
+                使用这个函数来进行接收后的操作 (与 <see cref="M:NetSimplified.NetModule.Read(System.IO.BinaryReader)" /> 分开以适配 runLocally)
             </summary>
         </member>
         <member name="M:NetSimplified.NetModule.PreSend(System.Int32,System.Int32)">
-            <summary>发包前调用, 返回 <see langword="false"/> 则不会发包, 也不会调用 <see cref="M:NetSimplified.NetModule.Receive"/>。 默认为 <see langword="true"/>.</summary>
+            <summary>发包前调用, 返回 <see langword="false" /> 则不会发包, 也不会调用 <see cref="M:NetSimplified.NetModule.Receive" />。 默认为 <see langword="true" />.</summary>
         </member>
         <member name="M:NetSimplified.NetModule.ReceiveModule(System.IO.BinaryReader,System.Int32)">
-            <summary>接收来自你的Mod的发包, 请在 <see cref="M:Terraria.ModLoader.Mod.HandlePacket(System.IO.BinaryReader,System.Int32)"/> 调用</summary>
+            <summary>接收来自你的Mod的发包, 请在 <see cref="M:Terraria.ModLoader.Mod.HandlePacket(System.IO.BinaryReader,System.Int32)" /> 调用</summary>
         </member>
         <member name="T:NetSimplified.NetModuleDiagnostics">
             <summary>
-            基本上是抄的 tModLoader 源码的 UIModNetDiagnostics<br/>
-            用于记录各 NetModule 的传输量
+                基本上是抄的 tModLoader 源码的 UIModNetDiagnostics<br />
+                用于记录各 NetModule 的传输量
             </summary>
         </member>
         <member name="M:NetSimplified.NetModuleDiagnostics.Reset">
             <summary>
-            重置计数器
+                重置计数器
             </summary>
         </member>
         <member name="T:NetSimplified.NetModuleLoader">
             <summary>
-            用于加载 <see cref="T:NetSimplified.NetModule"/> 的类。
-            需要在 <see cref="M:Terraria.ModLoader.Mod.Load"/> 中对此类调用 <see cref="M:Terraria.ModLoader.Mod.AddContent(Terraria.ModLoader.ILoadable)"/> 以添加实质内容
+                用于加载 <see cref="T:NetSimplified.NetModule" /> 的类。
+            </summary>
+        </member>
+        <member name="F:NetSimplified.NetModuleLoader.CurrentMod">
+            <summary>
+                当前模组实例，必须在调用 <see cref="M:NetSimplified.NetModuleLoader.LoadNetModulesFrom(System.Reflection.Assembly)" /> 前设置，以确保 NetModule 能正确设置 Mod 字段。建议在 <see cref="M:Terraria.ModLoader.Mod.Load" /> 中设置。之后可通过 <see cref="P:NetSimplified.NetModule.Mod" /> 访问
             </summary>
         </member>
         <member name="P:NetSimplified.NetModuleLoader.NetModuleDiagnosticsUI">
             <summary>
-            用于记录各 NetModule 的传输量
+                用于记录各 NetModule 的传输量
             </summary>
         </member>
         <member name="M:NetSimplified.NetModuleLoader.PostSetupContent">
@@ -163,57 +458,79 @@
         <member name="M:NetSimplified.NetModuleLoader.PreSaveAndQuit">
             <inheritdoc />
         </member>
-        <member name="M:NetSimplified.NetModuleLoader.Load">
-            <inheritdoc />
+        <member name="M:NetSimplified.NetModuleLoader.LoadAutoSyncsFrom(System.Reflection.Assembly)">
+            <summary>
+                从指定程序集加载并注册所有继承自 AutoSyncType 的类型<br/>
+                模组应在调用 Register 或 LoadNetModulesFrom 前先调用此方法以确保 AutoSyncType 已注册。<br/>
+                在调用前，请先设置 <see cref="T:Terraria.ModLoader.Mod" /> 字段，以确保 NetModule 能正确设置 Mod 字段。建议在 <see cref="M:Terraria.ModLoader.Mod.Load" /> 中设置。之后可通过 <see cref="P:NetSimplified.NetModule.Mod" /> 访问。
+            </summary>
         </member>
-        <member name="M:NetSimplified.NetModuleLoader.Unload">
-            <inheritdoc />
+        <member name="M:NetSimplified.NetModuleLoader.LoadNetModules">
+            <summary>
+                加载并注册所有继承自 NetModule 的类型。 <br/>
+                在调用前，请先确保所有所需的 AutoSyncType 已通过 <see cref="M:NetSimplified.NetModuleLoader.LoadAutoSyncsFrom(System.Reflection.Assembly)" /> 注册，以免出现 AutoSyncType 未注册导致的错误。<br/>
+                在调用前，请先设置 <see cref="T:Terraria.ModLoader.Mod" /> 字段，以确保 NetModule 能正确设置 Mod 字段。建议在 <see cref="M:Terraria.ModLoader.Mod.Load" /> 中设置。
+            </summary>
+        </member>
+        <member name="M:NetSimplified.NetModuleLoader.LoadNetModulesFrom(System.Reflection.Assembly)">
+            <summary>
+                从指定程序集加载并注册所有继承自 NetModule 的类型。<br/>
+                原本用于支持加载其他模组的 NetModule，但实际上无法实现，因此现在不需要调用此方法，直接调用 LoadNetModules() 即可。
+            </summary>
         </member>
         <member name="M:NetSimplified.NetModuleLoader.Get(System.Int32)">
             <summary>
-            根据 <paramref name="type"/> 获取相应的 <see cref="T:NetSimplified.NetModule"/> 实例
+                根据 <paramref name="type" /> 获取相应的 <see cref="T:NetSimplified.NetModule" /> 实例
             </summary>
-            <returns><see cref="T:NetSimplified.NetModule"/> 实例</returns>
+            <returns><see cref="T:NetSimplified.NetModule" /> 实例</returns>
+        </member>
+        <member name="M:NetSimplified.NetModuleLoader.Get(System.String)">
+            <summary>
+                根据 <paramref name="name" /> 获取相应的 <see cref="T:NetSimplified.NetModule" /> 实例
+            </summary>
+            <returns><see cref="T:NetSimplified.NetModule" /> 实例</returns>
         </member>
         <member name="M:NetSimplified.NetModuleLoader.Get``1">
             <summary>
-            获取带有Mod与Type信息的 <see cref="T:NetSimplified.NetModule"/> 实例
+                获取带有Mod与Type信息的 <see cref="T:NetSimplified.NetModule" /> 实例
             </summary>
-            <returns><see cref="T:NetSimplified.NetModule"/> 实例</returns>
+            <returns><see cref="T:NetSimplified.NetModule" /> 实例</returns>
+        </member>
+        <member name="M:NetSimplified.NetModuleLoader.FindFlexibleModule(System.String)">
+            <summary>
+                通过名称查找已注册的 <see cref="T:NetSimplified.FlexibleModule" /> 实例
+            </summary>
+            <param name="name">注册时传入的名称（不含 "FlexibleModule." 前缀）</param>
+            <returns>对应的 <see cref="T:NetSimplified.FlexibleModule" />；若不存在则返回 <see langword="null" /></returns>
         </member>
         <member name="T:NetSimplified.Syncing.AutoSyncAttribute">
             <summary>
-            此特性允许变量自动发包传输<br/>
-            支持的变量类型: <see cref="T:System.Byte"/>, <see cref="T:System.Boolean"/>, <see cref="T:System.Int16"/>, <see cref="T:System.Int32"/>, <see cref="T:System.Int64"/>, <see cref="T:System.SByte"/>, <see cref="T:System.UInt16"/>, <see cref="T:System.UInt32"/>, <see cref="T:System.UInt64"/>, <see cref="T:System.Single"/>, <see cref="T:System.Double"/>, <see cref="T:System.String"/>, <see cref="T:Microsoft.Xna.Framework.Vector2"/>, <see cref="T:Microsoft.Xna.Framework.Color"/>, <see cref="T:Microsoft.Xna.Framework.Point"/>, <see cref="T:Terraria.DataStructures.Point16"/>, <see cref="T:Terraria.Item"/> 及其数组类型
-            </summary>
-        </member>
-        <member name="F:NetSimplified.Syncing.AutoSyncHandler.SupportedTypes">
-            <summary>
-            自动传输支持的数据类型
+                此特性允许变量自动传输 <br/>
+                自动传输的变量必须有对应的注册了的 <see cref="T:NetSimplified.AutoSyncType"/> 类，或者是仅含已注册的变量的 <see cref="T:System.Collections.IEnumerable"/>, <see cref="T:System.Collections.Generic.KeyValuePair"/> 或 <see cref="T:System.Array"/>。<br/>
             </summary>
         </member>
         <member name="T:NetSimplified.Syncing.ItemSyncAttribute">
             <summary>
-            用于决定是否传输 <see cref="T:Terraria.Item"/> 的 <see cref="F:Terraria.Item.stack"/> 与 <see cref="F:Terraria.Item.favorited"/> 信息的特性
+                用于决定是否传输 <see cref="T:Terraria.Item" /> 的 <see cref="F:Terraria.Item.stack" /> 与 <see cref="F:Terraria.Item.favorited" /> 信息的特性
             </summary>
         </member>
         <member name="M:NetSimplified.Syncing.ItemSyncAttribute.#ctor(System.Boolean,System.Boolean)">
             <summary>
-            <inheritdoc cref="T:NetSimplified.Syncing.ItemSyncAttribute"/>
+                <inheritdoc cref="T:NetSimplified.Syncing.ItemSyncAttribute" />
             </summary>
-            <param name="syncStack">是否传输物品的 <see cref="F:Terraria.Item.stack"/> 信息</param>
-            <param name="syncFavorite">是否传输物品的 <see cref="F:Terraria.Item.favorited"/> 信息</param>
+            <param name="syncStack">是否传输物品的 <see cref="F:Terraria.Item.stack" /> 信息</param>
+            <param name="syncFavorite">是否传输物品的 <see cref="F:Terraria.Item.favorited" /> 信息</param>
         </member>
         <member name="T:NetSimplified.Syncing.ColorSyncAttribute">
             <summary>
-            用于决定是否传输 <see cref="T:Microsoft.Xna.Framework.Color"/> 的 <see cref="P:Microsoft.Xna.Framework.Color.A"/> 信息的特性
+                用于决定是否传输 <see cref="T:Microsoft.Xna.Framework.Color" /> 的 <see cref="P:Microsoft.Xna.Framework.Color.A" /> 信息的特性
             </summary>
         </member>
         <member name="M:NetSimplified.Syncing.ColorSyncAttribute.#ctor(System.Boolean)">
             <summary>
-            <inheritdoc cref="T:NetSimplified.Syncing.ColorSyncAttribute"/>
+                <inheritdoc cref="T:NetSimplified.Syncing.ColorSyncAttribute" />
             </summary>
-            <param name="syncAlpha">是否传输 <see cref="T:Microsoft.Xna.Framework.Color"/> 的 <see cref="P:Microsoft.Xna.Framework.Color.A"/> 信息</param>
+            <param name="syncAlpha">是否传输 <see cref="T:Microsoft.Xna.Framework.Color" /> 的 <see cref="P:Microsoft.Xna.Framework.Color.A" /> 信息</param>
         </member>
     </members>
 </doc>

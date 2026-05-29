@@ -93,7 +93,7 @@ public class MagickWand : SelectorItem, IConditionItem
         // 先掉落内容物。
         for (int k = 0; k < chest.item.Length; k++)
             if (!chest.item[k].IsAir)
-                SpawnTileBreakItem(i, j, ref chest.item[k], "ChestBrokenFromBlastsWand");
+                SpawnTileBreakItem(i, j, chest.item[k], "ChestBrokenFromBlastsWand");
         // 再破坏箱体本身。
         TryKillTile(i, j, player);
         return true;
@@ -334,7 +334,7 @@ public class MagickWand : SelectorItem, IConditionItem
     public override void AddRecipes()
     {
         CreateRecipe()
-            .AddRecipeGroup(RecipeGroupID.Wood, 18)
+            .AddRecipeGroup(RecipeGroups.Wood, 18)
             .AddIngredient(ItemID.JungleSpores, 6)
             .AddIngredient(ItemID.Ruby, 1)
             .AddTile(TileID.WorkBenches)

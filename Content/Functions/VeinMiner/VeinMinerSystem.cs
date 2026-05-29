@@ -63,7 +63,7 @@ public class VeinMinerSystem : ModSystem
     private static void CombineItems()
     {
         var player = Main.player[MinerIndex];
-        var allCenterItems = new List<Item>();
+        var allCenterItems = new List<WorldItem>();
         foreach (var activeItem in Main.ActiveItems)
         {
             if (activeItem.Center.Distance(player.Center) < 16 && activeItem.stack > 0)
@@ -72,7 +72,7 @@ public class VeinMinerSystem : ModSystem
 
         foreach (var item in allCenterItems)
         {
-            if (!item.CanCombineStackInWorld() || item.stack >= item.maxStack)
+            if (!item.inner.CanPassivelyStackInWorld() || item.stack >= item.maxStack)
                 continue;
 
             foreach (var item2 in allCenterItems)
@@ -81,19 +81,17 @@ public class VeinMinerSystem : ModSystem
                     item2.playerIndexTheItemIsReservedFor != item.playerIndexTheItemIsReservedFor)
                     continue;
 
-                if (!ItemLoader.CanStack(item, item2))
+                if (!ItemLoader.CanStack(item.inner, item2.inner))
                     continue;
 
                 if (!ItemLoader.CanStackInWorld(item, item2))
                     continue;
 
-                ItemLoader.StackItems(item, item2, out _);
+                ItemLoader.StackItems(item.inner, item2.inner, out _);
 
                 if (item2.stack <= 0)
-                {
-                    item2.SetDefaults();
-                    item2.active = false;
-                }
+                    item2.TurnToAir();
+
             }
         }
     }

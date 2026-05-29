@@ -52,7 +52,7 @@ namespace ImproveGame.Common.GlobalNPCs
                     }
                     else
                     {
-                        int itemType = NPC.AI_001_Slimes_GenerateItemInsideBody(npc.ai[0] == -999f);
+                        int itemType = npc.AI_001_Slimes_GenerateItemInsideBody(npc.ai[0] == -999f);
                         npc.ai[1] = itemType;
                         npc.netUpdate = true;
                     }

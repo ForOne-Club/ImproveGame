@@ -57,7 +57,7 @@ public class ImproveItem : GlobalItem, IItemOverrideHover, IItemMiddleClickable
         }
 
         // 任务鱼可堆叠
-        if (ImproveConfigs.Instance.QuestFishStack && Main.anglerQuestItemNetIDs.Contains(item.netID))
+        if (ImproveConfigs.Instance.QuestFishStack && Main.anglerQuestItemNetIDs.Contains(item.type))
         {
             item.uniqueStack = false;
             item.maxStack = ImproveConfigs.Instance.ItemMaxStack;
@@ -202,14 +202,14 @@ public class ImproveItem : GlobalItem, IItemOverrideHover, IItemMiddleClickable
             player.dead || player.noItems)
             return false;
         return item.mountType != -1 && player.mount.CanMount(item.mountType, player) &&
-               player.ItemCheck_CheckCanUse(item) && !MountID.Sets.Cart[item.mountType];
+               player.ItemCheck_CheckCanUse_Inner(item) && !MountID.Sets.Cart[item.mountType];
     }
 
     public void ManageHoverTooltips(Item item, List<TooltipLine> tooltips)
     {
         TryGetKeybindString(KeybindSystem.ItemInteractKeybind, out string keybind);
         string text = (GetTextWith("Tips.MouseMiddleUse", new { ItemName = item.Name, KeybindName = keybind }));
-        tooltips.Add(new TooltipLine(Mod, "MountQuickUse", text) { OverrideColor = Color.LightGreen });
+        tooltips.Add(new TooltipLine(Mod, "MountQuickUse", text) { Color = Color.LightGreen });
     }
 
     // 中键功能
@@ -234,10 +234,10 @@ public class ImproveItem : GlobalItem, IItemOverrideHover, IItemMiddleClickable
         if (!UIConfigs.Instance.ShowAmmoInfo) return;
 
         if (item.useAmmo > 0)
-            tooltips.Add(new TooltipLine(Mod, "UseAmmo", GetText("Tips.UseAmmoInfo", item.useAmmo, Lang.GetItemNameValue(item.useAmmo))) { OverrideColor = new Color(60, 160, 90) });
+            tooltips.Add(new TooltipLine(Mod, "UseAmmo", GetText("Tips.UseAmmoInfo", item.useAmmo, Lang.GetItemNameValue(item.useAmmo))) { Color = new Color(60, 160, 90) });
 
         if (item.ammo > 0)
-            tooltips.Add(new TooltipLine(Mod, "Ammo", GetText("Tips.AmmoInfo", item.ammo, Lang.GetItemNameValue(item.ammo))) { OverrideColor = new Color(60, 160, 90) });
+            tooltips.Add(new TooltipLine(Mod, "Ammo", GetText("Tips.AmmoInfo", item.ammo, Lang.GetItemNameValue(item.ammo))) { Color = new Color(60, 160, 90) });
     }
 
     private void TooltipShimmer(Item item, List<TooltipLine> tooltips)
@@ -249,7 +249,7 @@ public class ImproveItem : GlobalItem, IItemOverrideHover, IItemMiddleClickable
             tooltips.Add(
                 new TooltipLine(Mod, "ShimmerResult",
                         GetText("Tips.ShimmerIntoWithCoinLuck", ItemID.Sets.CoinLuckValue[item.type]))
-                { OverrideColor = new Color(241, 175, 233) });
+                { Color = new Color(241, 175, 233) });
             return;
         }
 
@@ -267,10 +267,10 @@ public class ImproveItem : GlobalItem, IItemOverrideHover, IItemMiddleClickable
             text.Append("[i");
             if (result.stack != 1)
                 text.Append($"/s{result.stack}");
-            text.Append($":{result.netID}]");
+            text.Append($":{result.type}]");
         }
 
-        tooltips.Add(new TooltipLine(Mod, "ShimmerResult", text.ToString()) { OverrideColor = new Color(241, 175, 233) });
+        tooltips.Add(new TooltipLine(Mod, "ShimmerResult", text.ToString()) { Color = new Color(241, 175, 233) });
     }
 
     private void TooltipMoreData(Item item, List<TooltipLine> tooltips)

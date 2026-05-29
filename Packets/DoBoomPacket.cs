@@ -18,7 +18,7 @@ public class DoBoomPacket : NetModule
 
     public static DoBoomPacket Get(int x, int y, int width, int height)
     {
-        var packet = ModContent.GetInstance<DoBoomPacket>();
+        var packet = NetModuleLoader.Get<DoBoomPacket>();
         packet._x = (ushort)x;
         packet._y = (ushort)y;
         packet._width = (ushort)width;

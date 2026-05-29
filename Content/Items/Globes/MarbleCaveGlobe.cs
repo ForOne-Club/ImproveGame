@@ -12,7 +12,7 @@ public class MarbleCaveGlobe() : GlobePlentyTooltip(ItemRarityID.Quest, Item.sel
 
     protected override Recipe AddCraftingMaterials(Recipe recipe) =>
         recipe.AddIngredient(ItemID.Glass, 8)
-            .AddRecipeGroup(RecipeGroupID.IronBar, 4)
+            .AddRecipeGroup(RecipeGroups.IronBar, 4)
             .AddIngredient(ItemID.Ruby)
             .AddTile(TileID.WorkBenches);
 }

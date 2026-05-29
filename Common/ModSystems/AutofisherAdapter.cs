@@ -78,7 +78,7 @@ namespace ImproveGame.Common.ModSystems
                 item.stack--;
                 fromAir = true;
             }
-            else if (baitSlot.IsTheSameAs(item))
+            else if (baitSlot.type == item.type)
             {
                 if (baitSlot.stack < baitSlot.maxStack)
                 {
@@ -140,7 +140,7 @@ namespace ImproveGame.Common.ModSystems
                 for (int p = 0; p < Main.maxPlayers; p++)
                 {
                     var client = Main.player[p];
-                    if (client.active && !client.DeadOrGhost &&
+                    if (client.active && !client.dead &&
                         client.GetModPlayer<AutofishPlayer>().IsAutofisherOpened)
                     {
                         if (amount != 0)

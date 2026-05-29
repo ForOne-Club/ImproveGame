@@ -124,9 +124,10 @@ public class ModIntegrationsSystem : ModSystem
 
     private static void DoRecipeBrowserIntegration()
     {
+
         if (!ModLoader.TryGetMod("RecipeBrowser", out Mod recipeBrowser))
             return;
-
+#if false
         // 给合成表的计量材料数量功能添加储存管理器、大背包、药水袋和旗帜盒支持
         var providers = recipeBrowser.Code.GetTypes()
             .Where(t => !t.IsAbstract && !t.ContainsGenericParameters)
@@ -173,6 +174,7 @@ public class ModIntegrationsSystem : ModSystem
 
             return count >= stopCountingAt ? stopCountingAt : count;
         });
+#endif  
     }
 
     private static void DoImproveGameModIntegration()
@@ -432,6 +434,11 @@ public class ModIntegrationsSystem : ModSystem
 
     public static object Call(params object[] args)
     {
+        object netReply = CrossMod.HandleModCalls(args);
+        if (netReply is not false)
+        {
+            return netReply;
+        }
         try
         {
             if (args is null)

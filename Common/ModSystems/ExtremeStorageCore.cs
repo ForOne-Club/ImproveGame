@@ -14,6 +14,8 @@ public class ExtremeStorageCore : ModSystem
     public override void Load()
     {
         // 同步快速堆叠
+        // TODO 适配145的实现
+#if false
         IL_Chest.PutItemInNearbyChest += il =>
         {
             // 根据上面的IL代码，写出对应的查找代码
@@ -103,12 +105,15 @@ public class ExtremeStorageCore : ModSystem
             c.Emit(OpCodes.Ldloc_1); // 箱子 index
             c.EmitDelegate<Action<int>>(chestIndex => TrySend(chestIndex, itemSlot));
         };
+#endif
     }
 
     private void TrySend(int chestIndex, int itemSlot)
     {
-        if (Main.netMode is not NetmodeID.Server || itemSlot is < 0 or >= Chest.maxItems ||
-            !Main.chest.IndexInRange(chestIndex))
+        if (Main.netMode is not NetmodeID.Server ||
+            !Main.chest.IndexInRange(chestIndex) ||
+            Main.chest[chestIndex] is not { } chest ||
+            itemSlot < 0 || itemSlot >= chest.maxItems)
             return;
         ChestItemOperation.SendItem(chestIndex, itemSlot);
     }
@@ -154,15 +159,22 @@ public class StorageMaterialConsumer : ModPlayer
 
             itemConsumedCallback = (item, index) =>
             {
-                int chestIndexInList = index / Chest.maxItems;
-                int itemIndex = index % Chest.maxItems;
-                if (chestIndexInList >= chests.Count)
-                    return;
-
-                int chestIndex = chests[chestIndexInList];
-                if (!Main.chest.IndexInRange(chestIndex))
-                    return;
-
+                int chestIndex = -1;
+                int itemIndex = index;
+                int chestCount = chests.Count;
+                for (int n = 0; n < chestCount; n++)
+                {
+                    int idx = chests[n];
+                    if (!Main.chest.IndexInRange(index) || Main.chest[index] is not { } chest) continue;
+                    if (chest.maxItems <= itemIndex)
+                        itemIndex -= chest.maxItems;
+                    else
+                    {
+                        chestIndex = idx;
+                        break;
+                    }
+                }
+                if (chestIndex == -1) return;
                 if (Main.netMode is NetmodeID.MultiplayerClient)
                 {
                     // 同步箱子信息

@@ -453,7 +453,7 @@ namespace ImproveGame.Content.Functions.Construction
                     if (sign >= 0)
                     {
                         Sign.TextSign(sign, structure.SignTexts[index]);
-                        NetMessage.SendData(MessageID.ReadSign, -1, -1, null, sign, 0f, (byte)new BitsByte(b1: true));
+                        NetMessage.SendData(MessageID.OpenSignResponse, -1, -1, null, sign, 0f, (byte)new BitsByte(b1: true));
                         index++;
                     }
 

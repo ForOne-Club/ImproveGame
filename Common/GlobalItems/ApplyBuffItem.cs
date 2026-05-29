@@ -149,7 +149,7 @@ public class ApplyBuffItem : GlobalItem
 
                 tooltips.Add(new TooltipLine(Mod, "AppliedBuffs", buffs)
                 {
-                    OverrideColor = Color.SkyBlue
+                    Color = Color.SkyBlue
                 });
 
                 TagItem.AddIconHiddenTooltips(Mod, tooltips);
@@ -188,7 +188,7 @@ public class ApplyBuffItem : GlobalItem
         {
             tooltips.Add(new TooltipLine(Mod, "TagDetailed.RedPotion", GetText("Tips.TagDetailed.RedPotion"))
             {
-                OverrideColor = Color.SkyBlue
+                Color = Color.SkyBlue
             });
             TagItem.AddShiftForMoreTooltip(tooltips);
         }

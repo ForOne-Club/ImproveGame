@@ -26,7 +26,7 @@ public class MinorPatches : ModSystem
     {
         private class ShakeTreeItem : GlobalItem
         {
-            public override void OnSpawn(Item item, IEntitySource source)
+            public override void OnSpawn(WorldItem item, IEntitySource source)
             {
                 if (_isShakingTree && source is EntitySource_ShakeTree)
                     _hasItemDropped = true;
@@ -271,8 +271,6 @@ public class MinorPatches : ModSystem
         ShakeTreeTweak.Load();
         // “草药” 生长速度
         IL_WorldGen.GrowAlch += WorldGen_GrowAlch;
-        // “草药” 绘制的是否是开花图案
-        On_TileDrawing.IsAlchemyPlantHarvestable += TileDrawing_IsAlchemyPlantHarvestable;
         // “草药” 是否可以被 “再生法杖” 收割
         IL_Player.PlaceThing_Tiles_BlockPlacementForAssortedThings +=
             Player_PlaceThing_Tiles_BlockPlacementForAssortedThings;
@@ -353,6 +351,7 @@ public class MinorPatches : ModSystem
                 numWaters = 114514;
         };
         // 失焦运行
+        /*
         IL_Main.DoUpdate += il =>
         {
             try
@@ -388,6 +387,7 @@ public class MinorPatches : ModSystem
                 MonoModHooks.DumpIL(Mod, il);
             }
         };
+        */
         // 专家/大师延长Debuff
         On_Player.AddBuff_DetermineBuffTimeToAdd += (orig, self, type, time1) => ImproveConfigs.Instance.LongerExpertDebuff ? orig.Invoke(self, type, time1) : time1;
         // 床随地设置重生点
@@ -409,7 +409,7 @@ public class MinorPatches : ModSystem
         // 禁止非玩家爆炸物破坏物块
         On_Projectile.ExplodeTiles += NoExplodeTiles;
         // 墓地特效
-        On_Player.UpdateGraveyard += GraveyardVisualRemoval;
+        On_SceneState.UpdateGraveyard += GraveyardVisualRemoval;
         // 墓地音乐
         On_Main.UpdateAudio += GraveyardMusicRemoval;
         // 墓地迷雾
@@ -487,16 +487,16 @@ public class MinorPatches : ModSystem
         orig.Invoke(self);
     }
 
-    private void GraveyardVisualRemoval(On_Player.orig_UpdateGraveyard orig, Player self, bool now)
+    private static void GraveyardVisualRemoval(On_SceneState.orig_UpdateGraveyard orig, SceneState self, SceneMetrics metrics)
     {
-        orig.Invoke(self, now);
+        orig.Invoke(self, metrics);
 
         if (UIConfigs.Instance.RemoveGraveyardVisual)
             Main.GraveyardVisualIntensity = 0f;
     }
 
     private void NoExplodeTiles(On_Projectile.orig_ExplodeTiles orig, Projectile self, Vector2 compareSpot,
-        int radius, int minI, int maxI, int minJ, int maxJ, bool wallSplode)
+        int radius, int minI, int maxI, int minJ, int maxJ, bool wallSplode,bool explodeHardmodeOres)
     {
         if (ImproveConfigs.Instance.DisableNonPlayerBombsExplosions != DisableNonPlayerBombsExplosionsType.Disabled &&
             (self.type == ProjectileID.Bomb && self.GetGlobalProjectile<ImproveProjectile>().NonPlayer ||
@@ -507,7 +507,7 @@ public class MinorPatches : ModSystem
             self.type == ProjectileID.Explosives)
             return;
 
-        orig(self, compareSpot, radius, minI, maxI, minJ, maxJ, wallSplode);
+        orig.Invoke(self, compareSpot, radius, minI, maxI, minJ, maxJ, wallSplode, explodeHardmodeOres);
     }
 
     private bool BetterCheckSpawn(On_Player.orig_CheckSpawn orig, int x, int y)
@@ -731,8 +731,8 @@ public class MinorPatches : ModSystem
     private void NPC_CountKillForBannersAndDropThem(On_NPC.orig_CountKillForBannersAndDropThem orig,
         NPC npc)
     {
-        int bannerID = Item.NPCtoBanner(npc.BannerID());
-        int itemID = Item.BannerToItem(bannerID);
+        int bannerID = BannerSystem.NPCtoBanner(npc.BannerID());
+        int itemID = BannerSystem.BannerToItem(bannerID);
         int originalRequirement = ItemID.Sets.KillsToBanner[itemID];
         ItemID.Sets.KillsToBanner[itemID] = (int)(ItemID.Sets.KillsToBanner[itemID] * ImproveConfigs.Instance.BannerRequirement);
         orig.Invoke(npc);
@@ -745,16 +745,11 @@ public class MinorPatches : ModSystem
             orig.Invoke();
     }
 
-    private bool TileDrawing_IsAlchemyPlantHarvestable(On_TileDrawing.orig_IsAlchemyPlantHarvestable orig,
-        TileDrawing self, int style)
-    {
-        return ImproveConfigs.Instance.AlchemyGrassAlwaysBlooms || orig.Invoke(self, style);
-    }
 
     private bool WorldGen_IsHarvestableHerbWithSeed(On_WorldGen.orig_IsHarvestableHerbWithSeed orig, int type,
-        int style)
+        int style, int y)
     {
-        return ImproveConfigs.Instance.AlchemyGrassAlwaysBlooms || orig.Invoke(type, style);
+        return ImproveConfigs.Instance.AlchemyGrassAlwaysBlooms || orig.Invoke(type, style, y);
     }
 
     // “草药” 是否可以被 “再生法杖” 收割

@@ -281,7 +281,7 @@ public class AmmoChainUI : BaseBody
         (item, slot.Items[slot.Index]) = (slot.Items[slot.Index], item);
         slot.DoPossibleItemChange();
         SoundEngine.PlaySound(SoundID.Grab);
-        Recipe.FindRecipes();
+        // Recipe.FindRecipes();
     }
 
     public bool SlotQuickPutAvailable(Item item) =>

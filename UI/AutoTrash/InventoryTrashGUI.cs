@@ -23,7 +23,7 @@ public class InventoryTrashGUI : BaseBody
     public override bool CanSetFocusTarget(UIElement target) => Window.IsMouseHovering;
     #endregion
 
-    private static bool ChestMenuExists => (Main.LocalPlayer.chest != -1 || Main.npcShop > 0) && !Main.recBigList;
+    private static bool ChestMenuExists => (Main.LocalPlayer.chest != -1 || Main.npcShop > 0) && !(Player.Settings.CraftingGridControl == Player.Settings.CraftingGridMode.Classic && Main.PipsUseGrid);
     internal static bool Hidden = false;
     public SUIPanel Window;
     public BaseGrid TrashGrid;

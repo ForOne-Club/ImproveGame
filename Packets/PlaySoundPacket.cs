@@ -22,7 +22,7 @@ public class PlaySoundPacket : NetModule
 
     public static PlaySoundPacket Get(int soundID, Vector2? position = null, int style = 1)
     {
-        var packet = ModContent.GetInstance<PlaySoundPacket>();
+        var packet = NetModuleLoader.Get<PlaySoundPacket>();
         packet._soundID = (byte)soundID;
         packet._position = (position ?? Vector2.Zero).ToTileCoordinates16();
         packet._style = (byte)style;

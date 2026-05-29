@@ -28,7 +28,7 @@ public class Autofisher : ModItem, IConditionItem
     public override void AddRecipes()
     {
         CreateRecipe()
-            .AddRecipeGroup(RecipeGroupID.IronBar, 10)
+            .AddRecipeGroup(RecipeGroups.IronBar, 10)
             .AddRecipeGroup(RecipeSystem.AnyCopperBar, 5)
             .AddIngredient(ItemID.Cobweb, 20)
             .AddTile(TileID.Anvils)

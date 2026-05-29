@@ -55,7 +55,7 @@ namespace ImproveGame.Content.Projectiles
                         bool vanillaHooks = firstWall.consumable && ItemLoader.ConsumeItem(firstWall, Player);
                         bool modSpecificChecks = firstWall.stack < 999 || !ImproveConfigs.Instance.WandMaterialNoConsume;
                         if (vanillaHooks && modSpecificChecks && --firstWall.stack == 0)
-                            firstWall.SetDefaults();
+                            firstWall.TurnToAir();
                     }
                 }
                 Projectile.rotation = (wall.ToVector2() * 16f + new Vector2(8) - Projectile.Center).ToRotation() + MathF.PI;
@@ -68,8 +68,7 @@ namespace ImproveGame.Content.Projectiles
 
         public Color background = new(45, 206, 255);
         public Color border = new(66, 117, 186);
-
-        public override bool PreDraw(ref Color lightColor)
+        public override bool PreDraw(Player player, ref Color lightColor)
         {
             if (index < Walls.Count)
             {
@@ -80,7 +79,7 @@ namespace ImproveGame.Content.Projectiles
             return true;
         }
 
-        public override void PostDraw(Color lightColor)
+        public override void PostDraw(Player player, Color lightColor)
         {
             Main.EntitySpriteDraw(ModAsset.WallRobot_Glow.Value, Projectile.Center - Main.screenPosition, null, Color.White, Projectile.rotation, Projectile.Size / 2f, Projectile.scale, SpriteEffects.None);
         }

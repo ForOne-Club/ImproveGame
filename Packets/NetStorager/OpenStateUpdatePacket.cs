@@ -16,7 +16,7 @@ public class OpenStateUpdatePacket : NetModule
     public static void Send(int openState)
     {
         Debug.Assert(Main.netMode is not NetmodeID.Server, "Packet cannot be sent by server");
-        var packet = ModContent.GetInstance<OpenStateUpdatePacket>();
+        var packet = NetModuleLoader.Get<OpenStateUpdatePacket>();
         packet._openState = (ushort)openState;
         packet.Send();
     }

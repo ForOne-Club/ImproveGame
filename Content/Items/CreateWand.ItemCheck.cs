@@ -1,5 +1,4 @@
-﻿using Microsoft.Build.Evaluation;
-using Terraria.ObjectData;
+﻿using Terraria.ObjectData;
 
 namespace ImproveGame.Content.Items;
 
@@ -104,7 +103,7 @@ public partial class CreateWand
 
         public static bool IsTileTorch(int tileType) =>
             tileType >= TileID.Dirt
-            && TileID.Sets.Torch[tileType];
+            && TileID.Sets.Torches[tileType];
 
         public static bool IsTileWorkbench(int tileType) =>
             tileType is TileID.WorkBenches;

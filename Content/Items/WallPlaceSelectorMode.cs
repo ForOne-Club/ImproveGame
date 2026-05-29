@@ -44,7 +44,7 @@ public class WallPlaceSelectorMode : SelectorItem
                 bool vanillaHooks = firstWall.consumable && ItemLoader.ConsumeItem(firstWall, player);
                 bool modSpecificChecks = firstWall.stack < 999 || !ImproveConfigs.Instance.WandMaterialNoConsume;
                 if (vanillaHooks && modSpecificChecks && --firstWall.stack == 0)
-                    firstWall.SetDefaults();
+                    firstWall.TurnToAir();
                 break;
             }
         }

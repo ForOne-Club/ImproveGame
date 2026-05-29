@@ -131,7 +131,7 @@ public class ExtremeStorage : TETileBase
         Texture2D glowTexture = ModAsset.ExtremeStorage_Glow.Value;
         Texture2D highlightTexture = ModAsset.ExtremeStorage_Highlight.Value;
 
-        if (!Main.ShouldShowInvisibleWalls() && tile.IsTileInvisible) return false;
+        if (!Main.ShouldShowInvisibleBlocksAndWalls() && tile.IsTileInvisible) return false;
 
         if (tile.TileFrameX == 0 && tile.TileFrameY == 0)
         {

@@ -40,7 +40,7 @@ namespace ImproveGame.UI.ExtremeStorage
                 case NetmodeID.SinglePlayer:
                     MouseClickSlot();
                     ExtremeStorageGUI.RefreshCachedAllItems();
-                    Recipe.FindRecipes();
+                    // Recipe.FindRecipes();
                     break;
                 case NetmodeID.MultiplayerClient:
                     switch (Main.cursorOverride)
@@ -99,7 +99,7 @@ namespace ImproveGame.UI.ExtremeStorage
 
             if (Main.netMode is not NetmodeID.SinglePlayer) return;
             ExtremeStorageGUI.RefreshCachedAllItems();
-            Recipe.FindRecipes();
+            // Recipe.FindRecipes();
         }
 
         // 覆写父类的方法，让宝藏袋右键不开启而是拿取
@@ -146,7 +146,7 @@ namespace ImproveGame.UI.ExtremeStorage
                         break;
                     // 本地先保证可以拿出物品，然后再发送给服务器
                     case NetmodeID.MultiplayerClient
-                        when ((Main.mouseItem.IsTheSameAs(Item) && ItemLoader.CanStack(Main.mouseItem, Item)) ||
+                        when ((Main.mouseItem.type == Item.type && ItemLoader.CanStack(Main.mouseItem, Item)) ||
                               Main.mouseItem.type is ItemID.None) && (Main.mouseItem.stack < Main.mouseItem.maxStack ||
                                                                       Main.mouseItem.type is ItemID.None):
                     {
@@ -204,7 +204,7 @@ namespace ImproveGame.UI.ExtremeStorage
 
             if (IsMouseHovering && Interactable)
             {
-                PlayerLoader.HoverSlot(Main.player[Main.myPlayer], Items, Terraria.UI.ItemSlot.Context.InventoryItem, Index);
+                PlayerLoader.HoverSlot(Main.LocalPlayer, Items, Terraria.UI.ItemSlot.Context.InventoryItem, Index);
                 Main.hoverItemName = Item.Name;
                 Main.HoverItem = Item.Clone();
                 SetCursorOverride();
