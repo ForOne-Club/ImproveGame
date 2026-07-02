@@ -34,7 +34,7 @@ class HideGlobalBuff : GlobalBuff
     {
         if (TryGetKeybindString(KeybindSystem.BuffTrackerKeybind, out _)) return;
 
-        if (!SilkyUISystem.Instance.SilkyUIManager.TryGetInstance<InfiniteBuffController>(out var controller)) return;
+        if (!UISceneManager.Instance.TryGetInstance<InfiniteBuffController>(out var controller)) return;
 
         tip += $"\n{GetText($"Tips.BuffTracker{(controller.Enabled ? "Off" : "On")}")}";
 
@@ -73,7 +73,7 @@ class HideGlobalBuff : GlobalBuff
         c.EmitDelegate(() =>
         {
             if (!Main.mouseLeft || !Main.mouseLeftRelease) return;
-            if (!SilkyUISystem.Instance.SilkyUIManager.TryGetInstance<InfiniteBuffController>(out var controller)) return;
+            if (!UISceneManager.Instance.TryGetInstance<InfiniteBuffController>(out var controller)) return;
 
             controller.Enabled = !controller.Enabled;
         });
