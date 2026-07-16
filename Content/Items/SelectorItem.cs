@@ -60,7 +60,6 @@ public abstract class SelectorItem : ModItem
         {
             return flag;
         }
-
         unCancelled = true;
         start = Main.MouseWorld.ToTileCoordinates();
         return true;
