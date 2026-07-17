@@ -55,7 +55,8 @@ public abstract class SelectorItem : ModItem
     {
         bool flag = StartUseItem(player);
         _syncRunner.StopAll();
-
+        if (player.itemAnimationMax != 0)
+            return true;
         if (!flag || !CanUseSelector(player))
         {
             return flag;
