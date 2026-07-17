@@ -250,7 +250,7 @@ public class SUIText : TimerView
 
         var scale = new Vector2(TextScale);
         ChatManager.DrawColorCodedStringShadow(spriteBatch, Font, FinalTextSnippets
-            , textPos, TextColor, 0f, Vector2.Zero, scale, -1, TextBorder);
+            , textPos, TextBorderColor, 0f, Vector2.Zero, scale, -1, TextBorder);
 
         ChatManager.DrawColorCodedString(spriteBatch, Font, FinalTextSnippets,
             textPos, TextColor, 0f, Vector2.Zero, scale, out var _, -1f);
