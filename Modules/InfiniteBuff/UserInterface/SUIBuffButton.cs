@@ -121,7 +121,7 @@ public class SUIBuffButton : UIElementGroup
         BuffLoader.ModifyBuffText(type, ref name, ref tooltip, ref rare);
 
         return new StringBuilder($"{name}\n{tooltip}\n")
-             .AppendLine(InfiniteBuffHelper.GetLeftClickString(Blacklisted))
+             .AppendLine(InfiniteBuffHelper.GetLeftClickString(!Blacklisted))
              .AppendLine(InfiniteBuffHelper.GetRightClickString(Favorited));
     }
 
