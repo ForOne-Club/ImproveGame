@@ -15,20 +15,8 @@ public class Dummy : ModItem
 
     public override bool? UseItem(Player player)
     {
-        return base.UseItem(player);
-    }
-    public override bool AltFunctionUse(Player player)
-    {
-        return true;
-    }
-    public override bool CanUseItem(Player player)
-    {
-        /*if (Main.netMode == NetmodeID.MultiplayerClient)
-        {
-            AddNotification(GetText("Items.Dummy.CannotUse"), Color.PaleVioletRed * 1.4f);
-            return false;
-        }*/
         if (Main.myPlayer != player.whoAmI) return false;
+
         if (player.altFunctionUse == 2)
         {
             foreach (var npc in Main.npc)
@@ -64,6 +52,19 @@ public class Dummy : ModItem
         }
 
         return true;
+    }
+    public override bool AltFunctionUse(Player player)
+    {
+        return true;
+    }
+    public override bool CanUseItem(Player player)
+    {
+        /*if (Main.netMode == NetmodeID.MultiplayerClient)
+        {
+            AddNotification(GetText("Items.Dummy.CannotUse"), Color.PaleVioletRed * 1.4f);
+            return false;
+        }*/
+        return Main.myPlayer == player.whoAmI;
     }
     public override void HoldStyle(Player player, Rectangle heldItemFrame)
     {
